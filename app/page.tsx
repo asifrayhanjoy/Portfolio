@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUp,
+  ArrowUpRight,
   BookOpen,
   Briefcase,
   CheckCircle2,
@@ -14,6 +16,8 @@ import {
   ExternalLink,
   FileText,
   GraduationCap,
+  Home as HomeIcon,
+  Languages,
   Layers3,
   Mail,
   MapPin,
@@ -21,41 +25,39 @@ import {
   Monitor,
   Moon,
   Phone,
+  Rocket,
   Send,
   Server,
   ShieldCheck,
+  Sparkles,
   Sun,
+  Wrench,
   X,
 } from "lucide-react";
 import {
   type ComponentType,
-  useEffect,
-  useState,
+  type CSSProperties,
+  type PointerEvent,
   type ReactNode,
   type SVGProps,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
 } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
+type ThemePreference = "light" | "dark" | "system";
+type ResolvedTheme = "light" | "dark";
+type SkillLevel = "Core" | "Working" | "Learning" | "Basic";
 
 type NavItem = {
   label: string;
   href: `#${string}`;
   id: string;
-};
-
-type SkillLevel = "Core" | "Working" | "Learning" | "Basic";
-
-type Skill = {
-  name: string;
-  level: SkillLevel;
-};
-
-type SkillGroup = {
-  title: string;
   icon: IconComponent;
-  skills: Skill[];
 };
 
 type ProjectLink = {
@@ -63,27 +65,46 @@ type ProjectLink = {
   href: string;
 };
 
-type CaseStudyBlock = {
-  title: string;
-  body: string;
-};
-
 type Project = {
   name: string;
   slug: string;
+  category: string;
   description: string;
+  accent: string;
+  visual: "commerce" | "product";
   technologies: string[];
+  highlights: string[];
   repositoryLinks: ProjectLink[];
   liveDemo?: string;
-  caseStudy: CaseStudyBlock[];
+  caseStudy: Array<{
+    title: string;
+    body: string;
+  }>;
 };
 
-type ContactFormValues = z.infer<typeof contactSchema>;
-type ThemePreference = "light" | "dark" | "system";
-type ResolvedTheme = "light" | "dark";
+type SkillGroup = {
+  title: string;
+  icon: IconComponent;
+  description: string;
+  skills: Array<{
+    name: string;
+    level: SkillLevel;
+  }>;
+};
+
+type CursorSpark = {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+  size: number;
+  driftX: number;
+  driftY: number;
+};
 
 const personal = {
   name: "MD. ASIF RAYHAN JOY",
+  shortName: "Asif Rayhan",
   title: "Full Stack Web Developer",
   location: "Satkhira, Khulna, Bangladesh",
   email: "amsiimf06@gmail.com",
@@ -94,94 +115,52 @@ const personal = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "#home", id: "home" },
-  { label: "About", href: "#about", id: "about" },
-  { label: "Skills", href: "#skills", id: "skills" },
-  { label: "Projects", href: "#projects", id: "projects" },
-  { label: "Education", href: "#education", id: "education" },
-  { label: "Resume", href: "#resume", id: "resume" },
-  { label: "Contact", href: "#contact", id: "contact" },
+  { label: "Home", href: "#home", id: "home", icon: HomeIcon },
+  { label: "Projects", href: "#projects", id: "projects", icon: Briefcase },
+  { label: "Skills", href: "#skills", id: "skills", icon: Code2 },
+  { label: "Process", href: "#process", id: "process", icon: Rocket },
+  { label: "Resume", href: "#resume", id: "resume", icon: FileText },
+  { label: "Contact", href: "#contact", id: "contact", icon: Mail },
 ];
 
-const quickStats = [
-  { value: "2+", label: "Personal Projects" },
-  { value: "Full Stack", label: "Development" },
-  { value: "Modern", label: "Web Technologies" },
-  { value: "Continuous", label: "Learning" },
+const heroStats = [
+  { value: "2", label: "Selected full-stack builds" },
+  { value: "7+", label: "Core technologies" },
+  { value: "API", label: "Backend-first thinking" },
+  { value: "BD", label: "Remote-ready from Bangladesh" },
 ];
 
-const skillGroups: SkillGroup[] = [
+const coreStack = [
+  { name: "Next.js", color: "#20d6b5" },
+  { name: "React", color: "#7dd3fc" },
+  { name: "TypeScript", color: "#8ea5ff" },
+  { name: "JavaScript", color: "#ffcf70" },
+  { name: "Node.js", color: "#8bff9c" },
+  { name: "Express.js", color: "#a7f3d0" },
+  { name: "MongoDB", color: "#70e08f" },
+  { name: "PostgreSQL", color: "#8fb7ff" },
+  { name: "Prisma", color: "#c4a7ff" },
+  { name: "Tailwind CSS", color: "#67e8f9" },
+  { name: "JWT", color: "#ff8fc7" },
+  { name: "Stripe", color: "#b5a7ff" },
+  { name: "Docker", color: "#75b7ff" },
+  { name: "Redis", color: "#ff8a7a" },
+];
+
+const cursorSparkColors = ["#20d6b5", "#7dd3fc", "#ffb86b", "#ff8fc7"];
+
+const capabilityHighlights = [
   {
-    title: "Languages",
-    icon: Code2,
-    skills: [
-      { name: "JavaScript", level: "Core" },
-      { name: "TypeScript", level: "Working" },
-      { name: "HTML5", level: "Core" },
-      { name: "CSS3", level: "Core" },
-    ],
+    title: "Frontend systems",
+    body: "Responsive React and Next.js interfaces with component boundaries, predictable states, and clean visual hierarchy.",
   },
   {
-    title: "Frontend",
-    icon: Layers3,
-    skills: [
-      { name: "React.js", level: "Core" },
-      { name: "Next.js", level: "Working" },
-      { name: "Tailwind CSS", level: "Core" },
-    ],
+    title: "Backend foundations",
+    body: "Node.js APIs, authentication flows, validation, and data access shaped for readable application behavior.",
   },
   {
-    title: "Backend",
-    icon: Server,
-    skills: [
-      { name: "Node.js", level: "Working" },
-      { name: "Express.js", level: "Working" },
-      { name: "NestJS", level: "Learning" },
-    ],
-  },
-  {
-    title: "Database",
-    icon: Database,
-    skills: [
-      { name: "MongoDB", level: "Working" },
-      { name: "PostgreSQL", level: "Working" },
-      { name: "Prisma ORM", level: "Working" },
-      { name: "Mongoose", level: "Working" },
-    ],
-  },
-  {
-    title: "Authentication",
-    icon: ShieldCheck,
-    skills: [
-      { name: "JWT", level: "Working" },
-      { name: "Refresh Token", level: "Working" },
-      { name: "OTP Authentication", level: "Working" },
-      { name: "RBAC", level: "Working" },
-    ],
-  },
-  {
-    title: "Tools",
-    icon: Briefcase,
-    skills: [
-      { name: "Git", level: "Working" },
-      { name: "GitHub", level: "Working" },
-      { name: "Docker", level: "Basic" },
-      { name: "Postman", level: "Working" },
-      { name: "VS Code", level: "Core" },
-    ],
-  },
-  {
-    title: "Additional Technologies",
-    icon: BookOpen,
-    skills: [
-      { name: "Redis", level: "Basic" },
-      { name: "Kafka", level: "Learning" },
-      { name: "RabbitMQ", level: "Learning" },
-      { name: "gRPC", level: "Learning" },
-      { name: "Stripe", level: "Working" },
-      { name: "Cloudinary", level: "Working" },
-      { name: "AWS", level: "Basic" },
-    ],
+    title: "Product delivery",
+    body: "Practical execution across UI, API, database, integrations, deployment, and review-ready project presentation.",
   },
 ];
 
@@ -189,8 +168,11 @@ const projects: Project[] = [
   {
     name: "E-Commerce",
     slug: "e-commerce",
+    category: "Commerce Platform",
+    accent: "#20d6b5",
+    visual: "commerce",
     description:
-      "A modern full-stack e-commerce platform built with React, Next.js, Node.js, MongoDB, Prisma, TypeScript, JavaScript, Tailwind CSS, and REST APIs.",
+      "A full-stack commerce build with a separate Next.js frontend, Node.js REST API backend, MongoDB, Prisma, TypeScript, JavaScript, and Tailwind CSS.",
     technologies: [
       "React.js",
       "Next.js",
@@ -201,6 +183,11 @@ const projects: Project[] = [
       "Prisma",
       "Tailwind CSS",
       "REST API",
+    ],
+    highlights: [
+      "Frontend and backend kept in separate repositories",
+      "REST API boundary between UI and server behavior",
+      "MongoDB and Prisma included in the project stack",
     ],
     repositoryLinks: [
       {
@@ -214,44 +201,27 @@ const projects: Project[] = [
     ],
     caseStudy: [
       {
-        title: "Project Overview",
-        body: "A full-stack e-commerce project organized with separate frontend and backend repositories. The public portfolio description should stay focused on the provided stack until repository-level feature details are reviewed.",
+        title: "Scope",
+        body: "A commerce system with dedicated frontend and backend repositories, keeping the public story tied to the available source and verified stack.",
       },
       {
-        title: "Architecture",
-        body: "Known structure: React/Next.js frontend, Node.js backend, REST API communication, MongoDB, Prisma, TypeScript, JavaScript, and Tailwind CSS.",
+        title: "System shape",
+        body: "React and Next.js handle the client experience while Node.js exposes REST endpoints. MongoDB and Prisma are represented in the persistence layer.",
       },
       {
-        title: "Main Features",
-        body: "Feature-level claims are intentionally marked for replacement after repository inspection. Add verified notes for catalog, cart, checkout, admin, order, and user flows only when confirmed in the code.",
-      },
-      {
-        title: "Authentication",
-        body: "Authentication details are a placeholder for verified implementation notes. Keep the final version tied to the actual backend code rather than generic e-commerce assumptions.",
-      },
-      {
-        title: "Backend/API",
-        body: "The backend is represented as a Node.js REST API project. Add endpoint groups, request validation, middleware, and error-handling details after reviewing the repository.",
-      },
-      {
-        title: "Database",
-        body: "MongoDB and Prisma are listed in the supplied project stack. Replace this note with exact schema/model details after the repository is audited.",
-      },
-      {
-        title: "Challenges",
-        body: "Use this space for real implementation challenges found in the codebase, such as data modeling, API design, authentication flow, state management, or deployment constraints.",
-      },
-      {
-        title: "What I Learned",
-        body: "This project demonstrates practical full-stack learning across frontend UI, backend API structure, database work, and connecting real application layers together.",
+        title: "Engineering focus",
+        body: "The interview angle is the separation of UI, API, and data responsibilities, plus explaining how each layer communicates.",
       },
     ],
   },
   {
     name: "My-App",
     slug: "my-app",
+    category: "Full-Stack Next.js App",
+    accent: "#ff8fc7",
+    visual: "product",
     description:
-      "A modern full-stack application built using Next.js, React, TypeScript, PostgreSQL, Prisma, Stripe, Authentication, and Next.js API Routes.",
+      "A Next.js application using React, TypeScript, PostgreSQL, Prisma, Stripe, authentication, and API Routes for full-stack product behavior.",
     technologies: [
       "Next.js",
       "React",
@@ -260,7 +230,12 @@ const projects: Project[] = [
       "Prisma",
       "Stripe",
       "Authentication",
-      "Next.js API Routes",
+      "API Routes",
+    ],
+    highlights: [
+      "Next.js app structure with API Routes",
+      "PostgreSQL and Prisma represented in the data layer",
+      "Stripe and authentication included in the product scope",
     ],
     repositoryLinks: [
       {
@@ -271,69 +246,127 @@ const projects: Project[] = [
     liveDemo: "https://my-app-tl6i.vercel.app/",
     caseStudy: [
       {
-        title: "Project Overview",
-        body: "A full-stack Next.js application using React, TypeScript, PostgreSQL, Prisma, Stripe, authentication, and Next.js API Routes.",
+        title: "Scope",
+        body: "A full-stack Next.js build where backend behavior belongs inside API Routes rather than a separate Express or Nest service.",
       },
       {
-        title: "Architecture",
-        body: "This project should be represented as a Next.js full-stack app, not an Express.js or NestJS backend. Server-side work belongs to Next.js API Routes.",
+        title: "System shape",
+        body: "Typed React UI, API route handlers, Prisma-backed PostgreSQL persistence, authentication, and Stripe integration work inside one product surface.",
       },
       {
-        title: "Main Features",
-        body: "Specific product features should be added after repository review. Current verified positioning: authentication, database-backed behavior, Stripe integration, and API Routes are part of the project scope.",
-      },
-      {
-        title: "Authentication",
-        body: "Authentication is listed in the project stack. Replace this placeholder with exact provider, session, middleware, and authorization details after code review.",
-      },
-      {
-        title: "Database",
-        body: "PostgreSQL and Prisma are listed in the supplied stack. Add model, relation, migration, and query details only when confirmed from the repository.",
-      },
-      {
-        title: "Payment Integration",
-        body: "Stripe is listed in the supplied stack. Add verified checkout, webhook, subscription, or payment flow details after inspecting the implementation.",
-      },
-      {
-        title: "API Routes",
-        body: "The backend behavior is implemented through Next.js API Routes. Keep this distinction clear during interviews because the project is not Express.js or NestJS based.",
-      },
-      {
-        title: "What I Learned",
-        body: "This project strengthens full-stack Next.js practice across typed UI work, API route design, database integration, authentication, and third-party payment workflows.",
+        title: "Engineering focus",
+        body: "The value comes from connecting product UI, server routes, persistence, authentication, and payment workflows in one coherent app.",
       },
     ],
   },
 ];
 
-const approachSteps = [
+const skillGroups: SkillGroup[] = [
+  {
+    title: "Languages",
+    icon: Code2,
+    description: "Implementation languages for typed, browser-ready work.",
+    skills: [
+      { name: "JavaScript", level: "Core" },
+      { name: "TypeScript", level: "Working" },
+      { name: "HTML5", level: "Core" },
+      { name: "CSS3", level: "Core" },
+    ],
+  },
+  {
+    title: "Frontend",
+    icon: Layers3,
+    description: "Interfaces, routing, layouts, and component-driven UI.",
+    skills: [
+      { name: "React.js", level: "Core" },
+      { name: "Next.js", level: "Working" },
+      { name: "Tailwind CSS", level: "Core" },
+    ],
+  },
+  {
+    title: "Backend",
+    icon: Server,
+    description: "Application logic, API structure, and service-side development.",
+    skills: [
+      { name: "Node.js", level: "Working" },
+      { name: "Express.js", level: "Working" },
+      { name: "NestJS", level: "Learning" },
+    ],
+  },
+  {
+    title: "Database",
+    icon: Database,
+    description: "Relational and document data work with ORM-backed workflows.",
+    skills: [
+      { name: "MongoDB", level: "Working" },
+      { name: "PostgreSQL", level: "Working" },
+      { name: "Prisma ORM", level: "Working" },
+      { name: "Mongoose", level: "Working" },
+    ],
+  },
+  {
+    title: "Authentication",
+    icon: ShieldCheck,
+    description: "Identity, authorization, sessions, and secure product flows.",
+    skills: [
+      { name: "JWT", level: "Working" },
+      { name: "Refresh Token", level: "Working" },
+      { name: "OTP Authentication", level: "Working" },
+      { name: "RBAC", level: "Working" },
+    ],
+  },
+  {
+    title: "Tools",
+    icon: Wrench,
+    description: "Versioning, API testing, local development, and deployment support.",
+    skills: [
+      { name: "Git", level: "Working" },
+      { name: "GitHub", level: "Working" },
+      { name: "Docker", level: "Basic" },
+      { name: "Postman", level: "Working" },
+      { name: "VS Code", level: "Core" },
+    ],
+  },
+  {
+    title: "Expanding Stack",
+    icon: BookOpen,
+    description: "Technologies being added through practical learning and experiments.",
+    skills: [
+      { name: "Redis", level: "Basic" },
+      { name: "Kafka", level: "Learning" },
+      { name: "RabbitMQ", level: "Learning" },
+      { name: "gRPC", level: "Learning" },
+      { name: "Stripe", level: "Working" },
+      { name: "Cloudinary", level: "Working" },
+      { name: "AWS", level: "Basic" },
+    ],
+  },
+];
+
+const processSteps = [
   {
     step: "01",
     title: "Understand",
-    subtitle: "Define the real problem",
-    body: "Clarify the user goal, business context, core workflows, data requirements, and success criteria before touching the UI or backend.",
-    focus: ["User flow", "Requirements", "Success criteria"],
+    body: "Clarify the workflow, users, data needs, constraints, and success criteria before choosing the implementation path.",
+    tags: ["User flow", "Requirements", "Success criteria"],
   },
   {
     step: "02",
-    title: "Plan",
-    subtitle: "Design the system shape",
-    body: "Map the application structure, database model, API boundaries, authentication flow, and page architecture so the build has direction.",
-    focus: ["Architecture", "Database", "API contracts"],
+    title: "Shape",
+    body: "Map the pages, API contracts, database models, authentication flow, and reusable UI structure.",
+    tags: ["Architecture", "Data model", "API contracts"],
   },
   {
     step: "03",
     title: "Build",
-    subtitle: "Ship the working product",
-    body: "Develop the interface, server logic, validations, integrations, reusable components, and data flows with clean TypeScript boundaries.",
-    focus: ["UI", "Backend logic", "Integrations"],
+    body: "Implement the interface, backend logic, validations, integrations, and state flows with practical TypeScript discipline.",
+    tags: ["UI systems", "Server logic", "Integrations"],
   },
   {
     step: "04",
-    title: "Improve",
-    subtitle: "Refine until reliable",
-    body: "Review behavior, fix edge cases, improve accessibility, optimize performance, and make the experience clearer for real users.",
-    focus: ["Debugging", "Accessibility", "Performance"],
+    title: "Refine",
+    body: "Review behavior, fix edge cases, improve accessibility, and polish performance until the result feels complete.",
+    tags: ["Debugging", "Accessibility", "Performance"],
   },
 ];
 
@@ -359,152 +392,20 @@ const contactSchema = z.object({
     .max(1000, "Message must be under 1000 characters."),
 });
 
+type ContactFormValues = z.infer<typeof contactSchema>;
+
 const levelStyles: Record<SkillLevel, string> = {
-  Core: "border-[var(--badge-core-border)] bg-[var(--badge-core-bg)] text-[var(--badge-core-text)]",
+  Core: "border-[var(--level-core-border)] bg-[var(--level-core-bg)] text-[var(--level-core-text)]",
   Working:
-    "border-[var(--badge-working-border)] bg-[var(--badge-working-bg)] text-[var(--badge-working-text)]",
+    "border-[var(--level-working-border)] bg-[var(--level-working-bg)] text-[var(--level-working-text)]",
   Learning:
-    "border-[var(--badge-learning-border)] bg-[var(--badge-learning-bg)] text-[var(--badge-learning-text)]",
+    "border-[var(--level-learning-border)] bg-[var(--level-learning-bg)] text-[var(--level-learning-text)]",
   Basic:
-    "border-[var(--badge-basic-border)] bg-[var(--badge-basic-bg)] text-[var(--badge-basic-text)]",
+    "border-[var(--level-basic-border)] bg-[var(--level-basic-bg)] text-[var(--level-basic-text)]",
 };
 
 const themeStorageKey = "asif-portfolio-theme";
 const copyrightYear = 2026;
-
-const portfolioStyles = `
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    min-width: 320px;
-  }
-
-  .portfolio-page {
-    --portfolio-bg: #f6f8fb;
-    --portfolio-surface: #ffffff;
-    --portfolio-surface-raised: rgba(255, 255, 255, 0.86);
-    --portfolio-surface-muted: #edf2f7;
-    --portfolio-text: #111827;
-    --portfolio-muted: #526071;
-    --portfolio-subtle: #778195;
-    --portfolio-border: rgba(15, 23, 42, 0.12);
-    --portfolio-border-strong: rgba(15, 23, 42, 0.2);
-    --portfolio-accent: #2563eb;
-    --portfolio-accent-strong: #1d4ed8;
-    --portfolio-accent-contrast: #ffffff;
-    --portfolio-accent-soft: rgba(37, 99, 235, 0.1);
-    --portfolio-secondary: #0f766e;
-    --portfolio-secondary-soft: rgba(15, 118, 110, 0.11);
-    --portfolio-warm: #b45309;
-    --portfolio-warm-soft: rgba(180, 83, 9, 0.1);
-    --portfolio-ring: rgba(37, 99, 235, 0.35);
-    --portfolio-code: #0f172a;
-    --portfolio-code-text: #dbeafe;
-    --portfolio-nav: rgba(255, 255, 255, 0.78);
-    --portfolio-shadow: 0 24px 80px rgba(15, 23, 42, 0.1);
-    --portfolio-hero: radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.14), transparent 32%), radial-gradient(circle at 88% 8%, rgba(15, 118, 110, 0.12), transparent 28%), linear-gradient(180deg, #f7f9fc 0%, #edf2f7 100%);
-    --badge-core-bg: rgba(37, 99, 235, 0.1);
-    --badge-core-border: rgba(37, 99, 235, 0.22);
-    --badge-core-text: #1d4ed8;
-    --badge-working-bg: rgba(15, 118, 110, 0.1);
-    --badge-working-border: rgba(15, 118, 110, 0.22);
-    --badge-working-text: #0f766e;
-    --badge-learning-bg: rgba(180, 83, 9, 0.1);
-    --badge-learning-border: rgba(180, 83, 9, 0.22);
-    --badge-learning-text: #b45309;
-    --badge-basic-bg: rgba(109, 40, 217, 0.1);
-    --badge-basic-border: rgba(109, 40, 217, 0.2);
-    --badge-basic-text: #6d28d9;
-    background: var(--portfolio-bg);
-    color: var(--portfolio-text);
-    overflow-x: hidden;
-  }
-
-  .portfolio-page[data-theme="dark"] {
-    --portfolio-bg: #050609;
-    --portfolio-surface: #0e1117;
-    --portfolio-surface-raised: rgba(14, 17, 23, 0.88);
-    --portfolio-surface-muted: #151a23;
-    --portfolio-text: #f5f7fb;
-    --portfolio-muted: #a8b0c0;
-    --portfolio-subtle: #7f899c;
-    --portfolio-border: rgba(255, 255, 255, 0.12);
-    --portfolio-border-strong: rgba(255, 255, 255, 0.2);
-    --portfolio-accent: #60a5fa;
-    --portfolio-accent-strong: #93c5fd;
-    --portfolio-accent-contrast: #06111f;
-    --portfolio-accent-soft: rgba(96, 165, 250, 0.14);
-    --portfolio-secondary: #2dd4bf;
-    --portfolio-secondary-soft: rgba(45, 212, 191, 0.12);
-    --portfolio-warm: #fbbf24;
-    --portfolio-warm-soft: rgba(251, 191, 36, 0.12);
-    --portfolio-ring: rgba(96, 165, 250, 0.38);
-    --portfolio-code: #070a10;
-    --portfolio-code-text: #dbeafe;
-    --portfolio-nav: rgba(5, 6, 9, 0.78);
-    --portfolio-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
-    --portfolio-hero: radial-gradient(circle at 12% 18%, rgba(96, 165, 250, 0.13), transparent 32%), radial-gradient(circle at 88% 8%, rgba(45, 212, 191, 0.11), transparent 28%), linear-gradient(180deg, #050609 0%, #0d1118 100%);
-    --badge-core-bg: rgba(96, 165, 250, 0.13);
-    --badge-core-border: rgba(96, 165, 250, 0.26);
-    --badge-core-text: #93c5fd;
-    --badge-working-bg: rgba(45, 212, 191, 0.12);
-    --badge-working-border: rgba(45, 212, 191, 0.24);
-    --badge-working-text: #5eead4;
-    --badge-learning-bg: rgba(251, 191, 36, 0.12);
-    --badge-learning-border: rgba(251, 191, 36, 0.24);
-    --badge-learning-text: #fcd34d;
-    --badge-basic-bg: rgba(196, 181, 253, 0.12);
-    --badge-basic-border: rgba(196, 181, 253, 0.22);
-    --badge-basic-text: #c4b5fd;
-  }
-
-  .portfolio-page[data-theme="light"] {
-    color-scheme: light;
-  }
-
-  .portfolio-page[data-theme="dark"] {
-    color-scheme: dark;
-  }
-
-  .portfolio-page::before {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    content: "";
-    background-image: linear-gradient(rgba(120, 130, 150, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 130, 150, 0.08) 1px, transparent 1px);
-    background-size: 54px 54px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent 72%);
-  }
-
-  .portfolio-gradient-text {
-    background: linear-gradient(135deg, var(--portfolio-text), var(--portfolio-accent), var(--portfolio-secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .portfolio-section {
-    scroll-margin-top: 96px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-
-    .portfolio-page *,
-    .portfolio-page *::before,
-    .portfolio-page *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
-`;
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -512,6 +413,40 @@ function cn(...classes: Array<string | false | null | undefined>) {
 
 function isThemePreference(value: string | null): value is ThemePreference {
   return value === "light" || value === "dark" || value === "system";
+}
+
+function getStoredThemePreference(): ThemePreference {
+  if (typeof window === "undefined") {
+    return "dark";
+  }
+
+  try {
+    const storedTheme = window.localStorage.getItem(themeStorageKey);
+    return isThemePreference(storedTheme) ? storedTheme : "dark";
+  } catch {
+    return "dark";
+  }
+}
+
+function getSystemThemeSnapshot(): ResolvedTheme {
+  if (typeof window === "undefined" || !window.matchMedia) {
+    return "dark";
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
+function subscribeToSystemTheme(onStoreChange: () => void) {
+  if (typeof window === "undefined" || !window.matchMedia) {
+    return () => {};
+  }
+
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  mediaQuery.addEventListener("change", onStoreChange);
+
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
 }
 
 function Github(props: SVGProps<SVGSVGElement>) {
@@ -551,56 +486,118 @@ function Linkedin(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function useActiveSection() {
+  const [activeSection, setActiveSection] = useState(navItems[0].id);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target.id) {
+          setActiveSection(visibleEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-32% 0px -52% 0px",
+        threshold: [0.08, 0.24, 0.45],
+      },
+    );
+
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return activeSection;
+}
+
 export default function Home() {
   return <PortfolioPage />;
 }
 
 function PortfolioPage() {
   const [themePreference, setThemePreference] =
-    useState<ThemePreference>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("light");
-  const [hasMounted, setHasMounted] = useState(false);
+    useState<ThemePreference>(getStoredThemePreference);
+  const [cursorSparks, setCursorSparks] = useState<CursorSpark[]>([]);
+  const nextSparkId = useRef(0);
+  const lastSparkAt = useRef(0);
+  const sparkTimeouts = useRef<number[]>([]);
+  const systemTheme = useSyncExternalStore(
+    subscribeToSystemTheme,
+    getSystemThemeSnapshot,
+    () => "dark",
+  );
+  const resolvedTheme =
+    themePreference === "system" ? systemTheme : themePreference;
+  const activeSection = useActiveSection();
 
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem(themeStorageKey);
-
-    if (isThemePreference(storedTheme)) {
-      setThemePreference(storedTheme);
+    try {
+      window.localStorage.setItem(themeStorageKey, themePreference);
+    } catch {
+      // Ignore storage errors in privacy-restricted contexts.
     }
+  }, [themePreference]);
 
-    setHasMounted(true);
+  useEffect(() => {
+    const timeoutIds = sparkTimeouts.current;
+
+    return () => {
+      timeoutIds.forEach((timeoutId) => {
+        window.clearTimeout(timeoutId);
+      });
+    };
   }, []);
 
-  useEffect(() => {
-    if (!hasMounted) {
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse") {
       return;
     }
 
-    const resolveTheme = () => {
-      if (themePreference !== "system") {
-        setResolvedTheme(themePreference);
-        return;
-      }
+    const now = window.performance.now();
 
-      setResolvedTheme(
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light",
-      );
+    if (now - lastSparkAt.current < 46) {
+      return;
+    }
+
+    lastSparkAt.current = now;
+
+    const sparkId = nextSparkId.current;
+    nextSparkId.current += 1;
+
+    const spark: CursorSpark = {
+      id: sparkId,
+      x: event.clientX,
+      y: event.clientY,
+      color: cursorSparkColors[sparkId % cursorSparkColors.length],
+      size: 5 + (sparkId % 3) * 2,
+      driftX: Math.round((Math.random() - 0.5) * 34),
+      driftY: Math.round((Math.random() - 0.5) * 34),
     };
 
-    window.localStorage.setItem(themeStorageKey, themePreference);
-    resolveTheme();
+    setCursorSparks((currentSparks) => [...currentSparks.slice(-13), spark]);
 
-    if (themePreference !== "system") {
-      return;
-    }
+    const timeoutId = window.setTimeout(() => {
+      setCursorSparks((currentSparks) =>
+        currentSparks.filter((item) => item.id !== spark.id),
+      );
+    }, 760);
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQuery.addEventListener("change", resolveTheme);
+    sparkTimeouts.current.push(timeoutId);
+  };
 
-    return () => mediaQuery.removeEventListener("change", resolveTheme);
-  }, [hasMounted, themePreference]);
+  const handlePointerLeave = () => {
+    setCursorSparks([]);
+  };
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -615,7 +612,7 @@ function PortfolioPage() {
       addressRegion: "Khulna",
       addressCountry: "BD",
     },
-    sameAs: [personal.github],
+    sameAs: [personal.github, personal.linkedin].filter(Boolean),
     knowsAbout: [
       "React",
       "Next.js",
@@ -629,44 +626,67 @@ function PortfolioPage() {
 
   return (
     <div
-      className="portfolio-page min-h-screen bg-[var(--portfolio-bg)] text-[var(--portfolio-text)]"
+      className="portfolio-page min-h-screen overflow-x-hidden bg-[var(--portfolio-bg)] pb-24 text-[var(--portfolio-text)] lg:pb-0"
       data-theme={resolvedTheme}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
     >
-      <style>{portfolioStyles}</style>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+      <div className="cursor-trail-layer" aria-hidden="true">
+        {cursorSparks.map((spark) => (
+          <span
+            key={spark.id}
+            className="cursor-spark"
+            style={
+              {
+                "--spark-left": `${spark.x}px`,
+                "--spark-top": `${spark.y}px`,
+                "--spark-size": `${spark.size}px`,
+                "--spark-color": spark.color,
+                "--spark-drift-x": `${spark.driftX}px`,
+                "--spark-drift-y": `${spark.driftY}px`,
+              } as CSSProperties
+            }
+          />
+        ))}
+      </div>
       <Header
+        activeSection={activeSection}
         themePreference={themePreference}
         onThemeChange={setThemePreference}
       />
+      <SideRail activeSection={activeSection} />
+      <MobileDock activeSection={activeSection} />
+
       <main className="relative z-10">
         <HeroSection />
-        <QuickStatsSection />
+        <StackRibbon />
         <AboutSection />
-        <SkillsSection />
         <ProjectsSection />
-        <ApproachSection />
-        <EducationSection />
+        <SkillsSection />
+        <ProcessSection />
         <ResumeSection />
-        <LanguagesSection />
         <ContactSection />
       </main>
+
       <Footer />
     </div>
   );
 }
 
 function Header({
+  activeSection,
   themePreference,
   onThemeChange,
 }: {
+  activeSection: string;
   themePreference: ThemePreference;
   onThemeChange: (theme: ThemePreference) => void;
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -676,34 +696,6 @@ function Header({
     window.addEventListener("scroll", updateScrolled, { passive: true });
 
     return () => window.removeEventListener("scroll", updateScrolled);
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (visibleEntry?.target.id) {
-          setActiveSection(visibleEntry.target.id);
-        }
-      },
-      {
-        rootMargin: "-35% 0px -50% 0px",
-        threshold: [0.08, 0.2, 0.5],
-      },
-    );
-
-    navItems.forEach((item) => {
-      const element = document.getElementById(item.id);
-
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
-    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -726,41 +718,41 @@ function Header({
       className={cn(
         "fixed inset-x-0 top-0 z-50 border-b transition-all duration-300",
         isScrolled
-          ? "border-[var(--portfolio-border)] bg-[var(--portfolio-nav)] shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl"
+          ? "border-[var(--portfolio-line)] bg-[var(--portfolio-nav)] shadow-[0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl"
           : "border-transparent bg-transparent",
       )}
     >
       <nav
         aria-label="Primary navigation"
-        className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+        className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
       >
         <a
           href="#home"
           onClick={closeMenu}
-          className="group inline-flex min-w-0 items-center gap-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+          className="group inline-flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--portfolio-text)] text-sm font-bold text-[var(--portfolio-bg)]">
+          <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-[var(--portfolio-line-strong)] bg-[var(--portfolio-text)] font-mono text-sm font-black text-[var(--portfolio-bg)] shadow-[0_0_28px_var(--portfolio-glow)]">
             AR
           </span>
           <span className="hidden min-w-0 leading-none sm:block">
-            <span className="block truncate text-sm font-semibold tracking-wide">
-              ASIF RAYHAN
+            <span className="block truncate font-mono text-base font-black tracking-wide">
+              asif.dev
             </span>
-            <span className="mt-1 block truncate text-xs text-[var(--portfolio-muted)]">
-              Full Stack Web Developer
+            <span className="mt-1 block truncate text-xs font-semibold uppercase tracking-[0.18em] text-[var(--portfolio-muted)]">
+              Full-stack portfolio
             </span>
           </span>
         </a>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] p-1 shadow-sm backdrop-blur md:flex">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
+                "rounded-md px-3 py-2 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
                 activeSection === item.id
-                  ? "bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]"
+                  ? "bg-[var(--portfolio-accent)] text-[var(--portfolio-accent-contrast)]"
                   : "text-[var(--portfolio-muted)] hover:text-[var(--portfolio-text)]",
               )}
             >
@@ -779,22 +771,15 @@ function Header({
             target="_blank"
             rel="noreferrer"
             aria-label="GitHub profile"
-            className="hidden size-10 place-items-center rounded-full border border-[var(--portfolio-border)] text-[var(--portfolio-muted)] transition hover:border-[var(--portfolio-border-strong)] hover:text-[var(--portfolio-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] sm:grid"
+            className="hidden size-10 place-items-center rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] text-[var(--portfolio-muted)] transition hover:border-[var(--portfolio-line-strong)] hover:text-[var(--portfolio-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] sm:grid"
           >
             <Github className="size-4" aria-hidden="true" />
           </a>
-          <span
-            aria-label="LinkedIn profile placeholder"
-            className="hidden size-10 place-items-center rounded-full border border-[var(--portfolio-border)] text-[var(--portfolio-subtle)] opacity-70 sm:grid"
-            title="LinkedIn to be added"
-          >
-            <Linkedin className="size-4" aria-hidden="true" />
-          </span>
           <a
             href="#contact"
-            className="hidden min-h-10 items-center gap-2 rounded-full bg-[var(--portfolio-text)] px-4 text-sm font-semibold text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] lg:inline-flex"
+            className="hidden min-h-10 items-center gap-2 rounded-lg bg-[var(--portfolio-text)] px-4 text-sm font-black text-[var(--portfolio-bg)] shadow-sm transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] lg:inline-flex"
           >
-            Let&apos;s Talk
+            Hire Me
             <ArrowRight className="size-4" aria-hidden="true" />
           </a>
           <button
@@ -802,7 +787,7 @@ function Header({
             aria-label="Open navigation menu"
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((value) => !value)}
-            className="grid size-10 place-items-center rounded-full border border-[var(--portfolio-border)] text-[var(--portfolio-text)] transition hover:border-[var(--portfolio-border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] md:hidden"
+            className="grid size-10 place-items-center rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] text-[var(--portfolio-text)] transition hover:border-[var(--portfolio-line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] md:hidden"
           >
             {isMenuOpen ? (
               <X className="size-5" aria-hidden="true" />
@@ -816,47 +801,33 @@ function Header({
       <AnimatePresence>
         {isMenuOpen ? (
           <motion.div
-            className="fixed inset-x-4 top-20 z-50 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-3 shadow-[var(--portfolio-shadow)] backdrop-blur-xl md:hidden"
+            className="fixed inset-x-4 top-24 z-50 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] p-3 shadow-[var(--portfolio-shadow)] backdrop-blur-xl md:hidden"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.18 }}
           >
             <div className="grid gap-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeMenu}
-                  className={cn(
-                    "rounded-lg px-4 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
-                    activeSection === item.id
-                      ? "bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]"
-                      : "text-[var(--portfolio-muted)] hover:bg-[var(--portfolio-surface-muted)] hover:text-[var(--portfolio-text)]",
-                  )}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t border-[var(--portfolio-border)] pt-3">
-              <a
-                href={personal.github}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--portfolio-border)] text-sm font-semibold text-[var(--portfolio-text)]"
-              >
-                <Github className="size-4" aria-hidden="true" />
-                GitHub
-              </a>
-              <a
-                href="#contact"
-                onClick={closeMenu}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--portfolio-text)] text-sm font-semibold text-[var(--portfolio-bg)]"
-              >
-                <Mail className="size-4" aria-hidden="true" />
-                Let&apos;s Talk
-              </a>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={cn(
+                      "flex min-h-12 items-center gap-3 rounded-md px-4 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
+                      activeSection === item.id
+                        ? "bg-[var(--portfolio-accent)] text-[var(--portfolio-accent-contrast)]"
+                        : "text-[var(--portfolio-muted)] hover:bg-[var(--portfolio-surface-muted)] hover:text-[var(--portfolio-text)]",
+                    )}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {item.label}
+                  </a>
+                );
+              })}
             </div>
           </motion.div>
         ) : null}
@@ -873,8 +844,8 @@ function ThemeSwitcher({
   onThemeChange: (theme: ThemePreference) => void;
 }) {
   const options = [
-    { value: "light" as const, label: "Light", icon: Sun },
     { value: "dark" as const, label: "Dark", icon: Moon },
+    { value: "light" as const, label: "Light", icon: Sun },
     { value: "system" as const, label: "System", icon: Monitor },
   ];
 
@@ -882,7 +853,7 @@ function ThemeSwitcher({
     <div
       role="group"
       aria-label="Theme preference"
-      className="hidden rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-1 backdrop-blur sm:flex"
+      className="hidden rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] p-1 shadow-sm backdrop-blur sm:flex"
     >
       {options.map((option) => {
         const Icon = option.icon;
@@ -896,9 +867,9 @@ function ThemeSwitcher({
             aria-pressed={isActive}
             onClick={() => onThemeChange(option.value)}
             className={cn(
-              "grid size-8 place-items-center rounded-full text-[var(--portfolio-muted)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
+              "grid size-8 place-items-center rounded-md text-[var(--portfolio-muted)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
               isActive &&
-                "bg-[var(--portfolio-text)] text-[var(--portfolio-bg)] shadow-sm",
+                "bg-[var(--portfolio-accent)] text-[var(--portfolio-accent-contrast)] shadow-sm",
             )}
           >
             <Icon className="size-4" aria-hidden="true" />
@@ -909,154 +880,259 @@ function ThemeSwitcher({
   );
 }
 
+function SideRail({ activeSection }: { activeSection: string }) {
+  return (
+    <aside
+      aria-label="Section shortcuts"
+      className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] p-2 shadow-[var(--portfolio-shadow)] backdrop-blur-xl lg:flex lg:flex-col lg:gap-2"
+    >
+      {navItems.map((item) => {
+        const Icon = item.icon;
+
+        return (
+          <a
+            key={item.href}
+            href={item.href}
+            aria-label={item.label}
+            className={cn(
+              "group relative grid size-11 place-items-center rounded-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
+              activeSection === item.id
+                ? "bg-[var(--portfolio-accent)] text-[var(--portfolio-accent-contrast)]"
+                : "bg-[var(--portfolio-surface-muted)] text-[var(--portfolio-muted)] hover:text-[var(--portfolio-text)]",
+            )}
+          >
+            <Icon className="size-5" aria-hidden="true" />
+            <span className="pointer-events-none absolute left-14 top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] px-3 py-2 text-xs font-bold text-[var(--portfolio-text)] shadow-sm group-hover:block">
+              {item.label}
+            </span>
+          </a>
+        );
+      })}
+    </aside>
+  );
+}
+
+function MobileDock({ activeSection }: { activeSection: string }) {
+  const mobileItems = [navItems[0], navItems[1], navItems[2], navItems[5]];
+
+  return (
+    <nav
+      aria-label="Mobile shortcuts"
+      className="fixed inset-x-3 bottom-3 z-50 grid grid-cols-4 gap-1 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] p-1 shadow-[var(--portfolio-shadow)] backdrop-blur-xl lg:hidden"
+    >
+      {mobileItems.map((item) => {
+        const Icon = item.icon;
+
+        return (
+          <a
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "grid min-h-14 place-items-center rounded-md px-1 text-[11px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]",
+              activeSection === item.id
+                ? "bg-[var(--portfolio-accent)] text-[var(--portfolio-accent-contrast)]"
+                : "text-[var(--portfolio-muted)]",
+            )}
+          >
+            <Icon className="mb-1 size-4" aria-hidden="true" />
+            <span className="max-w-full truncate">{item.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
+
 function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
     <section
       id="home"
-      className="portfolio-section relative overflow-hidden px-4 pb-16 pt-28 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8"
-      style={{ background: "var(--portfolio-hero)" }}
+      className="portfolio-section relative isolate overflow-hidden border-b border-[var(--portfolio-line)] px-4 pt-28 sm:px-6 lg:px-8"
     >
-      <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]">
+      <div className="absolute inset-0 -z-30" aria-hidden="true">
+        <Image
+          src="/portfolio-hero-abstract.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[64%_50%]"
+        />
+      </div>
+      <div className="absolute inset-0 -z-20 bg-[var(--portfolio-hero-overlay)]" />
+      <div className="absolute inset-0 -z-10 bg-[var(--portfolio-grid)] opacity-45" />
+
+      <div className="mx-auto grid min-h-[78svh] w-full max-w-7xl items-center gap-10 pb-14 pt-10 lg:grid-cols-[1fr_0.78fr]">
         <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="max-w-3xl"
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] px-3 py-2 text-sm font-medium text-[var(--portfolio-muted)] shadow-sm backdrop-blur">
-            <span className="relative flex size-2.5" aria-hidden="true">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--portfolio-secondary)] opacity-50" />
-              <span className="relative inline-flex size-2.5 rounded-full bg-[var(--portfolio-secondary)]" />
-            </span>
-            Open to Opportunities
+          <div className="inline-flex items-center gap-3 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-[var(--portfolio-muted)] shadow-sm backdrop-blur">
+            <span className="grid size-2.5 place-items-center rounded-full bg-[var(--portfolio-success)] shadow-[0_0_18px_var(--portfolio-success)]" />
+            Open to full-stack web roles
           </div>
 
-          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--portfolio-accent)]">
+          <p className="mt-8 text-sm font-bold uppercase tracking-[0.2em] text-[var(--portfolio-accent)]">
             {personal.title}
           </p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-tight text-[var(--portfolio-text)] sm:text-6xl lg:text-7xl">
+          <h1 className="mt-4 max-w-5xl break-words text-5xl font-semibold leading-[1.04] text-[var(--portfolio-text)] sm:text-6xl lg:text-7xl">
             {personal.name}
           </h1>
-          <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight sm:text-5xl">
-            <span className="portfolio-gradient-text">
-              Building Modern, Scalable &amp; User-Focused Web Applications.
-            </span>
-          </h2>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-[var(--portfolio-muted)] sm:text-lg">
-            I build full-stack web applications with React, Next.js, Node.js,
-            TypeScript, MongoDB, PostgreSQL, Prisma, and modern API patterns.
-            My focus is clean interfaces, reliable backend structure, and
-            practical problem solving.
+          <p className="mt-6 max-w-2xl text-xl font-semibold leading-8 text-[var(--portfolio-text)] sm:text-2xl sm:leading-9">
+            I build clean web products from polished interfaces to API routes,
+            authentication, data models, integrations, and deployment-ready
+            presentation.
+          </p>
+          <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--portfolio-muted)]">
+            Focused on React, Next.js, Node.js, TypeScript, MongoDB,
+            PostgreSQL, Prisma, Tailwind CSS, and practical full-stack delivery.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <PrimaryLink href="#projects" icon={ArrowRight}>
-              View My Work
+              View Projects
             </PrimaryLink>
-            <SecondaryLink href={personal.resume} icon={Download}>
-              Download Resume
-            </SecondaryLink>
-            <SecondaryLink href="#contact" icon={Mail}>
-              Contact Me
+            <SecondaryLink href={personal.resume} icon={Download} external>
+              Resume
             </SecondaryLink>
             <SecondaryLink href={personal.github} icon={Github} external>
               GitHub
             </SecondaryLink>
+            <SecondaryLink href="#contact" icon={Mail}>
+              Contact
+            </SecondaryLink>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            {[
-              "React",
-              "Next.js",
-              "Node.js",
-              "TypeScript",
-              "MongoDB",
-              "PostgreSQL",
-              "Prisma",
-            ].map((technology) => (
-              <span
-                key={technology}
-                className="rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] px-3 py-1.5 text-xs font-semibold text-[var(--portfolio-muted)] backdrop-blur"
-              >
-                {technology}
-              </span>
-            ))}
+          <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold text-[var(--portfolio-muted)]">
+            <span className="inline-flex items-center gap-2">
+              <MapPin className="size-4 text-[var(--portfolio-accent)]" />
+              {personal.location}
+            </span>
+            <a
+              href={`mailto:${personal.email}`}
+              className="inline-flex items-center gap-2 transition hover:text-[var(--portfolio-text)]"
+            >
+              <Mail className="size-4 text-[var(--portfolio-warm)]" />
+              {personal.email}
+            </a>
           </div>
         </motion.div>
 
         <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08, duration: 0.55, ease: "easeOut" }}
-          className="mx-auto w-full max-w-xl lg:ml-auto"
+          transition={{ duration: 0.65, delay: 0.08, ease: "easeOut" }}
+          className="hidden lg:block"
         >
-          <div className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-4 shadow-[var(--portfolio-shadow)] backdrop-blur">
-            <div className="flex items-center justify-between border-b border-[var(--portfolio-border)] pb-4">
-              <div className="flex items-center gap-2">
-                <span className="size-3 rounded-full bg-[#ef4444]" />
-                <span className="size-3 rounded-full bg-[#f59e0b]" />
-                <span className="size-3 rounded-full bg-[#10b981]" />
-              </div>
-              <span className="text-xs font-medium text-[var(--portfolio-subtle)]">
-                portfolio.ts
-              </span>
-            </div>
-            <pre className="mt-5 max-w-full overflow-x-auto rounded-lg bg-[var(--portfolio-code)] p-5 text-sm leading-7 text-[var(--portfolio-code-text)]">
-              <code>{`const developer = {
-  name: "MD. ASIF RAYHAN JOY",
-  role: "Full Stack Web Developer",
-  location: "Bangladesh",
-  focus: ["Frontend", "Backend", "APIs"],
-  stack: ["Next.js", "Node.js", "Prisma"]
-};`}</code>
-            </pre>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {[
-                { label: "Frontend", value: "React UI" },
-                { label: "Backend", value: "REST APIs" },
-                { label: "Database", value: "SQL + NoSQL" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="border-t border-[var(--portfolio-border)] pt-4"
-                >
-                  <p className="text-xs font-medium text-[var(--portfolio-subtle)]">
-                    {item.label}
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-[var(--portfolio-text)]">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <DeveloperPanel />
         </motion.div>
       </div>
     </section>
   );
 }
 
-function QuickStatsSection() {
+function DeveloperPanel() {
   return (
-    <section className="relative z-10 px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {quickStats.map((stat) => (
-          <motion.div
-            key={stat.label}
-            className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-5 shadow-sm backdrop-blur"
-            whileHover={{ y: -3 }}
-            transition={{ duration: 0.18 }}
-          >
-            <p className="text-2xl font-semibold text-[var(--portfolio-text)]">
-              {stat.value}
+    <div className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-panel)] p-4 shadow-[var(--portfolio-shadow)] backdrop-blur-xl">
+      <div className="flex items-center justify-between border-b border-[var(--portfolio-line)] pb-4">
+        <div className="flex items-center gap-2">
+          <span className="size-3 rounded-full bg-[#ff5f57]" />
+          <span className="size-3 rounded-full bg-[#ffbd2e]" />
+          <span className="size-3 rounded-full bg-[#28c840]" />
+        </div>
+        <span className="font-mono text-xs font-black uppercase tracking-[0.18em] text-[var(--portfolio-muted)]">
+          portfolio.tsx
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-4">
+        <div className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-4">
+          <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-[var(--portfolio-accent)]">
+            Current focus
+          </p>
+          <p className="mt-3 text-2xl font-black">{personal.title}</p>
+          <p className="mt-3 text-sm leading-7 text-[var(--portfolio-muted)]">
+            Building full-stack products with practical architecture, clean UI,
+            authentication, data models, and API boundaries.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {heroStats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-4"
+            >
+              <p className="font-mono text-3xl font-black text-[var(--portfolio-text)]">
+                {stat.value}
+              </p>
+              <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-[var(--portfolio-muted)]">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-4">
+          <div className="flex items-center justify-between">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-[var(--portfolio-warm)]">
+              Stack map
             </p>
-            <p className="mt-2 text-sm text-[var(--portfolio-muted)]">
-              {stat.label}
-            </p>
-          </motion.div>
-        ))}
+            <Sparkles
+              className="size-4 text-[var(--portfolio-warm)]"
+              aria-hidden="true"
+            />
+          </div>
+          <div className="mt-4 space-y-3">
+            {[
+              ["Client", "React / Next.js / Tailwind"],
+              ["Server", "Node.js / API Routes / Auth"],
+              ["Data", "Prisma / PostgreSQL / MongoDB"],
+            ].map(([label, value]) => (
+              <div key={label} className="flex items-center gap-3">
+                <span className="w-16 font-mono text-xs font-black uppercase tracking-[0.14em] text-[var(--portfolio-muted)]">
+                  {label}
+                </span>
+                <span className="h-px flex-1 bg-[var(--portfolio-line)]" />
+                <span className="text-right text-sm font-bold">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StackRibbon() {
+  const marqueeStack = [...coreStack, ...coreStack];
+
+  return (
+    <section className="border-b border-[var(--portfolio-line)] bg-[var(--portfolio-bg)] px-4 py-9 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex items-center gap-4">
+          <p className="shrink-0 text-xs font-black uppercase tracking-[0.16em] text-[var(--portfolio-muted)]">
+            Core technologies
+          </p>
+          <span className="h-px flex-1 bg-[var(--portfolio-line)]" />
+        </div>
+        <div className="portfolio-marquee-shell mt-6 py-3">
+          <div className="portfolio-marquee-track flex gap-4 pr-4">
+            {marqueeStack.map((item, index) => (
+              <div
+                key={`${item.name}-${index}`}
+                className="tech-pill flex min-h-16 min-w-[12rem] items-center justify-center rounded-lg border px-5 text-center text-sm font-black uppercase tracking-[0.04em] sm:min-w-[13.5rem]"
+                style={{ "--tech-color": item.color } as CSSProperties}
+              >
+                {item.name}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1067,39 +1143,38 @@ function AboutSection() {
     <Section
       id="about"
       eyebrow="About"
-      title="A practical developer focused on building useful web applications."
-      description="I enjoy turning ideas into clean, maintainable software with thoughtful UI, clear backend boundaries, and reliable data handling."
+      title="Practical full-stack development with a polished product finish."
+      description="A portfolio built around real project work, honest skill levels, and a clear path from frontend experience to backend behavior."
     >
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr]">
-        <div className="space-y-5 text-base leading-8 text-[var(--portfolio-muted)]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
+        <div className="space-y-6 text-base leading-8 text-[var(--portfolio-muted)]">
           <p>
-            I am a passionate Full Stack Web Developer from Satkhira, Khulna,
-            Bangladesh. I enjoy building modern web applications and solving
-            real-world problems through frontend development, backend
-            development, API design, authentication, database design, and
-            scalable application structure.
+            I am a Full Stack Web Developer from Satkhira, Khulna, Bangladesh.
+            I work across frontend development, backend development, API design,
+            authentication, database modeling, and application structure.
           </p>
           <p>
-            My work is centered around React, Next.js, Node.js, TypeScript,
-            MongoDB, PostgreSQL, Prisma, and modern tooling. I am continuously
-            learning and improving my software engineering skills through
-            practical full-stack projects.
+            My strongest work is built around React, Next.js, Node.js,
+            TypeScript, MongoDB, PostgreSQL, Prisma, and modern tooling. I keep
+            improving through practical projects that connect UI polish with
+            reliable application behavior.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
+
+          <div className="grid gap-3 pt-2 sm:grid-cols-2">
             {[
-              "Frontend development",
-              "Backend development",
-              "API development",
-              "Database design",
-              "Authentication",
-              "Scalable architecture",
+              "Responsive frontend development",
+              "API and backend implementation",
+              "Authentication and access control",
+              "Database modeling and queries",
+              "Typed application structure",
+              "Deployment-ready presentation",
             ].map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-3 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-4 text-sm font-semibold text-[var(--portfolio-text)]"
+                className="flex min-h-14 items-center gap-3 border-t border-[var(--portfolio-line)] py-3 text-sm font-bold text-[var(--portfolio-text)]"
               >
                 <CheckCircle2
-                  className="size-4 shrink-0 text-[var(--portfolio-secondary)]"
+                  className="size-4 shrink-0 text-[var(--portfolio-success)]"
                   aria-hidden="true"
                 />
                 {item}
@@ -1108,19 +1183,19 @@ function AboutSection() {
           </div>
         </div>
 
-        <aside className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-6 shadow-[var(--portfolio-shadow)] backdrop-blur">
-          <div className="flex items-center gap-4">
-            <div className="grid size-14 shrink-0 place-items-center rounded-lg bg-[var(--portfolio-text)] text-lg font-bold text-[var(--portfolio-bg)]">
+        <aside className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-5 shadow-[var(--portfolio-shadow)]">
+          <div className="flex items-center gap-4 border-b border-[var(--portfolio-line)] pb-5">
+            <div className="grid size-14 shrink-0 place-items-center rounded-lg bg-[var(--portfolio-accent)] font-mono text-lg font-black text-[var(--portfolio-accent-contrast)]">
               AR
             </div>
             <div className="min-w-0">
-              <p className="truncate text-lg font-semibold">{personal.name}</p>
-              <p className="mt-1 text-sm text-[var(--portfolio-muted)]">
+              <p className="truncate text-lg font-black">{personal.name}</p>
+              <p className="mt-1 text-sm font-semibold text-[var(--portfolio-muted)]">
                 {personal.title}
               </p>
             </div>
           </div>
-          <div className="mt-6 space-y-4 text-sm">
+          <div className="mt-5 space-y-4 text-sm">
             <InfoRow icon={MapPin} label="Location" value={personal.location} />
             <InfoRow icon={Mail} label="Email" value={personal.email} />
             <InfoRow icon={Phone} label="Phone" value={personal.phone} />
@@ -1128,54 +1203,19 @@ function AboutSection() {
           </div>
         </aside>
       </div>
-    </Section>
-  );
-}
 
-function SkillsSection() {
-  return (
-    <Section
-      id="skills"
-      eyebrow="Technical Skills"
-      title="A focused full-stack toolkit with honest skill levels."
-      description="Skills are grouped by where they are used in real applications. Learning and basic technologies are intentionally separated from core strengths."
-    >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {skillGroups.map((group) => {
-          const Icon = group.icon;
-
-          return (
-            <motion.article
-              key={group.title}
-              className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.18 }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="grid size-10 place-items-center rounded-lg bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <h3 className="text-lg font-semibold">{group.title}</h3>
-              </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold",
-                      levelStyles[skill.level],
-                    )}
-                  >
-                    {skill.name}
-                    <span className="text-[10px] uppercase tracking-wide opacity-80">
-                      {skill.level}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </motion.article>
-          );
-        })}
+      <div className="mt-12 grid gap-4 md:grid-cols-3">
+        {capabilityHighlights.map((item) => (
+          <article
+            key={item.title}
+            className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
+          >
+            <h3 className="text-xl font-black">{item.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-[var(--portfolio-muted)]">
+              {item.body}
+            </p>
+          </article>
+        ))}
       </div>
     </Section>
   );
@@ -1185,9 +1225,9 @@ function ProjectsSection() {
   return (
     <Section
       id="projects"
-      eyebrow="Projects"
-      title="Interview-ready project stories without unsupported claims."
-      description="These cards are structured so screenshots, live demos, and repository-backed implementation details can be replaced cleanly as the projects evolve."
+      eyebrow="Selected Work"
+      title="Full-stack projects with clear architecture and review-ready detail."
+      description="Each case study is grounded in your actual repositories, stack, and project boundaries."
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {projects.map((project) => (
@@ -1195,7 +1235,7 @@ function ProjectsSection() {
         ))}
       </div>
 
-      <div className="mt-12 space-y-8">
+      <div className="mt-12 grid gap-5">
         {projects.map((project) => (
           <ProjectCaseStudy key={project.slug} project={project} />
         ))}
@@ -1209,35 +1249,55 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <motion.article
-      className="flex h-full flex-col rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
+      className="flex h-full flex-col overflow-hidden rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] shadow-[var(--portfolio-shadow)]"
+      style={{ "--project-accent": project.accent } as CSSProperties}
       whileHover={shouldReduceMotion ? undefined : { y: -5 }}
       transition={{ duration: 0.18 }}
     >
       <ProjectVisual project={project} />
-      <div className="mt-5 flex flex-1 flex-col">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-2xl font-semibold">{project.name}</h3>
-            <p className="mt-3 text-sm leading-7 text-[var(--portfolio-muted)]">
-              {project.description}
-            </p>
-          </div>
+      <div className="flex flex-1 flex-col p-6">
+        <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-[var(--project-accent)]">
+          {project.category}
+        </p>
+        <h3 className="mt-3 font-mono text-3xl font-black">{project.name}</h3>
+        <p className="mt-4 text-sm leading-7 text-[var(--portfolio-muted)]">
+          {project.description}
+        </p>
+
+        <div className="mt-6 space-y-3">
+          {project.highlights.map((highlight) => (
+            <div
+              key={highlight}
+              className="flex gap-3 text-sm font-semibold leading-6 text-[var(--portfolio-text)]"
+            >
+              <CheckCircle2
+                className="mt-0.5 size-4 shrink-0 text-[var(--project-accent)]"
+                aria-hidden="true"
+              />
+              <span>{highlight}</span>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-6 flex flex-wrap gap-2">
           {project.technologies.map((technology) => (
             <span
               key={technology}
-              className="rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-muted)] px-3 py-1 text-xs font-semibold text-[var(--portfolio-muted)]"
+              className="rounded-md border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-muted)] px-2.5 py-1.5 text-xs font-bold text-[var(--portfolio-muted)]"
             >
               {technology}
             </span>
           ))}
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-7 flex flex-wrap gap-3">
           {project.repositoryLinks.map((link) => (
-            <SecondaryLink key={link.href} href={link.href} icon={Github} external>
+            <SecondaryLink
+              key={link.href}
+              href={link.href}
+              icon={Github}
+              external
+            >
               {link.label}
             </SecondaryLink>
           ))}
@@ -1246,13 +1306,13 @@ function ProjectCard({ project }: { project: Project }) {
               Live Demo
             </SecondaryLink>
           ) : (
-            <span className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full border border-[var(--portfolio-border)] px-4 text-sm font-semibold text-[var(--portfolio-subtle)] opacity-75">
+            <span className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-[var(--portfolio-line)] px-4 text-sm font-bold text-[var(--portfolio-subtle)] opacity-75">
               <ExternalLink className="size-4" aria-hidden="true" />
-              Live Demo TBD
+              Demo Pending
             </span>
           )}
           <PrimaryLink href={`#project-${project.slug}`} icon={ArrowRight}>
-            View Details
+            Details
           </PrimaryLink>
         </div>
       </div>
@@ -1263,38 +1323,113 @@ function ProjectCard({ project }: { project: Project }) {
 function ProjectVisual({ project }: { project: Project }) {
   return (
     <div
-      className="relative aspect-[16/10] overflow-hidden rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-muted)]"
-      aria-label={`${project.name} screenshot placeholder`}
+      className="relative aspect-[16/10] overflow-hidden border-b border-[var(--portfolio-line)] bg-[var(--project-visual-bg)]"
+      role="img"
+      aria-label={`${project.name} interface concept`}
     >
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,var(--portfolio-accent-soft),transparent_48%,var(--portfolio-secondary-soft))]" />
+      <div className="absolute inset-0 bg-[var(--project-visual-grid)]" />
       <div className="relative z-10 flex h-full flex-col p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-[var(--project-visual-line)] pb-3">
           <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-[var(--portfolio-accent)]" />
-            <span className="size-2.5 rounded-full bg-[var(--portfolio-secondary)]" />
-            <span className="size-2.5 rounded-full bg-[var(--portfolio-warm)]" />
+            <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="size-2.5 rounded-full bg-[#28c840]" />
           </div>
-          <span className="rounded-full bg-[var(--portfolio-surface-raised)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--portfolio-muted)]">
-            Replaceable
+          <span className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[var(--project-visual-muted)]">
+            {project.visual === "commerce" ? "Commerce System" : "Product App"}
           </span>
         </div>
-        <div className="mt-6 h-3 w-36 rounded-full bg-[var(--portfolio-text)] opacity-80" />
-        <div className="mt-3 h-2 w-48 max-w-full rounded-full bg-[var(--portfolio-muted)] opacity-35" />
-        <div className="mt-6 grid flex-1 grid-cols-3 gap-3">
-          {[0, 1, 2].map((item) => (
-            <div
-              key={item}
-              className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-3 backdrop-blur"
-            >
-              <div className="h-12 rounded bg-[var(--portfolio-surface-muted)]" />
-              <div className="mt-3 h-2 rounded-full bg-[var(--portfolio-muted)] opacity-30" />
-              <div className="mt-2 h-2 w-2/3 rounded-full bg-[var(--portfolio-muted)] opacity-20" />
+
+        {project.visual === "commerce" ? <CommerceMockup /> : <AppMockup />}
+      </div>
+    </div>
+  );
+}
+
+function CommerceMockup() {
+  return (
+    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[0.8fr_1.2fr_0.9fr] gap-3">
+      <div className="space-y-2 border-r border-[var(--project-visual-line)] pr-3">
+        {["Catalog", "Orders", "Users", "API"].map((item, index) => (
+          <div
+            key={item}
+            className={cn(
+              "h-7 rounded-md border border-[var(--project-visual-line)] px-2 py-1 font-mono text-[10px] font-black text-[var(--project-visual-muted)]",
+              index === 0 && "bg-[var(--project-visual-accent-soft)]",
+            )}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {[0, 1, 2, 3].map((item) => (
+          <div
+            key={item}
+            className="rounded-lg border border-[var(--project-visual-line)] bg-[var(--project-visual-panel)] p-3"
+          >
+            <div className="h-10 rounded-md bg-[var(--project-visual-accent-soft)]" />
+            <div className="mt-3 h-2 rounded-full bg-[var(--project-visual-line)]" />
+            <div className="mt-2 h-2 w-2/3 rounded-full bg-[var(--project-visual-line)]" />
+          </div>
+        ))}
+      </div>
+      <div className="rounded-lg border border-[var(--project-visual-line)] bg-[var(--project-visual-panel)] p-3">
+        <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[var(--project-visual-muted)]">
+          API Flow
+        </p>
+        <div className="mt-4 space-y-3">
+          {["Client", "REST", "Prisma", "MongoDB"].map((item) => (
+            <div key={item} className="flex items-center gap-2">
+              <span className="size-2 rounded-full bg-[var(--project-accent)]" />
+              <span className="h-2 flex-1 rounded-full bg-[var(--project-visual-line)]" />
+              <span className="w-14 font-mono text-[10px] font-black text-[var(--project-visual-muted)]">
+                {item}
+              </span>
             </div>
           ))}
         </div>
-        <p className="mt-4 text-xs font-medium text-[var(--portfolio-subtle)]">
-          Project screenshot placeholder
-        </p>
+      </div>
+    </div>
+  );
+}
+
+function AppMockup() {
+  return (
+    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[1fr_0.9fr] gap-3">
+      <div className="rounded-lg border border-[var(--project-visual-line)] bg-[var(--project-visual-panel)] p-3">
+        <div className="flex h-24 items-end gap-2">
+          {[44, 70, 52, 86, 64, 92].map((height, index) => (
+            <span
+              key={height + index}
+              className="w-full rounded-t bg-[var(--project-accent)] opacity-80"
+              style={{ height }}
+            />
+          ))}
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {["Auth", "Stripe", "API"].map((item) => (
+            <div
+              key={item}
+              className="rounded-md border border-[var(--project-visual-line)] bg-[var(--project-visual-accent-soft)] px-2 py-2 text-center font-mono text-[10px] font-black text-[var(--project-visual-muted)]"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="space-y-3">
+        <div className="rounded-lg border border-[var(--project-visual-line)] bg-[var(--project-visual-panel)] p-3">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[var(--project-visual-muted)]">
+            Data Layer
+          </p>
+          <div className="mt-4 h-20 rounded-md bg-[var(--project-visual-accent-soft)]" />
+        </div>
+        <div className="rounded-lg border border-[var(--project-visual-line)] bg-[var(--project-visual-panel)] p-3">
+          <div className="h-2 w-3/4 rounded-full bg-[var(--project-visual-line)]" />
+          <div className="mt-2 h-2 w-1/2 rounded-full bg-[var(--project-visual-line)]" />
+          <div className="mt-4 h-8 rounded-md bg-[var(--portfolio-warm)] opacity-85" />
+        </div>
       </div>
     </div>
   );
@@ -1304,211 +1439,152 @@ function ProjectCaseStudy({ project }: { project: Project }) {
   return (
     <article
       id={`project-${project.slug}`}
-      className="portfolio-section rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm sm:p-6"
+      className="portfolio-section rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-sm"
+      style={{ "--project-accent": project.accent } as CSSProperties}
     >
-      <div className="flex flex-col gap-4 border-b border-[var(--portfolio-border)] pb-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="grid gap-6 lg:grid-cols-[0.72fr_1fr]">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--portfolio-accent)]">
+          <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-[var(--project-accent)]">
             Case Study
           </p>
-          <h3 className="mt-3 text-3xl font-semibold">{project.name}</h3>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--portfolio-muted)]">
+          <h3 className="mt-3 font-mono text-3xl font-black">
+            {project.name}
+          </h3>
+          <p className="mt-4 text-sm leading-7 text-[var(--portfolio-muted)]">
             {project.description}
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          {project.repositoryLinks.map((link) => (
-            <SecondaryLink key={link.href} href={link.href} icon={Github} external>
-              {link.label}
-            </SecondaryLink>
+        <div className="grid gap-4 md:grid-cols-3">
+          {project.caseStudy.map((block) => (
+            <div
+              key={block.title}
+              className="border-t border-[var(--portfolio-line)] pt-4"
+            >
+              <h4 className="text-base font-black">{block.title}</h4>
+              <p className="mt-3 text-sm leading-7 text-[var(--portfolio-muted)]">
+                {block.body}
+              </p>
+            </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {project.caseStudy.map((block) => (
-          <div key={block.title} className="border-t border-[var(--portfolio-border)] pt-5">
-            <h4 className="text-base font-semibold">{block.title}</h4>
-            <p className="mt-3 text-sm leading-7 text-[var(--portfolio-muted)]">
-              {block.body}
-            </p>
-          </div>
-        ))}
       </div>
     </article>
   );
 }
 
-function ApproachSection() {
+function SkillsSection() {
   return (
     <Section
-      id="approach"
-      eyebrow="Development Approach"
-      title="A disciplined workflow for turning requirements into reliable products."
-      description="This process is designed to make project discussions easier in interviews: clear decisions, visible tradeoffs, and practical execution."
+      id="skills"
+      eyebrow="Technical Stack"
+      title="A focused toolkit with honest skill levels."
+      description="Core strengths are separated from working, learning, and basic technologies so the portfolio reads clearly in technical review."
     >
-      <div className="relative">
-        <div className="mb-6 grid gap-4 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] p-5 shadow-sm backdrop-blur md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold text-[var(--portfolio-accent)]">
-              Practical engineering loop
-            </p>
-            <p className="mt-2 max-w-3xl text-sm leading-7 text-[var(--portfolio-muted)]">
-              I keep each project grounded in the same sequence: define the
-              problem, design the system, build the product, and improve the
-              result with real feedback.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {["Product thinking", "Clean architecture", "Iterative polish"].map(
-              (item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--portfolio-muted)]"
-                >
-                  {item}
-                </span>
-              ),
-            )}
-          </div>
-        </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {skillGroups.map((group) => {
+          const Icon = group.icon;
 
-        <div className="pointer-events-none absolute left-6 top-40 hidden h-[calc(100%-11rem)] w-px bg-[linear-gradient(to_bottom,var(--portfolio-accent),var(--portfolio-secondary),transparent)] lg:block" />
-
-        <div className="grid gap-5 lg:grid-cols-4">
-          {approachSteps.map((item, index) => (
-            <motion.article
-            key={item.step}
-              className="group relative overflow-hidden rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm transition hover:border-[var(--portfolio-border-strong)]"
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.18 }}
+          return (
+            <article
+              key={group.title}
+              className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
             >
-              <div
-                className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--portfolio-accent),var(--portfolio-secondary))] opacity-80"
-                aria-hidden="true"
-              />
-              <div className="absolute right-4 top-4 text-6xl font-semibold leading-none text-[var(--portfolio-surface-muted)] transition group-hover:text-[var(--portfolio-accent-soft)]">
-                {item.step}
-              </div>
-              <div className="relative">
-                <span className="inline-flex size-12 items-center justify-center rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] text-sm font-bold text-[var(--portfolio-accent)] shadow-sm">
-                  {item.step}
+              <div className="flex items-start gap-3">
+                <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]">
+                  <Icon className="size-5" aria-hidden="true" />
                 </span>
-                <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--portfolio-subtle)]">
-                  Stage {index + 1}
-                </p>
-                <h3 className="mt-2 text-2xl font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm font-semibold text-[var(--portfolio-accent)]">
-                  {item.subtitle}
-                </p>
-                <p className="mt-4 text-sm leading-7 text-[var(--portfolio-muted)]">
-                  {item.body}
-                </p>
-                <div className="mt-5 space-y-2 border-t border-[var(--portfolio-border)] pt-4">
-                  {item.focus.map((focusItem) => (
-                    <div
-                      key={focusItem}
-                      className="flex items-center gap-2 text-sm font-medium text-[var(--portfolio-text)]"
-                    >
-                      <CheckCircle2
-                        className="size-4 shrink-0 text-[var(--portfolio-secondary)]"
-                        aria-hidden="true"
-                      />
-                      {focusItem}
-                    </div>
-                  ))}
+                <div>
+                  <h3 className="font-mono text-lg font-black">
+                    {group.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--portfolio-muted)]">
+                    {group.description}
+                  </p>
                 </div>
               </div>
-            </motion.article>
-          ))}
-        </div>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {[
-            {
-              label: "Before build",
-              value: "Clear scope, data model, and user journey",
-            },
-            {
-              label: "During build",
-              value: "Reusable UI, typed logic, and API boundaries",
-            },
-            {
-              label: "After build",
-              value: "Debugging, accessibility, performance, and polish",
-            },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="border-l-2 border-[var(--portfolio-accent)] bg-[var(--portfolio-surface-raised)] px-4 py-3 shadow-sm backdrop-blur"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--portfolio-subtle)]">
-                {item.label}
-              </p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[var(--portfolio-text)]">
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill.name}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-bold",
+                      levelStyles[skill.level],
+                    )}
+                  >
+                    {skill.name}
+                    <span className="font-mono text-[10px] uppercase tracking-wide opacity-75">
+                      {skill.level}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </Section>
   );
 }
 
-function EducationSection() {
+function ProcessSection() {
   return (
-    <Section
-      id="education"
-      eyebrow="Education & Experience"
-      title="Academic background and practical project experience."
-      description="No fake employment claims. The current experience section is based on personal full-stack project work."
+    <section
+      id="process"
+      className="portfolio-section relative overflow-hidden border-y border-[var(--portfolio-line)] bg-[var(--portfolio-inverse)] px-4 py-16 text-[var(--portfolio-inverse-text)] sm:px-6 sm:py-20 lg:px-8"
     >
-      <div className="grid gap-6 lg:grid-cols-2">
-        <article className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]">
-              <GraduationCap className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--portfolio-accent)]">
-                Education
-              </p>
-              <h3 className="mt-1 text-xl font-semibold">
-                Satkhira Government College
-              </h3>
-            </div>
+      <div className="absolute inset-0 bg-[var(--portfolio-grid)] opacity-30" />
+      <div className="relative mx-auto max-w-7xl">
+        <div className="mb-12 grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-end">
+          <div>
+            <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-[var(--portfolio-warm)]">
+              Development Process
+            </p>
+            <h2 className="mt-3 max-w-3xl font-mono text-3xl font-black leading-tight sm:text-4xl">
+              A disciplined workflow for turning requirements into reliable
+              products.
+            </h2>
           </div>
-          <p className="mt-5 text-base font-medium">
-            Bachelor of Arts (Honours) in English
+          <p className="max-w-3xl text-base leading-8 text-[var(--portfolio-inverse-muted)]">
+            Each project moves through the same sequence: clarify the problem,
+            shape the system, build the product, and refine the result until it
+            is easier to use and easier to explain.
           </p>
-          <p className="mt-2 text-sm text-[var(--portfolio-muted)]">
-            Currently Studying
-          </p>
-        </article>
+        </div>
 
-        <article className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-[var(--portfolio-secondary-soft)] text-[var(--portfolio-secondary)]">
-              <FileText className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--portfolio-secondary)]">
-                Project Experience
+        <div className="grid gap-px overflow-hidden rounded-lg border border-[var(--portfolio-inverse-line)] bg-[var(--portfolio-inverse-line)] md:grid-cols-2 xl:grid-cols-4">
+          {processSteps.map((item) => (
+            <article
+              key={item.step}
+              className="bg-[var(--portfolio-inverse)] p-6"
+            >
+              <p className="font-mono text-sm font-black text-[var(--portfolio-warm)]">
+                {item.step}
               </p>
-              <h3 className="mt-1 text-xl font-semibold">
-                Full-Stack Personal Projects
+              <h3 className="mt-5 font-mono text-2xl font-black">
+                {item.title}
               </h3>
-            </div>
-          </div>
-          <p className="mt-5 text-sm leading-7 text-[var(--portfolio-muted)]">
-            My practical development experience comes from building personal
-            full-stack projects that combine frontend interfaces, backend
-            logic, authentication, APIs, database work, and integrations.
-          </p>
-        </article>
+              <p className="mt-4 text-sm leading-7 text-[var(--portfolio-inverse-muted)]">
+                {item.body}
+              </p>
+              <div className="mt-6 space-y-2 border-t border-[var(--portfolio-inverse-line)] pt-4">
+                {item.tags.map((tag) => (
+                  <div
+                    key={tag}
+                    className="flex items-center gap-2 text-sm font-bold"
+                  >
+                    <CheckCircle2
+                      className="size-4 shrink-0 text-[var(--portfolio-warm)]"
+                      aria-hidden="true"
+                    />
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }
 
@@ -1516,50 +1592,86 @@ function ResumeSection() {
   return (
     <Section
       id="resume"
-      eyebrow="Resume"
-      title="Want to know more about my experience and technical background?"
-      description="The resume buttons point to a replaceable PDF path so the latest document can be added without changing the UI."
+      eyebrow="Resume & Background"
+      title="Academic background, practical project experience, and communication range."
+      description="The experience stays grounded in personal full-stack project work instead of unsupported employment claims."
     >
-      <div className="flex flex-col gap-3 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+        <article className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-lg bg-[var(--portfolio-accent-soft)] text-[var(--portfolio-accent)]">
+              <GraduationCap className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-[var(--portfolio-accent)]">
+                Education
+              </p>
+              <h3 className="mt-1 text-xl font-black">
+                Satkhira Government College
+              </h3>
+            </div>
+          </div>
+          <p className="mt-6 text-base font-bold">
+            Bachelor of Arts (Honours) in English
+          </p>
+          <p className="mt-2 text-sm text-[var(--portfolio-muted)]">
+            Currently studying
+          </p>
+        </article>
+
+        <article className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-lg bg-[var(--portfolio-warm-soft)] text-[var(--portfolio-warm)]">
+              <FileText className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-[var(--portfolio-warm)]">
+                Project Experience
+              </p>
+              <h3 className="mt-1 text-xl font-black">
+                Full-Stack Personal Projects
+              </h3>
+            </div>
+          </div>
+          <p className="mt-6 text-sm leading-7 text-[var(--portfolio-muted)]">
+            Practical development experience from building projects that combine
+            frontend interfaces, backend logic, authentication, APIs, database
+            work, and third-party integrations.
+          </p>
+        </article>
+      </div>
+
+      <div className="mt-6 grid gap-6 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-[var(--portfolio-shadow)] lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <h3 className="text-xl font-semibold">Resume PDF</h3>
-          <p className="mt-2 break-all text-sm text-[var(--portfolio-muted)]">
-            {personal.resume}
+          <h3 className="font-mono text-2xl font-black">Resume</h3>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--portfolio-muted)]">
+            Review the latest resume for a compact overview of skills, project
+            work, education, and contact details.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
           <SecondaryLink href={personal.resume} icon={FileText} external>
             View Resume
           </SecondaryLink>
-          <a
-            href={personal.resume}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--portfolio-text)] px-5 text-sm font-semibold text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
-          >
-            <Download className="size-4" aria-hidden="true" />
-            Download Resume
-          </a>
+          <PrimaryLink href={personal.resume} icon={Download}>
+            Open Resume
+          </PrimaryLink>
         </div>
       </div>
-    </Section>
-  );
-}
 
-function LanguagesSection() {
-  return (
-    <Section
-      id="languages"
-      eyebrow="Languages"
-      title="Communication strengths for local and international work."
-    >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {languages.map((language) => (
           <article
             key={language.name}
-            className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
+            className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-5 shadow-sm"
           >
-            <h3 className="text-lg font-semibold">{language.name}</h3>
+            <div className="flex items-center gap-3">
+              <Languages
+                className="size-5 text-[var(--portfolio-accent)]"
+                aria-hidden="true"
+              />
+              <h3 className="font-mono text-lg font-black">{language.name}</h3>
+            </div>
             <p className="mt-3 text-sm leading-6 text-[var(--portfolio-muted)]">
               {language.level}
             </p>
@@ -1575,15 +1687,31 @@ function ContactSection() {
     <Section
       id="contact"
       eyebrow="Contact"
-      title="Let's Build Something Great Together."
-      description="Reach out for job opportunities, technical discussions, collaboration, or interview follow-ups."
+      title="Open to roles, projects, and technical conversations."
+      description="Reach out for job opportunities, collaboration, interview follow-ups, or project discussions."
     >
-      <div className="grid gap-8 lg:grid-cols-[0.78fr_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[0.72fr_1fr]">
         <div className="space-y-4">
-          <ContactMethod icon={Mail} label="Email" value={personal.email} href={`mailto:${personal.email}`} />
-          <ContactMethod icon={Phone} label="Phone" value={personal.phone} href={`tel:${personal.phone}`} />
-          <ContactMethod icon={Github} label="GitHub" value="github.com/asifrayhanjoy" href={personal.github} external />
-          <ContactMethod icon={Linkedin} label="LinkedIn" value="TO BE ADDED" />
+          <ContactMethod
+            icon={Mail}
+            label="Email"
+            value={personal.email}
+            href={`mailto:${personal.email}`}
+          />
+          <ContactMethod
+            icon={Phone}
+            label="Phone"
+            value={personal.phone}
+            href={`tel:${personal.phone}`}
+          />
+          <ContactMethod
+            icon={Github}
+            label="GitHub"
+            value="github.com/asifrayhanjoy"
+            href={personal.github}
+            external
+          />
+          <ContactMethod icon={Linkedin} label="LinkedIn" value="To be added" />
         </div>
         <ContactForm />
       </div>
@@ -1616,7 +1744,9 @@ function ContactForm() {
     );
 
     setSubmitted(true);
-    window.location.href = `mailto:${personal.email}?subject=${subject}&body=${body}`;
+    window.location.assign(
+      `mailto:${personal.email}?subject=${subject}&body=${body}`,
+    );
     reset();
   };
 
@@ -1624,75 +1754,75 @@ function ContactForm() {
     <form
       noValidate
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-5 shadow-sm sm:p-6"
+      className="rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-5 shadow-[var(--portfolio-shadow)] sm:p-6"
     >
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-2 text-sm font-semibold" htmlFor="name">
+        <label className="grid gap-2 text-sm font-bold" htmlFor="name">
           Name
           <input
             id="name"
             type="text"
             autoComplete="name"
             aria-invalid={Boolean(errors.name)}
-            className="min-h-12 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-bg)] px-4 text-sm font-medium text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
+            className="min-h-12 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-input)] px-4 text-sm font-semibold text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
             placeholder="Your name"
             {...register("name")}
           />
           {errors.name?.message ? (
-            <span className="text-xs font-medium text-[var(--portfolio-warm)]">
+            <span className="text-xs font-semibold text-[var(--portfolio-danger)]">
               {errors.name.message}
             </span>
           ) : null}
         </label>
 
-        <label className="grid gap-2 text-sm font-semibold" htmlFor="email">
+        <label className="grid gap-2 text-sm font-bold" htmlFor="email">
           Email
           <input
             id="email"
             type="email"
             autoComplete="email"
             aria-invalid={Boolean(errors.email)}
-            className="min-h-12 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-bg)] px-4 text-sm font-medium text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
+            className="min-h-12 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-input)] px-4 text-sm font-semibold text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
             placeholder="you@example.com"
             {...register("email")}
           />
           {errors.email?.message ? (
-            <span className="text-xs font-medium text-[var(--portfolio-warm)]">
+            <span className="text-xs font-semibold text-[var(--portfolio-danger)]">
               {errors.email.message}
             </span>
           ) : null}
         </label>
       </div>
 
-      <label className="mt-4 grid gap-2 text-sm font-semibold" htmlFor="subject">
+      <label className="mt-4 grid gap-2 text-sm font-bold" htmlFor="subject">
         Subject
         <input
           id="subject"
           type="text"
           aria-invalid={Boolean(errors.subject)}
-          className="min-h-12 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-bg)] px-4 text-sm font-medium text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
+          className="min-h-12 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-input)] px-4 text-sm font-semibold text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
           placeholder="Project, role, or opportunity"
           {...register("subject")}
         />
         {errors.subject?.message ? (
-          <span className="text-xs font-medium text-[var(--portfolio-warm)]">
+          <span className="text-xs font-semibold text-[var(--portfolio-danger)]">
             {errors.subject.message}
           </span>
         ) : null}
       </label>
 
-      <label className="mt-4 grid gap-2 text-sm font-semibold" htmlFor="message">
+      <label className="mt-4 grid gap-2 text-sm font-bold" htmlFor="message">
         Message
         <textarea
           id="message"
           rows={6}
           aria-invalid={Boolean(errors.message)}
-          className="min-h-36 resize-y rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-bg)] px-4 py-3 text-sm font-medium text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
+          className="min-h-36 resize-y rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-input)] px-4 py-3 text-sm font-semibold text-[var(--portfolio-text)] outline-none transition placeholder:text-[var(--portfolio-subtle)] focus:border-[var(--portfolio-accent)] focus:ring-4 focus:ring-[var(--portfolio-ring)]"
           placeholder="Tell me about the role, project, or interview context."
           {...register("message")}
         />
         {errors.message?.message ? (
-          <span className="text-xs font-medium text-[var(--portfolio-warm)]">
+          <span className="text-xs font-semibold text-[var(--portfolio-danger)]">
             {errors.message.message}
           </span>
         ) : null}
@@ -1701,7 +1831,7 @@ function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--portfolio-text)] px-5 text-sm font-semibold text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--portfolio-accent)] px-5 text-sm font-black text-[var(--portfolio-accent-contrast)] shadow-sm transition hover:bg-[var(--portfolio-text)] hover:text-[var(--portfolio-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
         <Send className="size-4" aria-hidden="true" />
         Send Message
@@ -1709,8 +1839,7 @@ function ContactForm() {
 
       {submitted ? (
         <p role="status" className="mt-4 text-sm text-[var(--portfolio-muted)]">
-          Message validated locally and prepared through email. A secure
-          server-side email provider can be connected later.
+          Message validated locally and prepared through email.
         </p>
       ) : null}
     </form>
@@ -1719,28 +1848,36 @@ function ContactForm() {
 
 function Footer() {
   return (
-    <footer className="relative z-10 border-t border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] px-4 py-8 sm:px-6 lg:px-8">
+    <footer className="relative z-10 border-t border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-base font-semibold">{personal.name}</p>
-          <p className="mt-1 text-sm text-[var(--portfolio-muted)]">
+          <p className="font-mono text-base font-black">{personal.name}</p>
+          <p className="mt-1 text-sm font-semibold text-[var(--portfolio-muted)]">
             {personal.title}
           </p>
           <p className="mt-2 text-xs text-[var(--portfolio-subtle)]">
-            Copyright © {copyrightYear} {personal.name}. All rights
-            reserved.
+            Copyright © {copyrightYear} {personal.name}. All rights reserved.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <FooterLink href={personal.github} icon={Github} label="GitHub" external />
-          <span className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--portfolio-border)] px-4 text-sm font-semibold text-[var(--portfolio-subtle)] opacity-75">
+          <FooterLink
+            href={personal.github}
+            icon={Github}
+            label="GitHub"
+            external
+          />
+          <span className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--portfolio-line)] px-4 text-sm font-bold text-[var(--portfolio-subtle)] opacity-75">
             <Linkedin className="size-4" aria-hidden="true" />
             LinkedIn
           </span>
-          <FooterLink href={`mailto:${personal.email}`} icon={Mail} label="Email" />
+          <FooterLink
+            href={`mailto:${personal.email}`}
+            icon={Mail}
+            label="Email"
+          />
           <a
             href="#home"
-            className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[var(--portfolio-text)] px-4 text-sm font-semibold text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+            className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--portfolio-text)] px-4 text-sm font-black text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
           >
             <ArrowUp className="size-4" aria-hidden="true" />
             Back to Top
@@ -1770,23 +1907,25 @@ function Section({
     <motion.section
       id={id}
       className="portfolio-section px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 max-w-3xl">
-          {eyebrow ? (
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--portfolio-accent)]">
-              {eyebrow}
-            </p>
-          ) : null}
-          <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
-            {title}
-          </h2>
+        <div className="mb-10 grid gap-5 lg:grid-cols-[0.72fr_1fr] lg:items-end">
+          <div>
+            {eyebrow ? (
+              <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-[var(--portfolio-accent)]">
+                {eyebrow}
+              </p>
+            ) : null}
+            <h2 className="mt-3 max-w-3xl font-mono text-3xl font-black leading-tight sm:text-4xl">
+              {title}
+            </h2>
+          </div>
           {description ? (
-            <p className="mt-4 text-base leading-8 text-[var(--portfolio-muted)]">
+            <p className="max-w-3xl text-base leading-8 text-[var(--portfolio-muted)]">
               {description}
             </p>
           ) : null}
@@ -1809,7 +1948,7 @@ function PrimaryLink({
   return (
     <a
       href={href}
-      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--portfolio-text)] px-5 text-sm font-semibold text-[var(--portfolio-bg)] transition hover:bg-[var(--portfolio-accent)] hover:text-[var(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--portfolio-accent)] px-5 text-sm font-black text-[var(--portfolio-accent-contrast)] shadow-sm transition hover:bg-[var(--portfolio-text)] hover:text-[var(--portfolio-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
     >
       {children}
       <Icon className="size-4" aria-hidden="true" />
@@ -1833,10 +1972,11 @@ function SecondaryLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--portfolio-border)] bg-[var(--portfolio-surface-raised)] px-5 text-sm font-semibold text-[var(--portfolio-text)] transition hover:border-[var(--portfolio-border-strong)] hover:bg-[var(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface-raised)] px-5 text-sm font-black text-[var(--portfolio-text)] shadow-sm transition hover:border-[var(--portfolio-line-strong)] hover:bg-[var(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
     >
       <Icon className="size-4" aria-hidden="true" />
       {children}
+      {external ? <ArrowUpRight className="size-3.5" aria-hidden="true" /> : null}
     </a>
   );
 }
@@ -1856,10 +1996,10 @@ function InfoRow({
         <Icon className="size-4" aria-hidden="true" />
       </span>
       <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-wide text-[var(--portfolio-subtle)]">
+        <p className="font-mono text-xs font-black uppercase tracking-wide text-[var(--portfolio-subtle)]">
           {label}
         </p>
-        <p className="mt-1 break-words font-semibold text-[var(--portfolio-text)]">
+        <p className="mt-1 break-words font-bold text-[var(--portfolio-text)]">
           {value}
         </p>
       </div>
@@ -1886,10 +2026,10 @@ function ContactMethod({
         <Icon className="size-5" aria-hidden="true" />
       </span>
       <span className="min-w-0">
-        <span className="block text-xs font-medium uppercase tracking-wide text-[var(--portfolio-subtle)]">
+        <span className="block font-mono text-xs font-black uppercase tracking-wide text-[var(--portfolio-subtle)]">
           {label}
         </span>
-        <span className="mt-1 block break-words text-sm font-semibold text-[var(--portfolio-text)]">
+        <span className="mt-1 block break-words text-sm font-bold text-[var(--portfolio-text)]">
           {value}
         </span>
       </span>
@@ -1898,7 +2038,7 @@ function ContactMethod({
 
   if (!href) {
     return (
-      <div className="flex items-center gap-4 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-4 shadow-sm">
+      <div className="flex items-center gap-4 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-4 shadow-sm">
         {content}
       </div>
     );
@@ -1909,7 +2049,7 @@ function ContactMethod({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="flex items-center gap-4 rounded-lg border border-[var(--portfolio-border)] bg-[var(--portfolio-surface)] p-4 shadow-sm transition hover:border-[var(--portfolio-border-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+      className="flex items-center gap-4 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-4 shadow-sm transition hover:border-[var(--portfolio-line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
     >
       {content}
     </a>
@@ -1932,7 +2072,7 @@ function FooterLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--portfolio-border)] px-4 text-sm font-semibold text-[var(--portfolio-text)] transition hover:border-[var(--portfolio-border-strong)] hover:bg-[var(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
+      className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--portfolio-line)] px-4 text-sm font-bold text-[var(--portfolio-text)] transition hover:border-[var(--portfolio-line-strong)] hover:bg-[var(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portfolio-ring)]"
     >
       <Icon className="size-4" aria-hidden="true" />
       {label}
