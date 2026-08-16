@@ -110,7 +110,7 @@ const personal = {
   email: "amsiimf06@gmail.com",
   phone: "+8801302-271472",
   github: "https://github.com/asifrayhanjoy",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/md-asif-rayhan-joy-81444042a/",
   resume: "https://my-resume-s17p.vercel.app/",
 };
 
@@ -1002,6 +1002,9 @@ function HeroSection() {
             <SecondaryLink href={personal.github} icon={Github} external>
               GitHub
             </SecondaryLink>
+            <SecondaryLink href={personal.linkedin} icon={Linkedin} external>
+              LinkedIn
+            </SecondaryLink>
             <SecondaryLink href="#contact" icon={Mail}>
               Contact
             </SecondaryLink>
@@ -1711,7 +1714,13 @@ function ContactSection() {
             href={personal.github}
             external
           />
-          <ContactMethod icon={Linkedin} label="LinkedIn" value="To be added" />
+          <ContactMethod
+            icon={Linkedin}
+            label="LinkedIn"
+            value="linkedin.com/in/md-asif-rayhan-joy-81444042a"
+            href={personal.linkedin}
+            external
+          />
         </div>
         <ContactForm />
       </div>
@@ -1866,10 +1875,12 @@ function Footer() {
             label="GitHub"
             external
           />
-          <span className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--portfolio-line)] px-4 text-sm font-bold text-[var(--portfolio-subtle)] opacity-75">
-            <Linkedin className="size-4" aria-hidden="true" />
-            LinkedIn
-          </span>
+          <FooterLink
+            href={personal.linkedin}
+            icon={Linkedin}
+            label="LinkedIn"
+            external
+          />
           <FooterLink
             href={`mailto:${personal.email}`}
             icon={Mail}
