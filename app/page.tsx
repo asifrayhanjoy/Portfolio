@@ -110,8 +110,8 @@ const personal = {
   email: "amsiimf06@gmail.com",
   phone: "+8801302-271472",
   github: "https://github.com/asifrayhanjoy",
-  linkedin: "https://www.linkedin.com/in/md-asif-rayhan-joy-81444042a/",
-  resume: "https://my-resume-s17p.vercel.app/",
+  linkedin: "https://www.linkedin.com/in/md-asif-rayhan-joy-4177372a4/",
+  resume: "https://drive.google.com/file/d/1OWQWE04lDpmmiJn4IYQkU4aglT3N0GKn/view?usp=drive_link",
 };
 
 const navItems: NavItem[] = [
@@ -259,6 +259,51 @@ const projects: Project[] = [
       },
     ],
   },
+  {
+    name: "PH Healthcare",
+    slug: "ph-healthcare",
+    category: "Healthcare Platform",
+    accent: "#7dd3fc",
+    visual: "product",
+    description:
+      "A full-stack blood donation management app built with Next.js, React, TypeScript, MongoDB, Prisma, Better Auth, Tailwind CSS, Server Actions, and API Routes.",
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "MongoDB",
+      "Prisma",
+      "Better Auth",
+      "Tailwind CSS",
+      "Server Actions",
+      "API Routes",
+    ],
+    highlights: [
+      "Donor search and blood request workflows are represented in the app",
+      "Dashboard areas exist for donor, agent, and admin workflows",
+      "Prisma models cover donors, requests, hospitals, notifications, and donation history",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/tareqhassan2014/blood-donation.git",
+      },
+    ],
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "A healthcare-focused blood donation platform with donor discovery, request workflows, and role-specific dashboard areas represented in the available source.",
+      },
+      {
+        title: "System shape",
+        body: "Next.js App Router pages, Server Actions, and API route handlers connect React UI to Better Auth sessions and Prisma-backed MongoDB models.",
+      },
+      {
+        title: "Engineering focus",
+        body: "The source emphasizes searchable donor profiles, blood request handling, notifications, and protected dashboard workflows for donors, agents, and admins.",
+      },
+    ],
+  },
 ];
 
 const skillGroups: SkillGroup[] = [
@@ -269,6 +314,7 @@ const skillGroups: SkillGroup[] = [
     skills: [
       { name: "JavaScript", level: "Core" },
       { name: "TypeScript", level: "Working" },
+      { name: "Go", level: "Working" },
       { name: "HTML5", level: "Core" },
       { name: "CSS3", level: "Core" },
     ],
@@ -1717,7 +1763,7 @@ function ContactSection() {
           <ContactMethod
             icon={Linkedin}
             label="LinkedIn"
-            value="linkedin.com/in/md-asif-rayhan-joy-81444042a"
+            value="linkedin.com/in/md-asif-rayhan-joy-4177372a4"
             href={personal.linkedin}
             external
           />
