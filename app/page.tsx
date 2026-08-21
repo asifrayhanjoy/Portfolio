@@ -105,13 +105,14 @@ type CursorSpark = {
 const personal = {
   name: "MD. ASIF RAYHAN JOY",
   shortName: "Asif Rayhan",
-  title: "Full Stack Web Developer",
+  title: "Full-Stack Web Developer",
   location: "Satkhira, Khulna, Bangladesh",
   email: "amsiimf06@gmail.com",
   phone: "+8801302-271472",
   github: "https://github.com/asifrayhanjoy",
   linkedin: "https://www.linkedin.com/in/md-asif-rayhan-joy-4177372a4/",
-  resume: "https://drive.google.com/file/d/1OWQWE04lDpmmiJn4IYQkU4aglT3N0GKn/view?usp=drive_link",
+  portfolio: "https://portfolio-next.vercel.app/",
+  resume: "https://drive.google.com/file/d/18c1yzPI36QGmKns4rOw299Dmnk_WkxDq/view?usp=drive_link",
 };
 
 const navItems: NavItem[] = [
@@ -215,47 +216,90 @@ const projects: Project[] = [
     ],
   },
   {
-    name: "My-App",
-    slug: "my-app",
-    category: "Full-Stack Next.js App",
+    name: "Invoice Generator",
+    slug: "invoice-generator",
+    category: "Productivity Tool",
     accent: "#ff8fc7",
     visual: "product",
     description:
-      "A Next.js application using React, TypeScript, PostgreSQL, Prisma, Stripe, authentication, and API Routes for full-stack product behavior.",
+      "Built an invoice generation application with a modern responsive interface for creating and managing professional invoices using reusable components and streamlined data handling workflows.",
     technologies: [
       "Next.js",
       "React",
       "TypeScript",
-      "PostgreSQL",
-      "Prisma",
-      "Stripe",
-      "Authentication",
-      "API Routes",
+      "JavaScript",
+      "Tailwind CSS",
+      "Form Handling",
+      "Reusable Components",
+      "Responsive UI",
     ],
     highlights: [
-      "Next.js app structure with API Routes",
-      "PostgreSQL and Prisma represented in the data layer",
-      "Stripe and authentication included in the product scope",
+      "Modern responsive interface for invoice creation and management",
+      "Reusable form and UI components for smoother operations",
+      "Focused on user-friendly workflows and clean data handling",
     ],
     repositoryLinks: [
       {
         label: "GitHub",
-        href: "https://github.com/asifrayhanjoy/my-app.git",
+        href: "https://github.com/asifrayhanjoy",
       },
     ],
-    liveDemo: "https://my-app-tl6i.vercel.app/",
     caseStudy: [
       {
         title: "Scope",
-        body: "A full-stack Next.js build where backend behavior belongs inside API Routes rather than a separate Express or Nest service.",
+        body: "A focused productivity tool designed to simplify invoice creation with a polished and responsive user experience.",
       },
       {
         title: "System shape",
-        body: "Typed React UI, API route handlers, Prisma-backed PostgreSQL persistence, authentication, and Stripe integration work inside one product surface.",
+        body: "The project centers on reusable form behavior, component-driven UI structure, and practical handling of invoice data workflows.",
       },
       {
         title: "Engineering focus",
-        body: "The value comes from connecting product UI, server routes, persistence, authentication, and payment workflows in one coherent app.",
+        body: "The goal was to make invoice management feel efficient, clean, and approachable for end users.",
+      },
+    ],
+  },
+  {
+    name: "Rentful",
+    slug: "rentful",
+    category: "Personal Project",
+    accent: "#7dd3fc",
+    visual: "product",
+    description:
+      "Independently developed a rental-focused web application using Next.js. The project demonstrates modern frontend architecture, reusable components, routing, UI development and application structure. GitHub repository available on the developer profile.",
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Routing",
+      "Reusable Components",
+      "UI Development",
+      "Frontend Architecture",
+    ],
+    highlights: [
+      "Modern frontend architecture with reusable components",
+      "Routing and UI development for a rental-focused web app",
+      "Clean application structure built as an independent project",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "A rental-focused personal project designed to demonstrate modern frontend architecture and practical UI implementation in a real-world product context.",
+      },
+      {
+        title: "System shape",
+        body: "The app uses Next.js to organize routes, reusable UI elements, and structured front-end logic in a maintainable project layout.",
+      },
+      {
+        title: "Engineering focus",
+        body: "The emphasis is on clean reusable components, routing, product structure, and a polished user interface for a rental experience.",
       },
     ],
   },
@@ -308,83 +352,76 @@ const projects: Project[] = [
 
 const skillGroups: SkillGroup[] = [
   {
-    title: "Languages",
-    icon: Code2,
-    description: "Implementation languages for typed, browser-ready work.",
-    skills: [
-      { name: "JavaScript", level: "Core" },
-      { name: "TypeScript", level: "Working" },
-      { name: "Go", level: "Working" },
-      { name: "HTML5", level: "Core" },
-      { name: "CSS3", level: "Core" },
-    ],
-  },
-  {
     title: "Frontend",
     icon: Layers3,
-    description: "Interfaces, routing, layouts, and component-driven UI.",
+    description: "Responsive interfaces and component-driven frontend experiences.",
     skills: [
       { name: "React.js", level: "Core" },
-      { name: "Next.js", level: "Working" },
+      { name: "Next.js", level: "Core" },
+      { name: "JavaScript", level: "Core" },
+      { name: "TypeScript", level: "Working" },
+      { name: "HTML5", level: "Core" },
+      { name: "CSS3", level: "Core" },
       { name: "Tailwind CSS", level: "Core" },
     ],
   },
   {
     title: "Backend",
     icon: Server,
-    description: "Application logic, API structure, and service-side development.",
+    description: "API design, authentication, and service-side application logic.",
     skills: [
       { name: "Node.js", level: "Working" },
       { name: "Express.js", level: "Working" },
-      { name: "NestJS", level: "Learning" },
+      { name: "Go", level: "Working" },
+      { name: "REST API", level: "Core" },
+      { name: "JWT", level: "Working" },
+      { name: "Authentication", level: "Working" },
     ],
   },
   {
     title: "Database",
     icon: Database,
-    description: "Relational and document data work with ORM-backed workflows.",
+    description: "Relational and document-based persistence with modern ORM patterns.",
     skills: [
-      { name: "MongoDB", level: "Working" },
       { name: "PostgreSQL", level: "Working" },
-      { name: "Prisma ORM", level: "Working" },
-      { name: "Mongoose", level: "Working" },
+      { name: "MongoDB", level: "Working" },
+      { name: "Prisma", level: "Working" },
+      { name: "Redis", level: "Working" },
+    ],
+  },
+  {
+    title: "Architecture",
+    icon: BookOpen,
+    description: "Service-oriented and scalable system design for growing products.",
+    skills: [
+      { name: "Microservices", level: "Working" },
+      { name: "API Gateway", level: "Working" },
+      { name: "Service-based Architecture", level: "Working" },
+      { name: "Scalable Web Apps", level: "Working" },
     ],
   },
   {
     title: "Authentication",
     icon: ShieldCheck,
-    description: "Identity, authorization, sessions, and secure product flows.",
+    description: "Secure flows, role-aware access, and identity handling in products.",
     skills: [
       { name: "JWT", level: "Working" },
       { name: "Refresh Token", level: "Working" },
-      { name: "OTP Authentication", level: "Working" },
       { name: "RBAC", level: "Working" },
+      { name: "OTP Authentication", level: "Working" },
     ],
   },
   {
-    title: "Tools",
+    title: "Tools & DevOps",
     icon: Wrench,
-    description: "Versioning, API testing, local development, and deployment support.",
+    description: "Project workflow, source control, deployment, and delivery support.",
     skills: [
       { name: "Git", level: "Working" },
       { name: "GitHub", level: "Working" },
-      { name: "Docker", level: "Basic" },
-      { name: "Postman", level: "Working" },
+      { name: "Docker", level: "Working" },
+      { name: "Nginx", level: "Basic" },
+      { name: "Vercel", level: "Working" },
       { name: "VS Code", level: "Core" },
-    ],
-  },
-  {
-    title: "Expanding Stack",
-    icon: BookOpen,
-    description: "Technologies being added through practical learning and experiments.",
-    skills: [
-      { name: "Redis", level: "Basic" },
-      { name: "Kafka", level: "Learning" },
-      { name: "RabbitMQ", level: "Learning" },
-      { name: "gRPC", level: "Learning" },
-      { name: "Stripe", level: "Working" },
-      { name: "Cloudinary", level: "Working" },
-      { name: "AWS", level: "Basic" },
     ],
   },
 ];
@@ -1198,15 +1235,16 @@ function AboutSection() {
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
         <div className="space-y-6 text-base leading-8 text-[var(--portfolio-muted)]">
           <p>
-            I am a Full Stack Web Developer from Satkhira, Khulna, Bangladesh.
-            I work across frontend development, backend development, API design,
-            authentication, database modeling, and application structure.
+            Full-Stack Web Developer experienced in building modern, responsive
+            and scalable web applications. Hands-on experience with React.js,
+            Next.js, JavaScript, TypeScript, Node.js, Express.js, REST APIs,
+            databases, authentication, microservices and deployment.
           </p>
           <p>
-            My strongest work is built around React, Next.js, Node.js,
-            TypeScript, MongoDB, PostgreSQL, Prisma, and modern tooling. I keep
-            improving through practical projects that connect UI polish with
-            reliable application behavior.
+            Experienced in both independent development and collaborative team
+            projects across e-commerce, healthcare, rental, and service-oriented
+            applications. I focus on reliable product delivery, clear API
+            boundaries, and practical frontend-to-backend implementation.
           </p>
 
           <div className="grid gap-3 pt-2 sm:grid-cols-2">
@@ -1661,10 +1699,10 @@ function ResumeSection() {
             </div>
           </div>
           <p className="mt-6 text-base font-bold">
-            Bachelor of Arts (Honours) in English
+            Bachelor&apos;s Degree (Honours) in English
           </p>
           <p className="mt-2 text-sm text-[var(--portfolio-muted)]">
-            Currently studying
+            Satkhira, Bangladesh
           </p>
         </article>
 
@@ -1690,6 +1728,37 @@ function ResumeSection() {
         </article>
       </div>
 
+      <div className="mt-6 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
+        <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-[var(--portfolio-accent)]">
+          Collaborative Project Experience
+        </p>
+        <div className="mt-6 space-y-7">
+          <div>
+            <h3 className="text-3xl font-black leading-tight text-[var(--portfolio-text)]">
+              Blood Donation Platform — Team Project
+            </h3>
+            <p className="mt-4 text-base leading-8 text-[var(--portfolio-muted)]">
+              Collaborated with other developers on a blood donation platform.
+              Contributed to web application development, feature implementation,
+              frontend/backend integration and debugging while working as part of
+              a development team.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-3xl font-black leading-tight text-[var(--portfolio-text)]">
+              Next Tekana — Team Project
+            </h3>
+            <p className="mt-4 text-base leading-8 text-[var(--portfolio-muted)]">
+              Collaborated with a development team on a rental/service platform
+              focused on property and hostel-related listings and rental
+              workflows. Contributed to application features, UI development, API
+              integration and debugging.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="mt-6 grid gap-6 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-[var(--portfolio-shadow)] lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <h3 className="font-mono text-2xl font-black">Resume</h3>
@@ -1706,6 +1775,31 @@ function ResumeSection() {
             Open Resume
           </PrimaryLink>
         </div>
+      </div>
+
+      <div className="mt-8 rounded-lg border border-[var(--portfolio-line)] bg-[var(--portfolio-surface)] p-6 shadow-sm">
+        <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-[var(--portfolio-accent)]">
+          Core Strengths
+        </p>
+        <ul className="mt-5 grid gap-3 text-sm leading-7 text-[var(--portfolio-muted)] md:grid-cols-2">
+          {[
+            "Full-stack web application development",
+            "React / Next.js frontend development",
+            "REST API design and backend integration",
+            "Database design and ORM-based development",
+            "Team collaboration and independent project development",
+            "Debugging, deployment and production troubleshooting",
+            "Clean, maintainable and scalable code",
+          ].map((item) => (
+            <li key={item} className="flex gap-3">
+              <CheckCircle2
+                className="mt-1 size-4 shrink-0 text-[var(--portfolio-success)]"
+                aria-hidden="true"
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
