@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Code2,
   Database,
-  Download,
   ExternalLink,
   FileText,
   GraduationCap,
@@ -112,7 +111,6 @@ const personal = {
   github: "https://github.com/asifrayhanjoy",
   linkedin: "https://www.linkedin.com/in/md-asif-rayhan-joy-4177372a4/",
   portfolio: "https://portfolio-next.vercel.app/",
-  resume: "https://drive.google.com/file/d/18c1yzPI36QGmKns4rOw299Dmnk_WkxDq/view?usp=drive_link",
 };
 
 const navItems: NavItem[] = [
@@ -120,7 +118,6 @@ const navItems: NavItem[] = [
   { label: "Projects", href: "#projects", id: "projects", icon: Briefcase },
   { label: "Skills", href: "#skills", id: "skills", icon: Code2 },
   { label: "Process", href: "#process", id: "process", icon: Rocket },
-  { label: "Resume", href: "#resume", id: "resume", icon: FileText },
   { label: "Contact", href: "#contact", id: "contact", icon: Mail },
 ];
 
@@ -751,7 +748,6 @@ function PortfolioPage() {
         <ProjectsSection />
         <SkillsSection />
         <ProcessSection />
-        <ResumeSection />
         <ContactSection />
       </main>
 
@@ -996,7 +992,7 @@ function SideRail({ activeSection }: { activeSection: string }) {
 }
 
 function MobileDock({ activeSection }: { activeSection: string }) {
-  const mobileItems = [navItems[0], navItems[1], navItems[2], navItems[5]];
+  const mobileItems = [navItems[0], navItems[1], navItems[2], navItems[4]];
 
   return (
     <nav
@@ -1079,9 +1075,6 @@ function HeroSection() {
             <PrimaryLink href="#projects" icon={ArrowRight}>
               View Projects
             </PrimaryLink>
-            <SecondaryLink href={personal.resume} icon={Download} external>
-              Resume
-            </SecondaryLink>
             <SecondaryLink href={personal.github} icon={Github} external>
               GitHub
             </SecondaryLink>
@@ -1766,14 +1759,6 @@ function ResumeSection() {
             Review the latest resume for a compact overview of skills, project
             work, education, and contact details.
           </p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <SecondaryLink href={personal.resume} icon={FileText} external>
-            View Resume
-          </SecondaryLink>
-          <PrimaryLink href={personal.resume} icon={Download}>
-            Open Resume
-          </PrimaryLink>
         </div>
       </div>
 
