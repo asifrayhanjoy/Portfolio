@@ -105,7 +105,7 @@ const personal = {
   name: "MD. ASIF RAYHAN JOY",
   shortName: "Asif Rayhan",
   title: "Full-Stack Web Developer",
-  location: "Satkhira, Khulna, Bangladesh",
+  location: "Dhaka, Bangladesh",
   email: "mdasifrayhanjoy2@gmail.com",
   phone: "+8801302-271472",
   github: "https://github.com/asifrayhanjoy",
@@ -301,16 +301,62 @@ const projects: Project[] = [
     ],
   },
   {
-    name: "PH Healthcare",
-    slug: "ph-healthcare",
-    category: "Healthcare Platform",
+    name: "Next Thekana",
+    slug: "next-thekana",
+    category: "Team Project",
     accent: "#7dd3fc",
     visual: "product",
     description:
-      "A full-stack blood donation management app built with Next.js, React, TypeScript, MongoDB, Prisma, Better Auth, Tailwind CSS, Server Actions, and API Routes.",
+      "Next Thekana is a team-developed rental and service-focused web platform designed around property and hostel-related listings. I contributed to the frontend development, reusable UI components, API integration, responsive interfaces, real-time functionality, debugging, and collaborative feature development.",
     technologies: [
       "Next.js",
-      "React",
+      "React.js",
+      "TypeScript",
+      "REST API",
+      "WebSocket",
+    ],
+    highlights: [
+      "Developed responsive frontend interfaces.",
+      "Built reusable React/Next.js components.",
+      "Integrated frontend functionality with backend REST APIs.",
+      "Worked with property and hostel-related listing functionality.",
+      "Implemented and worked with real-time functionality using WebSocket.",
+      "Participated in feature development and debugging.",
+      "Collaborated with other team members during project development.",
+      "Worked across frontend and backend integration boundaries.",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "A team-built rental and service platform focused on property and hostel-related listings, with collaborative development across both UI and API integration layers.",
+      },
+      {
+        title: "System shape",
+        body: "The product brings together responsive frontend flows, reusable components, and real-time functionality while linking user-facing behavior to backend services.",
+      },
+      {
+        title: "Engineering focus",
+        body: "The work emphasized clean component structure, dependable integration with REST APIs, collaborative feature delivery, and practical debugging under team constraints.",
+      },
+    ],
+  },
+  {
+    name: "PH Healthcare",
+    slug: "ph-healthcare",
+    category: "Team Project",
+    accent: "#7dd3fc",
+    visual: "product",
+    description:
+      "A team-developed blood donation web application focused on connecting blood donors with blood requests and supporting donor, agent, and administrative workflows. I contributed to frontend development, application features, frontend/backend integration, debugging, and team-based development.",
+    technologies: [
+      "Next.js",
+      "React.js",
       "TypeScript",
       "MongoDB",
       "Prisma",
@@ -320,9 +366,12 @@ const projects: Project[] = [
       "API Routes",
     ],
     highlights: [
-      "Donor search and blood request workflows are represented in the app",
-      "Dashboard areas exist for donor, agent, and admin workflows",
-      "Prisma models cover donors, requests, hospitals, notifications, and donation history",
+      "Donor search functionality.",
+      "Blood request workflows and donor management.",
+      "Donor dashboard, agent dashboard, and admin dashboard workflows.",
+      "Authentication using Better Auth and MongoDB data management with Prisma.",
+      "Frontend/backend integration with Server Actions and API Routes.",
+      "Responsive UI development and debugging as part of team collaboration.",
     ],
     repositoryLinks: [
       {
@@ -333,15 +382,15 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "A healthcare-focused blood donation platform with donor discovery, request workflows, and role-specific dashboard areas represented in the available source.",
+        body: "A team-developed blood donation platform focused on donor discovery, request workflows, and role-based administrative coordination across donor, agent, and admin experiences.",
       },
       {
         title: "System shape",
-        body: "Next.js App Router pages, Server Actions, and API route handlers connect React UI to Better Auth sessions and Prisma-backed MongoDB models.",
+        body: "Next.js pages and API routes connect responsive frontend interfaces to Better Auth sessions and Prisma-backed MongoDB data models for donor and request management.",
       },
       {
         title: "Engineering focus",
-        body: "The source emphasizes searchable donor profiles, blood request handling, notifications, and protected dashboard workflows for donors, agents, and admins.",
+        body: "The project centered on frontend development, responsive UI work, API integration, debugging, authentication flows, and collaborative feature delivery across the full application.",
       },
     ],
   },
@@ -721,8 +770,8 @@ function PortfolioPage() {
     telephone: personal.phone,
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Satkhira",
-      addressRegion: "Khulna",
+      addressLocality: "Dhaka",
+      addressRegion: "Dhaka",
       addressCountry: "BD",
     },
     sameAs: [personal.github, personal.linkedin].filter(Boolean),
