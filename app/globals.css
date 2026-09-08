@@ -25,7 +25,9 @@ html {
 
 body {
   min-width: 320px;
-  background: var(--background);
+  background:
+    radial-gradient(circle at top, rgba(23, 87, 97, 0.32), transparent 28%),
+    linear-gradient(180deg, #02060a 0%, #050b12 38%, #04080d 100%);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
@@ -35,44 +37,44 @@ body {
 }
 
 .portfolio-page {
-  --portfolio-bg: #04080b;
-  --portfolio-text: #d8f3f1;
-  --portfolio-muted: #8ea5a7;
-  --portfolio-subtle: #61777c;
-  --portfolio-surface: rgba(8, 19, 23, 0.92);
-  --portfolio-surface-raised: rgba(10, 24, 30, 0.84);
-  --portfolio-surface-muted: rgba(32, 214, 181, 0.075);
-  --portfolio-panel: rgba(5, 12, 16, 0.72);
-  --portfolio-input: rgba(20, 54, 61, 0.5);
-  --portfolio-line: rgba(126, 229, 216, 0.15);
-  --portfolio-line-strong: rgba(126, 229, 216, 0.28);
-  --portfolio-nav: rgba(4, 8, 11, 0.78);
-  --portfolio-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+  --portfolio-bg: #050b12;
+  --portfolio-text: #c8dadd;
+  --portfolio-muted: #91aeb2;
+  --portfolio-subtle: #6f898e;
+  --portfolio-surface: rgba(14, 32, 42, 0.96);
+  --portfolio-surface-raised: rgba(19, 43, 53, 0.98);
+  --portfolio-surface-muted: rgba(32, 214, 181, 0.13);
+  --portfolio-panel: rgba(9, 25, 34, 0.95);
+  --portfolio-input: rgba(16, 52, 62, 0.52);
+  --portfolio-line: rgba(139, 213, 231, 0.22);
+  --portfolio-line-strong: rgba(139, 213, 231, 0.38);
+  --portfolio-nav: rgba(5, 11, 18, 0.84);
+  --portfolio-shadow: 0 28px 80px rgba(1, 8, 14, 0.72);
   --portfolio-accent: #20d6b5;
-  --portfolio-accent-contrast: #02110f;
+  --portfolio-accent-contrast: #021914;
   --portfolio-accent-soft: rgba(32, 214, 181, 0.14);
   --portfolio-warm: #ffb86b;
-  --portfolio-warm-soft: rgba(255, 184, 107, 0.14);
+  --portfolio-warm-soft: rgba(255, 184, 107, 0.12);
   --portfolio-success: #8bff9c;
   --portfolio-danger: #ff7aa5;
-  --portfolio-glow: rgba(32, 214, 181, 0.3);
-  --portfolio-ring: rgba(32, 214, 181, 0.34);
+  --portfolio-glow: rgba(32, 214, 181, 0.45);
+  --portfolio-ring: rgba(63, 182, 255, 0.42);
   --portfolio-grid: linear-gradient(
-      rgba(126, 229, 216, 0.07) 1px,
+      rgba(128, 211, 255, 0.07) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(126, 229, 216, 0.07) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(128, 211, 255, 0.07) 1px, transparent 1px);
   --portfolio-hero-overlay: linear-gradient(
       90deg,
-      rgba(4, 8, 11, 0.96) 0%,
-      rgba(4, 8, 11, 0.93) 34%,
-      rgba(4, 8, 11, 0.75) 58%,
-      rgba(4, 8, 11, 0.4) 100%
+      rgba(4, 8, 11, 0.95) 0%,
+      rgba(4, 12, 18, 0.9) 26%,
+      rgba(4, 12, 18, 0.75) 58%,
+      rgba(4, 12, 18, 0.42) 100%
     ),
     linear-gradient(
       180deg,
-      rgba(4, 8, 11, 0.22) 0%,
-      rgba(4, 8, 11, 0.96) 100%
+      rgba(4, 8, 11, 0.18) 0%,
+      rgba(4, 12, 18, 0.9) 100%
     );
   --portfolio-inverse: #061b20;
   --portfolio-inverse-text: #d8f3f1;
@@ -106,12 +108,114 @@ body {
   --level-basic-border: rgba(255, 122, 165, 0.28);
   --level-basic-text: #ffc0d5;
   position: relative;
+  isolation: isolate;
   background:
-    var(--portfolio-grid),
-    linear-gradient(180deg, rgba(32, 214, 181, 0.035), transparent 360px),
-    var(--portfolio-bg);
-  background-size: 72px 72px, 72px 72px, auto;
+    radial-gradient(circle at 20% 0%, rgba(32, 214, 181, 0.2), transparent 22%),
+    radial-gradient(circle at 82% 12%, rgba(96, 165, 250, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(96, 165, 250, 0.12), transparent 28%),
+    linear-gradient(180deg, #071118 0%, #040b12 28%, #04080d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(181, 246, 255, 0.08),
+    inset 0 -1px 0 rgba(181, 246, 255, 0.05),
+    inset 0 24px 70px rgba(143, 214, 255, 0.04),
+    0 0 0 1px rgba(128, 211, 255, 0.05);
   color-scheme: dark;
+}
+
+.portfolio-page [class~="bg-(--portfolio-surface)]"],
+.portfolio-page [class~="bg-(--portfolio-surface-raised)]"],
+.portfolio-page [class~="bg-(--portfolio-panel)]"] {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(105, 220, 226, 0.07) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      0deg,
+      rgba(105, 220, 226, 0.045) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(46, 211, 183, 0.14),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(113, 211, 223, 0.1),
+      transparent 42%,
+      rgba(33, 93, 121, 0.12)
+    );
+  background-size: 42px 42px, 42px 42px, auto, auto;
+  box-shadow:
+    inset 0 1px 0 rgba(202, 247, 255, 0.1),
+    inset 0 -1px 0 rgba(24, 104, 129, 0.2),
+    0 20px 50px rgba(1, 9, 17, 0.28),
+    0 0 24px rgba(52, 190, 211, 0.06);
+}
+
+.portfolio-page [class~="bg-(--portfolio-surface-muted)]"] {
+  background-image: linear-gradient(
+    135deg,
+    rgba(32, 214, 181, 0.18),
+    rgba(81, 153, 190, 0.14)
+  );
+}
+
+.portfolio-page > main {
+  position: relative;
+  isolation: isolate;
+}
+
+.portfolio-page > main::before {
+  content: "";
+  position: absolute;
+  inset: 4rem 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(32, 214, 181, 0.08), transparent 22%),
+    radial-gradient(circle at 82% 46%, rgba(96, 165, 250, 0.08), transparent 24%),
+    linear-gradient(90deg, transparent, rgba(128, 211, 255, 0.025) 50%, transparent);
+}
+
+.portfolio-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 12, 21, 0.26) 0%,
+      rgba(4, 14, 24, 0.52) 48%,
+      rgba(3, 9, 17, 0.34) 100%
+    ),
+    url("/portfolio-hero-abstract.png") center top / cover fixed,
+    linear-gradient(90deg, rgba(173, 232, 255, 0.035) 0, transparent 12%, transparent 88%, rgba(173, 232, 255, 0.025) 100%),
+    linear-gradient(180deg, rgba(173, 232, 255, 0.05), transparent 18%, transparent 82%, rgba(173, 232, 255, 0.02)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(128, 211, 255, 0.05) 0,
+      rgba(128, 211, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  opacity: 0.78;
+}
+
+.portfolio-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(173, 232, 255, 0.1), transparent 16%),
+    linear-gradient(135deg, rgba(173, 232, 255, 0.05), transparent 28%, transparent 72%, rgba(255, 184, 107, 0.04));
+  opacity: 0.82;
 }
 
 .cursor-trail-layer {
