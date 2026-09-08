@@ -21,15 +21,12 @@ import {
   Mail,
   MapPin,
   Menu,
-  Monitor,
-  Moon,
   Phone,
   Rocket,
   Send,
   Server,
   ShieldCheck,
   Sparkles,
-  Sun,
   Wrench,
   X,
 } from "lucide-react";
@@ -42,14 +39,11 @@ import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
-type ThemePreference = "light" | "dark" | "system";
-type ResolvedTheme = "light" | "dark";
 type SkillLevel = "Core" | "Working" | "Learning" | "Basic";
 
 type NavItem = {
@@ -606,49 +600,10 @@ const levelStyles: Record<SkillLevel, string> = {
     "border-(--level-basic-border)] bg-(--level-basic-bg)] text-(--level-basic-text)]",
 };
 
-const themeStorageKey = "asif-portfolio-theme";
 const copyrightYear = 2026;
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
-}
-
-function isThemePreference(value: string | null): value is ThemePreference {
-  return value === "light" || value === "dark" || value === "system";
-}
-
-function getStoredThemePreference(): ThemePreference {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  try {
-    const storedTheme = window.localStorage.getItem(themeStorageKey);
-    return isThemePreference(storedTheme) ? storedTheme : "dark";
-  } catch {
-    return "dark";
-  }
-}
-
-function getSystemThemeSnapshot(): ResolvedTheme {
-  if (typeof window === "undefined" || !window.matchMedia) {
-    return "dark";
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
-function subscribeToSystemTheme(onStoreChange: () => void) {
-  if (typeof window === "undefined" || !window.matchMedia) {
-    return () => {};
-  }
-
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  mediaQuery.addEventListener("change", onStoreChange);
-
-  return () => mediaQuery.removeEventListener("change", onStoreChange);
 }
 
 function Github(props: SVGProps<SVGSVGElement>) {
@@ -727,28 +682,11 @@ export default function Home() {
 }
 
 function PortfolioPage() {
-  const [themePreference, setThemePreference] =
-    useState<ThemePreference>(getStoredThemePreference);
   const [cursorSparks, setCursorSparks] = useState<CursorSpark[]>([]);
   const nextSparkId = useRef(0);
   const lastSparkAt = useRef(0);
   const sparkTimeouts = useRef<number[]>([]);
-  const systemTheme = useSyncExternalStore(
-    subscribeToSystemTheme,
-    getSystemThemeSnapshot,
-    () => "dark",
-  );
-  const resolvedTheme =
-    themePreference === "system" ? systemTheme : themePreference;
   const activeSection = useActiveSection();
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(themeStorageKey, themePreference);
-    } catch {
-      // Ignore storage errors in privacy-restricted contexts.
-    }
-  }, [themePreference]);
 
   useEffect(() => {
     const timeoutIds = sparkTimeouts.current;
@@ -829,7 +767,7 @@ function PortfolioPage() {
   return (
     <div
       className="portfolio-page min-h-screen overflow-x-hidden bg-(--portfolio-bg)] pb-24 text-(--portfolio-text)] lg:pb-0"
-      data-theme={resolvedTheme}
+      data-theme="dark"
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
@@ -857,8 +795,6 @@ function PortfolioPage() {
       </div>
       <Header
         activeSection={activeSection}
-        themePreference={themePreference}
-        onThemeChange={setThemePreference}
       />
       <SideRail activeSection={activeSection} />
       <MobileDock activeSection={activeSection} />
@@ -882,12 +818,8 @@ function PortfolioPage() {
 
 function Header({
   activeSection,
-  themePreference,
-  onThemeChange,
 }: {
   activeSection: string;
-  themePreference: ThemePreference;
-  onThemeChange: (theme: ThemePreference) => void;
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -953,10 +885,10 @@ function Header({
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-md px-3 py-2 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
+                "rounded-md px-3 py-2 text-sm font-bold transition-[transform,color,background-color] duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
                 activeSection === item.id
-                  ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)]"
-                  : "text-(--portfolio-muted)] hover:text-(--portfolio-text)]",
+                  ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)] hover:bg-(--portfolio-text)]"
+                  : "text-(--portfolio-muted)] hover:bg-(--portfolio-surface-muted)] hover:text-(--portfolio-text)]",
               )}
             >
               {item.label}
@@ -965,10 +897,6 @@ function Header({
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeSwitcher
-            themePreference={themePreference}
-            onThemeChange={onThemeChange}
-          />
           <a
             href={personal.github}
             target="_blank"
@@ -1036,50 +964,6 @@ function Header({
         ) : null}
       </AnimatePresence>
     </header>
-  );
-}
-
-function ThemeSwitcher({
-  themePreference,
-  onThemeChange,
-}: {
-  themePreference: ThemePreference;
-  onThemeChange: (theme: ThemePreference) => void;
-}) {
-  const options = [
-    { value: "dark" as const, label: "Dark", icon: Moon },
-    { value: "light" as const, label: "Light", icon: Sun },
-    { value: "system" as const, label: "System", icon: Monitor },
-  ];
-
-  return (
-    <div
-      role="group"
-      aria-label="Theme preference"
-      className="hidden rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] p-1 shadow-sm backdrop-blur sm:flex"
-    >
-      {options.map((option) => {
-        const Icon = option.icon;
-        const isActive = themePreference === option.value;
-
-        return (
-          <button
-            key={option.value}
-            type="button"
-            aria-label={`${option.label} theme`}
-            aria-pressed={isActive}
-            onClick={() => onThemeChange(option.value)}
-            className={cn(
-              "grid size-8 place-items-center rounded-md text-(--portfolio-muted)] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
-              isActive &&
-                "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)] shadow-sm",
-            )}
-          >
-            <Icon className="size-4" aria-hidden="true" />
-          </button>
-        );
-      })}
-    </div>
   );
 }
 

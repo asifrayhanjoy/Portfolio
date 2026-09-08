@@ -55,6 +55,8 @@ body {
   --portfolio-accent-soft: rgba(32, 214, 181, 0.14);
   --portfolio-warm: #ffb86b;
   --portfolio-warm-soft: rgba(255, 184, 107, 0.12);
+  --portfolio-box-fill: #103844;
+  --portfolio-box-light: rgba(32, 214, 181, 0.72);
   --portfolio-success: #8bff9c;
   --portfolio-danger: #ff7aa5;
   --portfolio-glow: rgba(32, 214, 181, 0.45);
@@ -125,6 +127,7 @@ body {
 .portfolio-page [class~="bg-(--portfolio-surface)]"],
 .portfolio-page [class~="bg-(--portfolio-surface-raised)]"],
 .portfolio-page [class~="bg-(--portfolio-panel)]"] {
+  background-color: var(--portfolio-box-fill);
   background-image:
     linear-gradient(
       90deg,
@@ -136,23 +139,20 @@ body {
       rgba(105, 220, 226, 0.045) 1px,
       transparent 1px
     ),
-    radial-gradient(
-      circle at 92% 8%,
-      rgba(46, 211, 183, 0.14),
-      transparent 32%
-    ),
     linear-gradient(
       145deg,
       rgba(113, 211, 223, 0.1),
       transparent 42%,
       rgba(33, 93, 121, 0.12)
     );
-  background-size: 42px 42px, 42px 42px, auto, auto;
+  background-size: 42px 42px, 42px 42px, auto;
   box-shadow:
     inset 0 1px 0 rgba(202, 247, 255, 0.1),
     inset 0 -1px 0 rgba(24, 104, 129, 0.2),
     0 20px 50px rgba(1, 9, 17, 0.28),
-    0 0 24px rgba(52, 190, 211, 0.06);
+    0 0 24px rgba(52, 190, 211, 0.06),
+    0 14px 24px -18px var(--portfolio-box-light);
+  border-bottom: 2px solid var(--portfolio-box-light);
 }
 
 .portfolio-page [class~="bg-(--portfolio-surface-muted)]"] {
@@ -166,6 +166,18 @@ body {
 .portfolio-page > main {
   position: relative;
   isolation: isolate;
+}
+
+.portfolio-page button:not(:disabled) {
+  transition:
+    transform 180ms ease-out,
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    border-color 180ms ease-out;
+}
+
+.portfolio-page button:not(:disabled):hover {
+  transform: translateY(-2px);
 }
 
 .portfolio-page > main::before {
@@ -216,6 +228,66 @@ body {
     radial-gradient(circle at 50% 15%, rgba(173, 232, 255, 0.1), transparent 16%),
     linear-gradient(135deg, rgba(173, 232, 255, 0.05), transparent 28%, transparent 72%, rgba(255, 184, 107, 0.04));
   opacity: 0.82;
+}
+
+.portfolio-page[data-theme="light"] {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(15, 159, 143, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 12%, rgba(36, 92, 232, 0.08), transparent 24%),
+    linear-gradient(180deg, #f4fbf8 0%, #eaf6f2 42%, #e3f1ee 100%);
+}
+
+.portfolio-page[data-theme="light"]::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(234, 246, 242, 0.72) 0%,
+      rgba(234, 246, 242, 0.82) 48%,
+      rgba(234, 246, 242, 0.7) 100%
+    ),
+    url("/portfolio-hero-abstract.png") center top / cover fixed,
+    repeating-linear-gradient(
+      90deg,
+      rgba(13, 91, 89, 0.04) 0,
+      rgba(13, 91, 89, 0.04) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  opacity: 0.62;
+}
+
+.portfolio-page[data-theme="light"]::after {
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.64), transparent 18%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.24),
+      transparent 28%,
+      transparent 72%,
+      rgba(15, 159, 143, 0.08)
+    );
+  opacity: 0.72;
+}
+
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-surface)"]
+  [class*="text-(--portfolio-text)"],
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-surface)"]
+  [class*="text-(--portfolio-muted)"],
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-surface)"]
+  [class*="text-(--portfolio-subtle)"],
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-panel)"]
+  [class*="text-(--portfolio-text)"],
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-panel)"]
+  [class*="text-(--portfolio-muted)"],
+.portfolio-page[data-theme="light"]
+  [class*="bg-(--portfolio-panel)"]
+  [class*="text-(--portfolio-subtle)"] {
+  color: var(--portfolio-text) !important;
 }
 
 .cursor-trail-layer {
@@ -289,6 +361,8 @@ body {
   --portfolio-accent-soft: rgba(15, 159, 143, 0.13);
   --portfolio-warm: #b66014;
   --portfolio-warm-soft: rgba(182, 96, 20, 0.13);
+  --portfolio-box-fill: #d8eee8;
+  --portfolio-box-light: rgba(15, 159, 143, 0.5);
   --portfolio-success: #147a48;
   --portfolio-danger: #b9265d;
   --portfolio-glow: rgba(15, 159, 143, 0.2);
