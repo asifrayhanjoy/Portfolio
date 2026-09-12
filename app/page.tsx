@@ -440,13 +440,13 @@ const skillGroups: SkillGroup[] = [
       { name: "React.js", level: "Core" },
       { name: "Next.js", level: "Core" },
       { name: "JavaScript", level: "Core" },
-      { name: "TypeScript", level: "Working" },
-      { name: "React Context API", level: "Working" },
-      { name: "Redux", level: "Working" },
-      { name: "Zustand", level: "Working" },
+      { name: "TypeScript", level: "Core" },
       { name: "HTML5", level: "Core" },
       { name: "CSS3", level: "Core" },
       { name: "Tailwind CSS", level: "Core" },
+      { name: "React Context API", level: "Core" },
+      { name: "Redux", level: "Core" },
+      { name: "Zustand", level: "Core" },
     ],
   },
   {
@@ -457,12 +457,13 @@ const skillGroups: SkillGroup[] = [
       { name: "Node.js", level: "Working" },
       { name: "Express.js", level: "Working" },
       { name: "Python", level: "Working" },
+      { name: "REST API", level: "Core" },
+      { name: "Authentication", level: "Core" },
+      { name: "Authorization", level: "Working" },
+      { name: "JWT", level: "Core" },
+      { name: "WebSocket", level: "Working" },
       { name: "NestJS", level: "Working" },
       { name: "Go", level: "Working" },
-      { name: "REST API", level: "Core" },
-      { name: "WebSocket", level: "Working" },
-      { name: "JWT", level: "Working" },
-      { name: "Authentication", level: "Working" },
     ],
   },
   {
@@ -1238,9 +1239,7 @@ function AboutSection() {
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
         <div className="space-y-6 text-base leading-8 text-(--portfolio-muted)]">
           <p>
-            Full-stack web developer focused on building responsive, modern
-            applications with React.js, Next.js, TypeScript, JavaScript, Node.js,
-            REST APIs, databases, authentication flows, and clean product UX.
+            Full-stack web developer with approximately 2 years of hands-on development experience. I focus on building responsive, modern applications with React.js, Next.js, TypeScript, JavaScript, Node.js, REST APIs, databases, authentication flows, and clean product UX across professional, team-based, and personal project work.
           </p>
           <p>
             I develop both the user-facing frontend and the backend systems that
@@ -1689,7 +1688,7 @@ function ExperienceSection() {
     <Section
       id="experience"
       eyebrow="Experience & Background"
-      title="A practical developer profile shaped by projects, collaboration, and adaptability."
+      title="Approximately 2 years of hands-on development through professional, team-based, and personal projects."
       description="My experience is grounded in frontend delivery, full-stack problem solving, and team coordination rather than unsupported claims."
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
