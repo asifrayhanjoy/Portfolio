@@ -61,6 +61,7 @@ type ProjectLink = {
 type Project = {
   name: string;
   slug: string;
+  role?: string;
   category: string;
   description: string;
   accent: string;
@@ -96,9 +97,12 @@ type CursorSpark = {
 };
 
 const personal = {
-  name: "Md. Asif Rayhan Joy",
+  name: "MD ASIF RAYHAN JOY",
   shortName: "Asif Rayhan",
-  title: "Full-Stack Web Developer | AI-Assisted Software Developer",
+  title: "Full-Stack Developer & Team Lead",
+  headline: "Full-Stack Developer & Team Lead | Next.js · React.js · TypeScript · Node.js | AI-Assisted Workflows",
+  subtitle: "Next.js · React.js · TypeScript · Python · Node.js · PostgreSQL",
+  bio: "Building scalable, responsive, and high-performance web applications with modern frontend architectures, robust backend systems, and AI-accelerated workflows.",
   location: "Dhaka, Bangladesh",
   email: "mdasifrayhanjoy2@gmail.com",
   phone: "01302271472",
@@ -118,73 +122,107 @@ const navItems: NavItem[] = [
 ];
 
 const heroStats = [
-  { value: "1Y", label: "Team coordination" },
-  { value: "8+", label: "Core technologies" },
-  { value: "AI", label: "Workflow support" },
-  { value: "BD", label: "Based in Bangladesh" },
+  { value: "1Y", label: "Team leadership" },
+  { value: "2Y", label: "Dev experience" },
+  { value: "AI", label: "Accelerated workflows" },
+  { value: "BD", label: "Dhaka, Bangladesh" },
 ];
 
 const coreStack = [
   { name: "Next.js", color: "#20d6b5" },
-  { name: "React", color: "#7dd3fc" },
+  { name: "React.js", color: "#7dd3fc" },
   { name: "TypeScript", color: "#8ea5ff" },
-  { name: "JavaScript", color: "#ffcf70" },
   { name: "Node.js", color: "#8bff9c" },
   { name: "Express.js", color: "#a7f3d0" },
-  { name: "MongoDB", color: "#70e08f" },
   { name: "PostgreSQL", color: "#8fb7ff" },
-  { name: "Prisma", color: "#c4a7ff" },
+  { name: "MongoDB", color: "#70e08f" },
+  { name: "Prisma ORM", color: "#c4a7ff" },
   { name: "Tailwind CSS", color: "#67e8f9" },
-  { name: "JWT", color: "#ff8fc7" },
+  { name: "Zustand", color: "#ffcf70" },
+  { name: "Redux", color: "#ff8fc7" },
+  { name: "JWT / RBAC", color: "#b5a7ff" },
   { name: "Stripe", color: "#b5a7ff" },
   { name: "Docker", color: "#75b7ff" },
-  { name: "Redis", color: "#ff8a7a" },
 ];
 
 const cursorSparkColors = ["#20d6b5", "#7dd3fc", "#ffb86b", "#ff8fc7"];
 
 const capabilityHighlights = [
   {
-    title: "Frontend + backend systems",
-    body: "Responsive React and Next.js interfaces connected to backend APIs, authentication, databases, and reliable application states.",
+    title: "Team Leadership & Delivery",
+    body: "Led and coordinated a development team for ~1 year—aligning sprint milestones, conducting code reviews, resolving technical blockers, and keeping releases on schedule.",
   },
   {
-    title: "Backend foundations",
-    body: "Node.js APIs, authentication flows, validation, and data access shaped for readable application behavior.",
+    title: "Frontend Architecture",
+    body: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, and Tailwind CSS with modern state management (Zustand, Redux, Context API).",
   },
   {
-    title: "Product delivery",
-    body: "Practical execution across UI, API, database, integrations, deployment, and review-ready project presentation.",
+    title: "Backend & Data",
+    body: "Hands-on experience developing RESTful APIs with Node.js and Express.js, implementing secure authentication (JWT/RBAC), and schema modeling with PostgreSQL, MongoDB, and Prisma ORM.",
+  },
+];
+
+type ExperienceEntry = {
+  role: string;
+  type: string;
+  duration: string;
+  location: string;
+  bullets: string[];
+};
+
+const experiences: ExperienceEntry[] = [
+  {
+    role: "Team Lead & Full-Stack Developer",
+    type: "Full-time / Contract (Collaborative Web Projects)",
+    duration: "Approximately 1 Year (Oct 2025 – Sep 2026)",
+    location: "Dhaka, Bangladesh (Remote)",
+    bullets: [
+      "Led and coordinated a development team for ~1 year, maintaining development milestones, task distribution, and cross-functional feature delivery.",
+      "Architected and developed client and administrative dashboards using Next.js, React.js, and TypeScript.",
+      "Developed backend REST APIs with Node.js, Express.js, and PostgreSQL using Prisma ORM.",
+      "Implemented secure JWT authentication, role-based access control (RBAC), and Stripe payment workflows.",
+      "Supported team members through regular debugging sessions, code refactoring, and Git version control workflows.",
+    ],
+  },
+  {
+    role: "Frontend & Web Developer",
+    type: "Part-time / Contract (Independent Development)",
+    duration: "Hands-on Development (~2 years practical experience)",
+    location: "Dhaka, Bangladesh (Remote)",
+    bullets: [
+      "Developed responsive, mobile-first web applications using Next.js, React.js, TypeScript, and Tailwind CSS.",
+      "Integrated REST APIs and real-time communication features using WebSockets.",
+      "Built dynamic form workflows, state management logic, and reusable UI components.",
+    ],
   },
 ];
 
 const projects: Project[] = [
   {
-    name: "E-Commerce Platform",
+    name: "Full-Stack E-Commerce Platform",
     slug: "e-commerce",
-    category: "Full-Stack Project",
+    role: "Team Lead & Full-Stack Developer",
+    category: "",
     accent: "#20d6b5",
     visual: "commerce",
     description:
-      "A full-stack commerce build with a separate Next.js frontend, Node.js REST API backend, PostgreSQL or MongoDB integration, Prisma, authentication, and modern product workflows.",
+      "Led the end-to-end development of a scalable full-stack e-commerce platform. Coordinated sprint tasks, built customer/seller/admin dashboards with RBAC, integrated Stripe checkout workflows, and optimized database queries with Prisma.",
     technologies: [
-      "React.js",
       "Next.js",
-      "Node.js",
+      "React.js",
       "TypeScript",
-      "JavaScript",
-      "MongoDB",
+      "Node.js",
+      "Express.js",
       "PostgreSQL",
-      "Prisma",
+      "Prisma ORM",
+      "Stripe",
       "Tailwind CSS",
-      "REST API",
-      "Authentication",
     ],
     highlights: [
-      "Built product, seller, admin, and order-management workflows",
-      "Connected frontend interfaces with backend REST APIs",
-      "Worked across frontend, API, authentication, and database layers",
-      "Applied full-stack architecture with clean service boundaries",
+      "Led end-to-end development and sprint coordination (~1 Year)",
+      "Built customer, seller, and admin dashboards with RBAC",
+      "Integrated Stripe checkout workflows and payment handling",
+      "Optimized database queries with PostgreSQL and Prisma ORM",
     ],
     repositoryLinks: [
       {
@@ -199,40 +237,82 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "A commerce system built to demonstrate end-to-end product delivery, from UI flows to backend APIs and data handling.",
+        body: "Led the end-to-end development of a scalable full-stack e-commerce platform.",
       },
       {
         title: "System shape",
-        body: "The frontend, backend, and persistence layers are separated so the project shows practical API-driven communication and product architecture.",
+        body: "Separate Next.js frontend and Node.js REST API backend with PostgreSQL, Prisma ORM, Stripe, and RBAC security.",
       },
       {
         title: "Engineering focus",
-        body: "The strongest value here is the combination of frontend UX work, backend integration, authentication, and database-backed application logic.",
+        body: "Sprint coordination, dashboard architecture, secure auth, payment workflows, and optimized database querying.",
       },
     ],
   },
   {
-    name: "Rentiful",
+    name: "Next Thekana — Rental & Service Platform",
+    slug: "next-thekana",
+    role: "Team Member & Full-Stack Developer",
+    category: "",
+    accent: "#7dd3fc",
+    visual: "product",
+    description:
+      "Collaborated on a rental and service platform. Built modular responsive UI components, integrated REST APIs, and implemented real-time listing updates using WebSockets.",
+    technologies: [
+      "Next.js",
+      "React.js",
+      "TypeScript",
+      "REST APIs",
+      "WebSockets",
+      "Tailwind CSS",
+    ],
+    highlights: [
+      "Collaborated on a rental and service platform with team members",
+      "Built modular responsive UI components with Next.js & Tailwind CSS",
+      "Integrated REST APIs for listing and service workflows",
+      "Implemented real-time listing updates using WebSockets",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "Collaborated with team members to deliver user interfaces and real-time features for a rental platform.",
+      },
+      {
+        title: "System shape",
+        body: "Modular frontend architecture connected to RESTful backend endpoints and WebSocket feeds.",
+      },
+      {
+        title: "Engineering focus",
+        body: "Component reusability, responsive UI, real-time data sync, and team collaboration.",
+      },
+    ],
+  },
+  {
+    name: "Rentiful — Rental Web Application",
     slug: "rentful",
+    role: "Frontend Developer",
     category: "Frontend Project",
     accent: "#7dd3fc",
     visual: "product",
     description:
-      "A responsive rental-focused web application built in Next.js with a strong emphasis on reusable components, routed screens, and maintainable frontend architecture.",
+      "Developed a modern rental web application focusing on component-based architecture, clean state management, and optimized responsive layouts.",
     technologies: [
       "Next.js",
       "React.js",
       "TypeScript",
       "Tailwind CSS",
-      "Responsive UI",
-      "Frontend Architecture",
-      "Component Design",
-      "Routing",
     ],
     highlights: [
-      "Designed a clean rental-focused product experience",
-      "Built maintainable frontend structures with reusable components",
-      "Focused on responsive layout, usability, and structured UI flows",
+      "Developed a modern rental web application",
+      "Applied component-based architecture for scalability",
+      "Implemented clean state management and routing",
+      "Optimized responsive layouts across all device viewports",
     ],
     repositoryLinks: [
       {
@@ -243,83 +323,37 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "A personal project shaped to highlight frontend architecture, product polish, and responsive React/Next.js implementation.",
+        body: "Designed and implemented a rental web application focused on frontend polish and usability.",
       },
       {
         title: "System shape",
-        body: "The app is structured around reusable UI components, page-level flows, and a clear product-first frontend layout.",
+        body: "React/Next.js page routing and component system styled with Tailwind CSS.",
       },
       {
         title: "Engineering focus",
-        body: "This project demonstrates strong frontend thinking, clean component boundaries, and attention to real user-facing usability.",
+        body: "Clean component boundaries, intuitive UI flows, and state management.",
       },
     ],
   },
   {
-    name: "Next Thekana",
-    slug: "next-thekana",
-    category: "Team Project",
-    accent: "#7dd3fc",
-    visual: "product",
-    description:
-      "A team-developed rental and service platform focused on property and hostel-related listings, with frontend work, API integration, reusable components, and real-time functionality.",
-    technologies: [
-      "Next.js",
-      "React.js",
-      "TypeScript",
-      "REST API",
-      "WebSocket",
-      "Team Collaboration",
-    ],
-    highlights: [
-      "Built responsive interfaces for listing and service workflows",
-      "Integrated frontend functionality with backend APIs",
-      "Worked with real-time functionality using WebSocket",
-      "Collaborated with team members during feature development and debugging",
-    ],
-    repositoryLinks: [
-      {
-        label: "GitHub",
-        href: "https://github.com/asifrayhanjoy",
-      },
-    ],
-    caseStudy: [
-      {
-        title: "Scope",
-        body: "A collaborative project for a rental and service platform with property- and hostel-related experiences.",
-      },
-      {
-        title: "System shape",
-        body: "Responsive UI work and backend integration were handled together to support practical product interactions and shared team delivery.",
-      },
-      {
-        title: "Engineering focus",
-        body: "The project strengthened my skills in teamwork, debugging, API integration, and building user-facing functionality in a collaborative environment.",
-      },
-    ],
-  },
-  {
-    name: "Invoice Generator",
+    name: "Invoice Generator Web Application",
     slug: "invoice-generator",
+    role: "Frontend Developer",
     category: "Productivity Tool",
     accent: "#ff8fc7",
     visual: "product",
     description:
-      "Built a responsive invoice-generation application with reusable components, form-driven workflow handling, and a focused user experience for managing invoice data.",
+      "Built a responsive invoice-generation tool featuring dynamic calculation workflows, line-item management, and structured printable output.",
     technologies: [
-      "Next.js",
       "React.js",
       "TypeScript",
-      "JavaScript",
       "Tailwind CSS",
-      "Responsive UI",
-      "Reusable Components",
-      "Form Handling",
     ],
     highlights: [
-      "Developed a smooth invoice workflow with reusable UI patterns",
-      "Focused on clean data handling and responsive design",
-      "Built a practical productivity tool with maintainable structure",
+      "Built a responsive invoice-generation tool",
+      "Implemented dynamic calculation workflows for totals and taxes",
+      "Developed interactive line-item management and form state",
+      "Created structured printable output and export formatting",
     ],
     repositoryLinks: [
       {
@@ -330,39 +364,38 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "A focused tool for invoice creation and workflow simplification with an emphasis on usability and structure.",
+        body: "Created a focused productivity tool for managing and generating client invoices.",
       },
       {
         title: "System shape",
-        body: "The project revolves around reusable components, practical form logic, and a responsive interface built for everyday use.",
+        body: "Interactive React form components with dynamic calculation logic.",
       },
       {
         title: "Engineering focus",
-        body: "The main value is strong frontend UX design, maintainable component structure, and efficient product presentation.",
+        body: "Form handling, calculation precision, and printable layout optimization.",
       },
     ],
   },
   {
-    name: "PH Healthcare",
+    name: "PH Healthcare Platform",
     slug: "ph-healthcare",
+    role: "Frontend Developer",
     category: "Healthcare Project",
     accent: "#7dd3fc",
     visual: "product",
     description:
-      "A healthcare-focused web application focused on clean user interfaces, data-driven workflows, and practical integration between frontend interactions and backend services.",
+      "Developed responsive user interfaces for doctor profiling, appointment scheduling, and patient record management workflows.",
     technologies: [
-      "Next.js",
       "React.js",
+      "Next.js",
       "TypeScript",
-      "Tailwind CSS",
-      "REST API",
-      "Frontend Integration",
-      "Responsive UI",
+      "REST APIs",
     ],
     highlights: [
-      "Created responsive healthcare-focused interfaces",
-      "Connected user-facing functionality with backend services",
-      "Improved application workflow behavior through debugging and iteration",
+      "Developed doctor profiling and search user interfaces",
+      "Built interactive appointment scheduling workflows",
+      "Created patient record management interfaces",
+      "Integrated frontend components with backend REST APIs",
     ],
     repositoryLinks: [
       {
@@ -373,59 +406,15 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "A product-focused healthcare app where the frontend experience and application behavior needed to stay clear and reliable.",
+        body: "Healthcare platform interfaces built for patient-doctor scheduling and record workflows.",
       },
       {
         title: "System shape",
-        body: "The work centered on responsive interfaces, data-driven product behavior, and practical frontend-service integration.",
+        body: "Data-driven React/Next.js pages connected to healthcare REST APIs.",
       },
       {
         title: "Engineering focus",
-        body: "This project reinforced my ability to build practical application flows with clean UI and dependable integration work.",
-      },
-    ],
-  },
-  {
-    name: "Blood Donation Platform",
-    slug: "blood-donation-platform",
-    category: "Team Project",
-    accent: "#ff8fc7",
-    visual: "product",
-    description:
-      "A collaborative blood donation platform focused on donor workflows, request handling, and team-driven feature development across frontend and backend integration points.",
-    technologies: [
-      "Next.js",
-      "React.js",
-      "TypeScript",
-      "MongoDB",
-      "Prisma",
-      "API Routes",
-      "Authentication",
-      "Team Collaboration",
-    ],
-    highlights: [
-      "Collaborated on core application features with team members",
-      "Supported frontend and backend integration work",
-      "Participated in debugging, troubleshooting, and feature refinement",
-    ],
-    repositoryLinks: [
-      {
-        label: "GitHub",
-        href: "https://github.com/tareqhassan2014/blood-donation.git",
-      },
-    ],
-    caseStudy: [
-      {
-        title: "Scope",
-        body: "A team-based product built around blood donor coordination and request workflows that required reliable application behavior and collaboration.",
-      },
-      {
-        title: "System shape",
-        body: "The app blends responsive UI work with API and data-driven functionality to support practical end-user actions.",
-      },
-      {
-        title: "Engineering focus",
-        body: "This project is a good example of collaboration, debugging, and applying frontend/backend integration work in a shared project environment.",
+        body: "Usability in multi-step workflows, API integration, and clean state handling.",
       },
     ],
   },
@@ -435,107 +424,57 @@ const skillGroups: SkillGroup[] = [
   {
     title: "Frontend",
     icon: Layers3,
-    description: "Responsive interfaces and component-driven frontend experiences.",
+    description: "Modern UI architecture, responsive layouts & state management.",
     skills: [
       { name: "React.js", level: "Core" },
       { name: "Next.js", level: "Core" },
-      { name: "JavaScript", level: "Core" },
       { name: "TypeScript", level: "Core" },
+      { name: "JavaScript (ES6+)", level: "Core" },
+      { name: "Tailwind CSS", level: "Core" },
       { name: "HTML5", level: "Core" },
       { name: "CSS3", level: "Core" },
-      { name: "Tailwind CSS", level: "Core" },
-      { name: "React Context API", level: "Core" },
-      { name: "Redux", level: "Core" },
       { name: "Zustand", level: "Core" },
+      { name: "Redux", level: "Core" },
     ],
   },
   {
-    title: "Backend",
+    title: "Backend & Database",
     icon: Server,
-    description: "API design, authentication, and service-side application logic.",
+    description: "RESTful APIs, security, ORM, and data persistence.",
     skills: [
-      { name: "Node.js", level: "Working" },
-      { name: "Express.js", level: "Working" },
-      { name: "Python", level: "Working" },
-      { name: "REST API", level: "Core" },
-      { name: "Authentication", level: "Core" },
-      { name: "Authorization", level: "Working" },
-      { name: "JWT", level: "Core" },
-      { name: "WebSocket", level: "Working" },
+      { name: "Node.js", level: "Core" },
+      { name: "Express.js", level: "Core" },
+      { name: "REST APIs", level: "Core" },
+      { name: "WebSockets", level: "Working" },
+      { name: "PostgreSQL", level: "Core" },
+      { name: "MongoDB", level: "Working" },
+      { name: "Prisma ORM", level: "Core" },
+      { name: "JWT / RBAC", level: "Core" },
+    ],
+  },
+  {
+    title: "Tools & Workflow",
+    icon: Wrench,
+    description: "Version control, containers, Postman & AI-accelerated dev tools.",
+    skills: [
+      { name: "Git", level: "Core" },
+      { name: "GitHub", level: "Core" },
+      { name: "Docker", level: "Working" },
+      { name: "Postman", level: "Core" },
+      { name: "Cursor", level: "Core" },
+      { name: "Claude Code", level: "Core" },
+    ],
+  },
+  {
+    title: "Working Knowledge",
+    icon: Sparkles,
+    description: "Payment workflows, backend concepts, frameworks, and cloud.",
+    skills: [
+      { name: "Stripe", level: "Working" },
+      { name: "Microservices concepts", level: "Working" },
       { name: "NestJS", level: "Working" },
       { name: "Go", level: "Working" },
-    ],
-  },
-  {
-    title: "AI & RAG",
-    icon: Sparkles,
-    description: "Practical AI implementation, retrieval workflows, and AI-assisted delivery.",
-    skills: [
-      { name: "RAG (Retrieval-Augmented Generation)", level: "Working" },
-      { name: "LLM Integration", level: "Working" },
-      { name: "Embeddings", level: "Working" },
-      { name: "Vector Search", level: "Working" },
-      { name: "Retrieval Pipelines", level: "Working" },
-      { name: "AI-powered Applications", level: "Working" },
-      { name: "AI-Assisted Software Development", level: "Working" },
-      { name: "Claude Code", level: "Working" },
-      { name: "OpenAI Codex", level: "Working" },
-      { name: "ChatGPT", level: "Working" },
-      { name: "Cursor", level: "Working" },
-    ],
-  },
-  {
-    title: "Database",
-    icon: Database,
-    description: "Relational and document-based persistence with modern ORM patterns.",
-    skills: [
-      { name: "PostgreSQL", level: "Working" },
-      { name: "MongoDB", level: "Working" },
-      { name: "Prisma", level: "Working" },
-      { name: "Supabase", level: "Working" },
-      { name: "Firebase", level: "Working" },
-      { name: "Redis", level: "Working" },
-    ],
-  },
-  {
-    title: "Architecture",
-    icon: BookOpen,
-    description: "Service-oriented and scalable system design for growing products.",
-    skills: [
-      { name: "Microservices", level: "Working" },
-      { name: "API Gateway", level: "Working" },
-      { name: "Service-based Architecture", level: "Working" },
-      { name: "gRPC", level: "Working" },
-      { name: "Scalable Web Apps", level: "Working" },
-    ],
-  },
-  {
-    title: "Authentication",
-    icon: ShieldCheck,
-    description: "Secure flows, role-aware access, and identity handling in products.",
-    skills: [
-      { name: "JWT", level: "Working" },
-      { name: "Refresh Token", level: "Working" },
-      { name: "RBAC", level: "Working" },
-      { name: "OTP Authentication", level: "Working" },
-    ],
-  },
-  {
-    title: "Tools & DevOps",
-    icon: Wrench,
-    description: "Project workflow, source control, deployment, and delivery support.",
-    skills: [
-      { name: "Git", level: "Working" },
-      { name: "GitHub", level: "Working" },
-      { name: "Docker", level: "Working" },
       { name: "AWS", level: "Working" },
-      { name: "Kubernetes", level: "Working" },
-      { name: "Nx Monorepo", level: "Working" },
-      { name: "Kafka", level: "Working" },
-      { name: "RabbitMQ", level: "Working" },
-      { name: "Nginx", level: "Basic" },
-      { name: "Vercel", level: "Working" },
-      { name: "VS Code", level: "Core" },
     ],
   },
 ];
@@ -1065,21 +1004,16 @@ function HeroSection() {
           </div>
 
           <p className="mt-8 text-sm font-bold uppercase tracking-[0.2em] text-(--portfolio-accent)]">
-            {personal.title}
+            Full-Stack Developer & Team Lead
           </p>
           <h1 className="mt-4 max-w-5xl break-words text-5xl font-semibold leading-[1.04] text-(--portfolio-text)] sm:text-6xl lg:text-7xl">
             {personal.name}
           </h1>
           <p className="mt-6 max-w-2xl text-xl font-semibold leading-8 text-(--portfolio-text)] sm:text-2xl sm:leading-9">
-            Building modern web applications across the frontend and backend with
-            React.js, Next.js, TypeScript, Node.js APIs, databases, and
-            AI-assisted development tools.
+            {personal.subtitle}
           </p>
           <p className="mt-5 max-w-2xl text-base leading-8 text-(--portfolio-muted)]">
-            I design responsive interfaces and develop the server-side systems
-            behind them, including REST APIs, authentication, database workflows,
-            and practical product delivery while staying adaptable when learning
-            unfamiliar codebases and tools.
+            {personal.bio}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -1239,42 +1173,48 @@ function AboutSection() {
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
         <div className="space-y-6 text-base leading-8 text-(--portfolio-muted)]">
           <p>
-            Full-stack web developer with approximately 2 years of hands-on development experience. I focus on building responsive, modern applications with React.js, Next.js, TypeScript, JavaScript, Node.js, REST APIs, databases, authentication flows, and clean product UX across professional, team-based, and personal project work.
-          </p>
-          <p>
-            I develop both the user-facing frontend and the backend systems that
-            power it, including API integration, database-driven workflows,
-            authentication, and AI-assisted development. I am also comfortable
-            learning unfamiliar codebases and tools quickly, which helps me adapt
-            to new technical environments and solve real product problems.
-          </p>
-          <p>
-            I bring approximately 1 year of team leadership and coordination
-            experience, collaborating with team members, coordinating development
-            tasks, supporting problem solving, and helping maintain momentum on
-            project work.
+            I am a Full-Stack Developer and Team Lead specializing in Next.js, React.js, TypeScript, and Node.js. With approximately 2 years of hands-on software development experience and roughly 1 year of team leadership and coordination experience, I combine technical execution with structured project delivery.
           </p>
 
-          <div className="grid gap-3 pt-2 sm:grid-cols-2">
-            {[
-              "Responsive frontend architecture",
-              "Full-stack API and database integration",
-              "Authentication and authorization flows",
-              "Fast learning in new codebases and tools",
-              "AI-assisted development workflows",
-              "Team coordination and collaborative delivery",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex min-h-14 items-center gap-3 border-t border-(--portfolio-line)] py-3 text-sm font-bold text-(--portfolio-text)]"
-              >
-                <CheckCircle2
-                  className="size-4 shrink-0 text-(--portfolio-success)]"
-                  aria-hidden="true"
-                />
-                {item}
-              </div>
-            ))}
+          <div className="pt-2">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-accent)]">
+              What I bring to a team
+            </p>
+            <div className="mt-4 space-y-3">
+              {[
+                {
+                  label: "Team Leadership & Delivery",
+                  text: "Led and coordinated a development team for ~1 year—aligning sprint milestones, conducting code reviews, resolving technical blockers, and keeping releases on schedule.",
+                },
+                {
+                  label: "Frontend Architecture",
+                  text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, and Tailwind CSS with modern state management (Zustand, Redux, Context API).",
+                },
+                {
+                  label: "Backend & Data",
+                  text: "Hands-on experience developing RESTful APIs with Node.js and Express.js, implementing secure authentication (JWT/RBAC), and schema modeling with PostgreSQL, MongoDB, and Prisma ORM.",
+                },
+                {
+                  label: "AI-Assisted Engineering",
+                  text: "Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.",
+                },
+                {
+                  label: "Problem Solving & Adaptability",
+                  text: "Strong analytical mindset capable of quickly understanding unfamiliar codebases, adopting new technologies, and shipping clean, maintainable code.",
+                },
+              ].map((item) => (
+                <div key={item.label} className="flex gap-3 text-sm leading-6">
+                  <CheckCircle2
+                    className="mt-0.5 size-4 shrink-0 text-(--portfolio-success)]"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <span className="font-bold text-(--portfolio-text)]">{item.label}: </span>
+                    <span className="text-(--portfolio-muted)]">{item.text}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1351,9 +1291,16 @@ function ProjectCard({ project }: { project: Project }) {
     >
       <ProjectVisual project={project} />
       <div className="flex flex-1 flex-col p-6">
-        <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--project-accent)]">
-          {project.category}
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--project-accent)]">
+            {project.category}
+          </p>
+          {project.role ? (
+            <span className="text-xs font-semibold text-(--portfolio-muted)]">
+              {project.role}
+            </span>
+          ) : null}
+        </div>
         <h3 className="mt-3 font-mono text-3xl font-black">{project.name}</h3>
         <p className="mt-4 text-sm leading-7 text-(--portfolio-muted)]">
           {project.description}
@@ -1688,54 +1635,41 @@ function ExperienceSection() {
     <Section
       id="experience"
       eyebrow="Experience & Background"
-      title="Approximately 2 years of hands-on development through professional, team-based, and personal projects."
-      description="My experience is grounded in frontend delivery, full-stack problem solving, and team coordination rather than unsupported claims."
+      title="Software Development & Team Leadership"
+      description="Approximately 2 years of hands-on development experience and 1 year of team leadership & project coordination."
     >
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <article className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-(--portfolio-accent-soft)] text-(--portfolio-accent)]">
-              <Briefcase className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-accent)]">
-                Team Leadership / Coordination
-              </p>
-              <h3 className="mt-1 text-xl font-black">
-                Approximately 1 year of coordination experience
-              </h3>
+      <div className="grid gap-6">
+        {experiences.map((exp) => (
+          <article
+            key={exp.role}
+            className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm"
+          >
+            <div className="flex flex-col gap-2 border-b border-(--portfolio-line)] pb-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-mono text-xs font-black uppercase tracking-[0.16em] text-(--portfolio-accent)]">
+                  {exp.type}
+                </p>
+                <h3 className="mt-1 text-2xl font-black">{exp.role}</h3>
+              </div>
+              <div className="text-sm font-semibold text-(--portfolio-muted)] sm:text-right">
+                <p className="font-mono text-(--portfolio-text)]">{exp.duration}</p>
+                <p className="text-xs text-(--portfolio-subtle)]">{exp.location}</p>
+              </div>
             </div>
-          </div>
-          <p className="mt-6 text-sm leading-7 text-(--portfolio-muted)]">
-            Collaborated with team members, coordinated development activities,
-            supported problem solving, and helped maintain project progress in a
-            shared workflow. This experience strengthened my ability to work
-            effectively with others, communicate clearly, and keep work moving
-            forward.
-          </p>
-        </article>
 
-        <article className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-(--portfolio-warm-soft)] text-(--portfolio-warm)]">
-              <Rocket className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-warm)]">
-                Learning & Adaptability
-              </p>
-              <h3 className="mt-1 text-xl font-black">
-                Fast learner in unfamiliar environments
-              </h3>
-            </div>
-          </div>
-          <p className="mt-6 text-sm leading-7 text-(--portfolio-muted)]">
-            I learn new frameworks, APIs, and codebases quickly and can adapt to
-            unfamiliar technical environments. I also use AI-assisted tools to
-            explore, debug, refactor, and understand complex systems while
-            keeping engineering judgment and product context in focus.
-          </p>
-        </article>
+            <ul className="mt-5 space-y-3">
+              {exp.bullets.map((bullet) => (
+                <li key={bullet} className="flex gap-3 text-sm leading-7 text-(--portfolio-muted)]">
+                  <CheckCircle2
+                    className="mt-1 size-4 shrink-0 text-(--portfolio-success)]"
+                    aria-hidden="true"
+                  />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1fr]">
@@ -1757,59 +1691,28 @@ function ExperienceSection() {
             Honours in English
           </p>
           <p className="mt-2 text-sm text-(--portfolio-muted)]">
-            Satkhira, Bangladesh
-          </p>
-          <p className="mt-3 text-sm text-(--portfolio-muted)]">
-            Currently studying.
+            Satkhira, Bangladesh (Currently studying)
           </p>
         </article>
 
         <article className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid size-11 place-items-center rounded-lg bg-(--portfolio-warm-soft)] text-(--portfolio-warm)]">
-              <FileText className="size-5" aria-hidden="true" />
+              <Sparkles className="size-5" aria-hidden="true" />
             </span>
             <div>
               <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-warm)]">
-                Project Experience
+                Engineering & Workflow
               </p>
               <h3 className="mt-1 text-xl font-black">
-                Frontend, full-stack, and team projects
+                AI-Assisted Development
               </h3>
             </div>
           </div>
           <p className="mt-6 text-sm leading-7 text-(--portfolio-muted)]">
-            Practical experience across e-commerce, rental, healthcare, and team
-            collaboration projects, with work spanning UI implementation,
-            backend integration, auth flows, databases, and debugging.
+            Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.
           </p>
         </article>
-      </div>
-
-      <div className="mt-6 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
-        <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-accent)]">
-          Core Strengths
-        </p>
-        <ul className="mt-5 grid gap-3 text-sm leading-7 text-(--portfolio-muted)] md:grid-cols-2">
-          {[
-            "React.js and Next.js frontend development",
-            "Full-stack API and database integration",
-            "Authentication, JWT, and application workflows",
-            "Database-backed product development",
-            "Collaborative project delivery",
-            "AI-assisted debugging and implementation",
-            "Clean, maintainable architecture",
-            "Problem solving across frontend and backend boundaries",
-          ].map((item) => (
-            <li key={item} className="flex gap-3">
-              <CheckCircle2
-                className="mt-1 size-4 shrink-0 text-(--portfolio-success)]"
-                aria-hidden="true"
-              />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -1917,12 +1820,17 @@ function ContactSection() {
 }
 
 function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+  const [isSending, setIsSending] = useState(false);
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     mode: "onBlur",
@@ -1934,17 +1842,42 @@ function ContactForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<ContactFormValues> = (values) => {
-    const subject = encodeURIComponent(values.subject);
-    const body = encodeURIComponent(
-      `Name: ${values.name}\nEmail: ${values.email}\n\n${values.message}`,
-    );
+  const onSubmit: SubmitHandler<ContactFormValues> = async (values) => {
+    setIsSending(true);
+    setStatusMessage(null);
 
-    setSubmitted(true);
-    window.location.assign(
-      `mailto:${personal.email}?subject=${subject}&body=${body}`,
-    );
-    reset();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setStatusMessage({
+          type: "success",
+          text: data.message || "Thank you! Your message has been sent successfully.",
+        });
+        reset();
+      } else {
+        setStatusMessage({
+          type: "error",
+          text: data.message || "Failed to send message. Please try again.",
+        });
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      setStatusMessage({
+        type: "error",
+        text: "An error occurred while sending your message. Please try again.",
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -2027,16 +1960,24 @@ function ContactForm() {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSending}
         className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-(--portfolio-accent)] px-5 text-sm font-black text-(--portfolio-accent-contrast)] shadow-sm transition hover:bg-(--portfolio-text)] hover:text-(--portfolio-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        <Send className="size-4" aria-hidden="true" />
-        Send Message
+        <Send className={cn("size-4", isSending && "animate-spin")} aria-hidden="true" />
+        {isSending ? "Sending..." : "Send Message"}
       </button>
 
-      {submitted ? (
-        <p role="status" className="mt-4 text-sm text-(--portfolio-muted)]">
-          Message validated locally and prepared through email.
+      {statusMessage ? (
+        <p
+          role="status"
+          className={cn(
+            "mt-4 text-sm font-semibold",
+            statusMessage.type === "success"
+              ? "text-(--portfolio-success)]"
+              : "text-(--portfolio-danger)]",
+          )}
+        >
+          {statusMessage.text}
         </p>
       ) : null}
     </form>

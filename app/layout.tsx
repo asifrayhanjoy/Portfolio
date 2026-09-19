@@ -3,31 +3,32 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio-neon-omega-77.vercel.app"),
-  title: "Md. Asif Rayhan Joy | Frontend / Full-Stack Web Developer",
+  title: "MD ASIF RAYHAN JOY | Full-Stack Developer & Team Lead",
   description:
-    "Frontend and full-stack web developer based in Dhaka, Bangladesh, specializing in React.js, Next.js, TypeScript, full-stack development, and AI-assisted software workflows.",
+    "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows. Based in Dhaka, Bangladesh.",
   keywords: [
-    "React.js Developer",
-    "Next.js Developer",
-    "Frontend Developer",
     "Full-Stack Developer",
+    "Team Lead",
+    "Next.js Developer",
+    "React.js Developer",
     "TypeScript Developer",
-    "AI-Assisted Software Developer",
+    "Node.js Developer",
+    "AI-Assisted Workflows",
     "Web Developer in Bangladesh",
   ],
   openGraph: {
-    title: "Md. Asif Rayhan Joy | Frontend / Full-Stack Web Developer",
+    title: "Md. Asif Rayhan Joy | Full-Stack Developer & Team Lead",
     description:
-      "building responsive web applications with React.js, Next.js, TypeScript, full-stack technologies, and AI-assisted development workflows.",
+      "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows.",
     url: "https://portfolio-neon-omega-77.vercel.app/",
-    siteName: "Asif Rayhan Joy Portfolio",
+    siteName: "Md. Asif Rayhan Joy Portfolio",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Md. Asif Rayhan Joy | Frontend / Full-Stack Web Developer",
+    title: "Md. Asif Rayhan Joy | Full-Stack Developer & Team Lead",
     description:
-      "Frontend and full-stack web developer specializing in React.js, Next.js, TypeScript, and AI-assisted software development.",
+      "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows.",
   },
 };
 
