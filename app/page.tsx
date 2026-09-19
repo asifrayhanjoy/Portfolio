@@ -97,7 +97,7 @@ type CursorSpark = {
 };
 
 const personal = {
-  name: "MD ASIF RAYHAN JOY",
+  name: "Md. Asif Rayhan Joy",
   shortName: "Asif Rayhan",
   title: "Full-Stack Developer & Team Lead",
   headline: "Full-Stack Developer & Team Lead | Next.js · React.js · TypeScript · Node.js | AI-Assisted Workflows",
