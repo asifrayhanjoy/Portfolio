@@ -65,7 +65,7 @@ type Project = {
   category: string;
   description: string;
   accent: string;
-  visual: "commerce" | "product";
+  visual: "commerce" | "product" | "extension";
   technologies: string[];
   highlights: string[];
   repositoryLinks: ProjectLink[];
@@ -99,10 +99,12 @@ type CursorSpark = {
 const personal = {
   name: "Md. Asif Rayhan Joy",
   shortName: "Asif Rayhan",
-  title: "Full-Stack Developer & Team Lead",
-  headline: "Full-Stack Developer & Team Lead | Next.js · React.js · TypeScript · Node.js | AI-Assisted Workflows",
-  subtitle: "Next.js · React.js · TypeScript · Python · Node.js · PostgreSQL",
-  bio: "Building scalable, responsive, and high-performance web applications with modern frontend architectures, robust backend systems, and AI-accelerated workflows.",
+  title: "Full-Stack Web Developer, Extension Engineer & Team Lead",
+  headline:
+    "Full-Stack Web Developer, Extension Engineer & Team Lead | Next.js · React.js · TypeScript · Node.js · Plasmo",
+  subtitle:
+    "Next.js · React.js · TypeScript · Node.js · Plasmo · PostgreSQL",
+  bio: "Building scalable, responsive, and high-performance web applications and browser extensions with modern frontend architectures, robust backend systems, and AI-accelerated workflows.",
   location: "Dhaka, Bangladesh",
   email: "mdasifrayhanjoy2@gmail.com",
   phone: "01302271472",
@@ -133,6 +135,8 @@ const coreStack = [
   { name: "React.js", color: "#7dd3fc" },
   { name: "TypeScript", color: "#8ea5ff" },
   { name: "Node.js", color: "#8bff9c" },
+  { name: "Plasmo", color: "#ff4b4b" },
+  { name: "Manifest V3", color: "#ffb86b" },
   { name: "Express.js", color: "#a7f3d0" },
   { name: "PostgreSQL", color: "#8fb7ff" },
   { name: "MongoDB", color: "#70e08f" },
@@ -153,8 +157,8 @@ const capabilityHighlights = [
     body: "Led and coordinated a development team for ~1 year—aligning sprint milestones, conducting code reviews, resolving technical blockers, and keeping releases on schedule.",
   },
   {
-    title: "Frontend Architecture",
-    body: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, and Tailwind CSS with modern state management (Zustand, Redux, Context API).",
+    title: "Frontend Architecture & Browser Extensions",
+    body: "Deep expertise in Next.js, React.js, TypeScript, Tailwind CSS, and Plasmo framework for Chrome Manifest V3 browser extension development.",
   },
   {
     title: "Backend & Data",
@@ -198,6 +202,50 @@ const experiences: ExperienceEntry[] = [
 ];
 
 const projects: Project[] = [
+  {
+    name: "YouTube Cleaner (Ad-Free & Utility Browser Extension)",
+    slug: "youtube-cleaner",
+    role: "Extension Developer & Frontend Engineer",
+    category: "Browser Extension / Automation",
+    accent: "#ff4b4b",
+    visual: "extension",
+    description:
+      "A lightweight Chrome extension built using the Plasmo framework and TypeScript to provide an uninterrupted, Premium-like YouTube experience by eliminating video ads, auto-skipping promotional segments, and removing sponsored sidebar banners.",
+    technologies: [
+      "TypeScript",
+      "Plasmo Framework",
+      "Chrome Extension API (Manifest V3)",
+      "MutationObserver",
+      "CSS Injection",
+      "WebExtensions API",
+    ],
+    highlights: [
+      "Automated detection and real-time suppression of in-stream video ads without breaking standard video playback",
+      "Utilized MutationObserver and YouTube SPA navigation events (yt-navigate-finish) for seamless DOM updates",
+      "Implemented programmatic skip-button triggers and video element automation with guardrails against false-positive skips",
+      "Injected dynamic stylesheet rules to cleanly hide sponsored companion cards, promo banners, and feed clutter",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "Built a lightweight Chrome extension using Plasmo framework & TypeScript to eliminate video ads, auto-skip promotional segments, and remove sponsored sidebar banners on YouTube.",
+      },
+      {
+        title: "System shape",
+        body: "Manifest V3 content scripts, background service worker, MutationObserver DOM watchers, and dynamic CSS injection rules.",
+      },
+      {
+        title: "Engineering focus",
+        body: "Real-time ad suppression, SPA lifecycle event handling (yt-navigate-finish), skip trigger automation, and false-positive guardrails.",
+      },
+    ],
+  },
   {
     name: "Full-Stack E-Commerce Platform",
     slug: "e-commerce",
@@ -475,6 +523,27 @@ const skillGroups: SkillGroup[] = [
       { name: "NestJS", level: "Working" },
       { name: "Go", level: "Working" },
       { name: "AWS", level: "Working" },
+    ],
+  },
+  {
+    title: "Browser Extension Development",
+    icon: Code2,
+    description: "Chrome extensions, Manifest V3 architecture & Plasmo framework.",
+    skills: [
+      { name: "Plasmo Framework", level: "Core" },
+      { name: "Chrome Manifest V3", level: "Core" },
+      { name: "WebExtensions API", level: "Core" },
+    ],
+  },
+  {
+    title: "DOM & Browser Automation",
+    icon: Sparkles,
+    description: "DOM mutation monitoring, SPA event handling & dynamic CSS injection.",
+    skills: [
+      { name: "MutationObserver", level: "Core" },
+      { name: "SPA Lifecycle Handling (yt-navigate-finish)", level: "Core" },
+      { name: "Content Scripts", level: "Core" },
+      { name: "Dynamic CSS Injection", level: "Core" },
     ],
   },
 ];
@@ -1004,7 +1073,7 @@ function HeroSection() {
           </div>
 
           <p className="mt-8 text-sm font-bold uppercase tracking-[0.2em] text-(--portfolio-accent)]">
-            Full-Stack Developer & Team Lead
+            Full-Stack Web Developer, Extension Engineer & Team Lead
           </p>
           <h1 className="mt-4 max-w-5xl break-words text-5xl font-semibold leading-[1.04] text-(--portfolio-text)] sm:text-6xl lg:text-7xl">
             {personal.name}
@@ -1080,8 +1149,7 @@ function DeveloperPanel() {
           </p>
           <p className="mt-3 text-2xl font-black">{personal.title}</p>
           <p className="mt-3 text-sm leading-7 text-(--portfolio-muted)]">
-            Building full-stack products with practical architecture, clean UI,
-            authentication, data models, and API boundaries.
+            Building scalable web products & browser extensions with practical architecture, clean UI, authentication, and dynamic DOM automation.
           </p>
         </div>
 
@@ -1114,6 +1182,7 @@ function DeveloperPanel() {
           <div className="mt-4 space-y-3">
             {[
               ["Client", "React / Next.js / Tailwind"],
+              ["Extension", "Plasmo / Manifest V3 / DOM"],
               ["Server", "Node.js / API Routes / Auth"],
               ["Data", "Prisma / PostgreSQL / MongoDB"],
             ].map(([label, value]) => (
@@ -1167,13 +1236,13 @@ function AboutSection() {
     <Section
       id="about"
       eyebrow="About"
-      title="Frontend and backend development with a polished product finish."
-      description="A portfolio built around real project work, honest skill levels, and complete application development from interface to server and data layer."
+      title="Frontend, backend, and extension engineering with a polished product finish."
+      description="A portfolio built around real project work, honest skill levels, and complete application development from web interfaces to browser extensions and server layers."
     >
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
         <div className="space-y-6 text-base leading-8 text-(--portfolio-muted)]">
           <p>
-            I am a Full-Stack Developer and Team Lead specializing in Next.js, React.js, TypeScript, and Node.js. With approximately 2 years of hands-on software development experience and roughly 1 year of team leadership and coordination experience, I combine technical execution with structured project delivery.
+            I am a Full-Stack Web Developer, Extension Engineer, and Team Lead specializing in Next.js, React.js, TypeScript, Node.js, and Plasmo framework. With approximately 2 years of hands-on software development experience and roughly 1 year of team leadership and coordination experience, I combine technical execution with structured project delivery.
           </p>
 
           <div className="pt-2">
@@ -1189,6 +1258,10 @@ function AboutSection() {
                 {
                   label: "Frontend Architecture",
                   text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, and Tailwind CSS with modern state management (Zustand, Redux, Context API).",
+                },
+                {
+                  label: "Browser Extensions & Automation",
+                  text: "Experience building Chrome Manifest V3 extensions with Plasmo framework, DOM mutation monitoring (MutationObserver), SPA navigation handling, and dynamic CSS injection.",
                 },
                 {
                   label: "Backend & Data",
@@ -1378,11 +1451,85 @@ function ProjectVisual({ project }: { project: Project }) {
             <span className="size-2.5 rounded-full bg-[#28c840]" />
           </div>
           <span className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-(--project-visual-muted)]">
-            {project.visual === "commerce" ? "Commerce System" : "Product App"}
+            {project.visual === "commerce"
+              ? "Commerce System"
+              : project.visual === "extension"
+                ? "Browser Extension"
+                : "Product App"}
           </span>
         </div>
 
-        {project.visual === "commerce" ? <CommerceMockup /> : <AppMockup />}
+        {project.visual === "commerce" ? (
+          <CommerceMockup />
+        ) : project.visual === "extension" ? (
+          <ExtensionMockup />
+        ) : (
+          <AppMockup />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ExtensionMockup() {
+  return (
+    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[1fr_0.9fr] gap-3">
+      <div className="flex flex-col justify-between rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
+        <div>
+          <div className="flex items-center justify-between border-b border-(--project-visual-line)] pb-2">
+            <span className="font-mono text-[10px] font-black uppercase tracking-wider text-(--project-accent)]">
+              YouTube.com
+            </span>
+            <span className="inline-flex items-center gap-1 rounded bg-[#ff4b4b]/20 px-1.5 py-0.5 font-mono text-[9px] font-black text-[#ff4b4b]">
+              <span className="size-1.5 rounded-full bg-[#ff4b4b] animate-pulse" />
+              Ad Blocked
+            </span>
+          </div>
+          <div className="mt-3 space-y-2">
+            <div className="relative flex h-16 items-center justify-center overflow-hidden rounded-md bg-(--project-visual-accent-soft)]">
+              <span className="font-mono text-[10px] font-bold text-(--project-visual-muted)]">
+                Video Player (Ads Suppressed)
+              </span>
+            </div>
+            <div className="flex items-center justify-between font-mono text-[10px] text-(--project-visual-muted)]">
+              <span>yt-navigate-finish</span>
+              <span className="font-bold text-(--portfolio-success)]">Auto-Skipped</span>
+            </div>
+          </div>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {["MutationObserver", "Content Script"].map((badge) => (
+            <span
+              key={badge}
+              className="rounded border border-(--project-visual-line)] px-1.5 py-0.5 font-mono text-[9px] text-(--project-visual-muted)]"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="space-y-3">
+        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-(--project-visual-muted)]">
+            Plasmo & Manifest V3
+          </p>
+          <div className="mt-2 space-y-1.5">
+            {["Background Worker", "Dynamic CSS Injection", "DOM Watcher"].map(
+              (item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-(--project-accent)]" />
+                  <span className="font-mono text-[10px] text-(--project-visual-muted)]">
+                    {item}
+                  </span>
+                </div>
+              ),
+            )}
+          </div>
+        </div>
+        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
+          <div className="h-2 w-3/4 rounded-full bg-(--project-visual-line)]" />
+          <div className="mt-2 h-2 w-1/2 rounded-full bg-(--project-visual-line)]" />
+        </div>
       </div>
     </div>
   );

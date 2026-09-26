@@ -3,11 +3,15 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio-neon-omega-77.vercel.app"),
-  title: "MD ASIF RAYHAN JOY | Full-Stack Developer & Team Lead",
+  title:
+    "MD ASIF RAYHAN JOY | Full-Stack Web Developer, Extension Engineer & Team Lead",
   description:
-    "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows. Based in Dhaka, Bangladesh.",
+    "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows. Based in Dhaka, Bangladesh.",
   keywords: [
     "Full-Stack Developer",
+    "Extension Engineer",
+    "Browser Extension Developer",
+    "Plasmo Developer",
     "Team Lead",
     "Next.js Developer",
     "React.js Developer",
@@ -17,18 +21,20 @@ export const metadata: Metadata = {
     "Web Developer in Bangladesh",
   ],
   openGraph: {
-    title: "Md. Asif Rayhan Joy | Full-Stack Developer & Team Lead",
+    title:
+      "Md. Asif Rayhan Joy | Full-Stack Web Developer, Extension Engineer & Team Lead",
     description:
-      "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows.",
+      "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows.",
     url: "https://portfolio-neon-omega-77.vercel.app/",
     siteName: "Md. Asif Rayhan Joy Portfolio",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Md. Asif Rayhan Joy | Full-Stack Developer & Team Lead",
+    title:
+      "Md. Asif Rayhan Joy | Full-Stack Web Developer, Extension Engineer & Team Lead",
     description:
-      "Full-Stack Developer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, PostgreSQL, and AI-assisted workflows.",
+      "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows.",
   },
 };
 
