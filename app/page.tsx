@@ -176,9 +176,9 @@ type ExperienceEntry = {
 
 const experiences: ExperienceEntry[] = [
   {
-    role: "Team Lead & Full-Stack Developer",
+    role: "E-Commerce Platform (Full-Stack Engineer & Team Lead)",
     type: "Full-time / Contract (Collaborative Web Projects)",
-    duration: "Approximately 1 Year (Oct 2025 – Sep 2026)",
+    duration: "I am currently working in this role",
     location: "Dhaka, Bangladesh (Remote)",
     bullets: [
       "Led and coordinated a development team for ~1 year, maintaining development milestones, task distribution, and cross-functional feature delivery.",
