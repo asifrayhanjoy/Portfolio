@@ -466,6 +466,101 @@ const projects: Project[] = [
       },
     ],
   },
+  {
+    name: "DigiVibe ( Part-Time Active Project)",
+    slug: "digivibe",
+    role: "Team Lead & Full-Stack Developer",
+    category: "Digital E-Commerce",
+    accent: "#20d6b5",
+    visual: "commerce",
+    description:
+      "A specialized real-time e-commerce platform for digital subscriptions, AI tools (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
+    technologies: [
+      "Next.js",
+      "React.js",
+      "TypeScript",
+      "Node.js",
+      "Express.js",
+      "Python",
+      "MongoDB",
+      "PostgreSQL",
+      "Prisma ORM",
+      "Tailwind CSS",
+    ],
+    highlights: [
+      "Specialized real-time e-commerce platform for digital subscriptions, AI tools, and IT utilities",
+      "Led end-to-end development, sprint milestone tracking, and task distribution as Team Lead",
+      "Built dual-database architecture leveraging MongoDB and PostgreSQL with Prisma ORM",
+      "Developed client & administrative interfaces with Next.js, Express.js, and Python backend microservices",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    liveDemo: "https://digi-vibe.vercel.app",
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "A specialized real-time e-commerce platform for digital subscriptions, AI tools (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
+      },
+      {
+        title: "System shape",
+        body: "Next.js & React.js frontend connected to Node.js/Express.js & Python backend services with MongoDB, PostgreSQL, and Prisma ORM.",
+      },
+      {
+        title: "Engineering focus",
+        body: "Team leadership, multi-database schema design, digital subscription fulfillment, and high-performance API integration.",
+      },
+    ],
+  },
+  {
+    name: "Bytespace (Bytespace-new)",
+    slug: "bytespace-new",
+    role: "Full-Stack Developer",
+    category: "Assessment Project",
+    accent: "#8ea5ff",
+    visual: "product",
+    description:
+      "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
+    technologies: [
+      "Next.js",
+      "React.js",
+      "TypeScript",
+      "Node.js",
+      "MongoDB",
+      "PostgreSQL",
+      "Tailwind CSS",
+    ],
+    highlights: [
+      "Full-stack prototype application developed under tight deadlines as part of a technical evaluation",
+      "Successfully deployed live on Vercel with automated deployment pipelines",
+      "Implemented responsive UI components using Next.js, React.js, TypeScript, and Tailwind CSS",
+      "Integrated MongoDB and PostgreSQL database storage layers for dynamic data management",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    liveDemo: "https://bytespace-new.vercel.app",
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
+      },
+      {
+        title: "System shape",
+        body: "Next.js & React.js full-stack application backed by Node.js, MongoDB, PostgreSQL, and Tailwind CSS.",
+      },
+      {
+        title: "Engineering focus",
+        body: "Rapid prototype implementation under strict deadlines, clean component structure, dual DB data modeling, and Vercel cloud deployment.",
+      },
+    ],
+  },
 ];
 
 const skillGroups: SkillGroup[] = [
