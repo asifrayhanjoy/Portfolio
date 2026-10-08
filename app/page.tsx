@@ -99,12 +99,12 @@ type CursorSpark = {
 const personal = {
   name: "Md. Asif Rayhan Joy",
   shortName: "Asif Rayhan",
-  title: "Full-Stack Web Developer, Extension Engineer & Team Lead",
+  title: "Full-Stack Software Engineer & Technical Team Lead",
   headline:
-    "Full-Stack Web Developer, Extension Engineer & Team Lead | Next.js · React.js · TypeScript · Node.js · Plasmo",
+    "Full-Stack Software Engineer & Technical Team Lead | Next.js · React.js · TypeScript · Node.js · Plasmo",
   subtitle:
-    "Next.js · React.js · TypeScript · Node.js · Plasmo · PostgreSQL",
-  bio: "Building scalable, responsive, and high-performance web applications and browser extensions with modern frontend architectures, robust backend systems, and AI-accelerated workflows.",
+    "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
+  bio: "Full-Stack Engineer & Team Lead with 3 years of professional experience delivering scalable full-stack web platforms and high-performance browser extensions with modern frontend architectures, robust backend systems, and technical leadership.",
   location: "Dhaka, Bangladesh",
   email: "mdasifrayhanjoy2@gmail.com",
   phone: "01302271472",
@@ -125,7 +125,7 @@ const navItems: NavItem[] = [
 
 const heroStats = [
   { value: "1Y", label: "Team leadership" },
-  { value: "2Y", label: "Dev experience" },
+  { value: "3Y", label: "Dev experience" },
   { value: "AI", label: "Accelerated workflows" },
   { value: "BD", label: "Dhaka, Bangladesh" },
 ];
@@ -154,15 +154,15 @@ const cursorSparkColors = ["#20d6b5", "#7dd3fc", "#ffb86b", "#ff8fc7"];
 const capabilityHighlights = [
   {
     title: "Team Leadership & Delivery",
-    body: "Led and coordinated a development team for ~1 year—aligning sprint milestones, conducting code reviews, resolving technical blockers, and keeping releases on schedule.",
+    body: "Active leadership role directing sprint planning, technical code reviews, and architecture at DigiVibe—aligning milestones and keeping releases on schedule.",
   },
   {
     title: "Frontend Architecture & Browser Extensions",
-    body: "Deep expertise in Next.js, React.js, TypeScript, Tailwind CSS, and Plasmo framework for Chrome Manifest V3 browser extension development.",
+    body: "Deep expertise in Next.js, React, TypeScript, micro-interactions, and Plasmo framework for high-performance Chrome Manifest V3 browser extensions.",
   },
   {
-    title: "Backend & Data",
-    body: "Hands-on experience developing RESTful APIs with Node.js and Express.js, implementing secure authentication (JWT/RBAC), and schema modeling with PostgreSQL, MongoDB, and Prisma ORM.",
+    title: "Backend & Hybrid Database Architecture",
+    body: "Deep expertise building robust REST APIs with Node.js and Express.js, JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma ORM & MongoDB).",
   },
 ];
 
@@ -176,54 +176,104 @@ type ExperienceEntry = {
 
 const experiences: ExperienceEntry[] = [
   {
-    role: "E-Commerce Platform (Full-Stack Engineer & Team Lead)",
-    type: "Full-time / Contract (Collaborative Web Projects)",
-    duration: "I am currently working in this role",
+    role: "Team Lead & Full-Stack Developer",
+    type: "DigiVibe (Full-time / Technical Leadership)",
+    duration: "Jun 2025 – Present",
     location: "Dhaka, Bangladesh (Remote)",
     bullets: [
-      "Led and coordinated a development team for ~1 year, maintaining development milestones, task distribution, and cross-functional feature delivery.",
-      "Architected and developed client and administrative dashboards using Next.js, React.js, and TypeScript.",
-      "Developed backend REST APIs with Node.js, Express.js, and PostgreSQL using Prisma ORM.",
-      "Implemented secure JWT authentication, role-based access control (RBAC), and Stripe payment workflows.",
-      "Supported team members through regular debugging sessions, code refactoring, and Git version control workflows.",
+      "Leading sprint delivery, task allocation, code reviews, and system architecture as Team Lead & Full-Stack Developer at DigiVibe.",
+      "Architected multi-portal e-commerce subscription workflows covering Customer, Merchant, and Admin web applications.",
+      "Implemented secure JWT rotation, role-based access control (RBAC), and high-throughput Node.js/Express REST APIs.",
+      "Integrated Python task automation scripts for background processing and service integrations.",
+      "Engineered hybrid database architecture utilizing Prisma ORM with PostgreSQL for transactional data and MongoDB for dynamic catalog storage.",
     ],
   },
   {
-    role: "Frontend & Web Developer",
-    type: "Part-time / Contract (Independent Development)",
-    duration: "Hands-on Development (~2 years practical experience)",
+    role: "Full-Stack Software Engineer",
+    type: "Full-time / Web & Extension Development",
+    duration: "Oct 2023 – Jun 2025 (~1.5+ Years)",
     location: "Dhaka, Bangladesh (Remote)",
     bullets: [
-      "Developed responsive, mobile-first web applications using Next.js, React.js, TypeScript, and Tailwind CSS.",
-      "Integrated REST APIs and real-time communication features using WebSockets.",
-      "Built dynamic form workflows, state management logic, and reusable UI components.",
+      "Delivered scalable production web applications, interactive user dashboards, and responsive frontends with Next.js, React, and TypeScript.",
+      "Developed high-fidelity technical assessment prototypes, including Bytespace with hybrid database deployments.",
+      "Engineered real-time rental platforms such as Next Thekana with WebSocket feeds for live listing updates and interactive map components.",
+      "Built high-utility web tools including Rentiful rental manager and Invoice Generator with complex dynamic calculation workflows.",
     ],
   },
 ];
 
 const projects: Project[] = [
   {
-    name: "YouTube Cleaner (Ad-Free & Utility Browser Extension)",
+    name: "DigiVibe — Digital Subscription Platform",
+    slug: "digivibe",
+    role: "Team Lead & Full-Stack Developer",
+    category: "Digital E-Commerce & Subscriptions",
+    accent: "#20d6b5",
+    visual: "commerce",
+    description:
+      "A multi-portal real-time e-commerce subscription platform for digital tools, AI services (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
+    technologies: [
+      "Next.js",
+      "React.js",
+      "TypeScript",
+      "Node.js",
+      "Express.js",
+      "Python",
+      "PostgreSQL",
+      "MongoDB",
+      "Prisma ORM",
+      "Tailwind CSS",
+    ],
+    highlights: [
+      "Led end-to-end development, sprint milestone tracking, and task distribution as Technical Team Lead",
+      "Architected multi-portal workflows for Customer, Merchant, and Admin web applications",
+      "Implemented secure JWT rotation, role-based access control (RBAC), and Node.js REST APIs",
+      "Engineered hybrid database architecture leveraging PostgreSQL with Prisma ORM and MongoDB",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    liveDemo: "https://digi-vibe.vercel.app/en",
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "Led the architecture and development of DigiVibe, a multi-portal subscription platform for digital products and AI utilities.",
+      },
+      {
+        title: "System shape",
+        body: "Next.js & React frontend with Node.js/Express REST APIs, Python task automation scripts, and hybrid PostgreSQL (Prisma ORM) & MongoDB database layers.",
+      },
+      {
+        title: "Engineering focus",
+        body: "Team leadership, multi-portal state management, JWT rotation, RBAC security, and hybrid database schema design.",
+      },
+    ],
+  },
+  {
+    name: "YouTube Cleaner — Ad-Free & Utility Extension",
     slug: "youtube-cleaner",
     role: "Extension Developer & Frontend Engineer",
     category: "Browser Extension / Automation",
     accent: "#ff4b4b",
     visual: "extension",
     description:
-      "A lightweight Chrome extension built using the Plasmo framework and TypeScript to provide an uninterrupted, Premium-like YouTube experience by eliminating video ads, auto-skipping promotional segments, and removing sponsored sidebar banners.",
+      "A Manifest V3 Chrome extension built with Plasmo and TypeScript for real-time SPA DOM mutation cleanup, ad suppression, and auto-skipping promotional segments.",
     technologies: [
       "TypeScript",
       "Plasmo Framework",
-      "Chrome Extension API (Manifest V3)",
+      "Chrome Manifest V3",
       "MutationObserver",
-      "CSS Injection",
-      "WebExtensions API",
+      "SPA DOM Lifecycle Handling",
+      "Dynamic CSS Injection",
     ],
     highlights: [
-      "Automated detection and real-time suppression of in-stream video ads without breaking standard video playback",
-      "Utilized MutationObserver and YouTube SPA navigation events (yt-navigate-finish) for seamless DOM updates",
-      "Implemented programmatic skip-button triggers and video element automation with guardrails against false-positive skips",
-      "Injected dynamic stylesheet rules to cleanly hide sponsored companion cards, promo banners, and feed clutter",
+      "Automated real-time suppression of in-stream video ads without interrupting video playback",
+      "Utilized MutationObserver and YouTube SPA lifecycle events (yt-navigate-finish) for DOM mutation cleanup",
+      "Implemented programmatic skip-button triggers and video automation with false-positive guardrails",
+      "Injected dynamic stylesheet rules to remove companion cards, banner ads, and feed clutter",
     ],
     repositoryLinks: [
       {
@@ -234,7 +284,7 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "Built a lightweight Chrome extension using Plasmo framework & TypeScript to eliminate video ads, auto-skip promotional segments, and remove sponsored sidebar banners on YouTube.",
+        body: "Built a lightweight, high-performance Chrome extension using Plasmo framework & TypeScript to eliminate video ads and cleanup YouTube's SPA DOM.",
       },
       {
         title: "System shape",
@@ -242,66 +292,62 @@ const projects: Project[] = [
       },
       {
         title: "Engineering focus",
-        body: "Real-time ad suppression, SPA lifecycle event handling (yt-navigate-finish), skip trigger automation, and false-positive guardrails.",
+        body: "Real-time DOM mutation cleanup, SPA lifecycle event handling (yt-navigate-finish), skip trigger automation, and false-positive guardrails.",
       },
     ],
   },
   {
-    name: "Full-Stack E-Commerce Platform",
-    slug: "e-commerce",
-    role: "Team Lead & Full-Stack Developer",
-    category: "",
-    accent: "#20d6b5",
-    visual: "commerce",
+    name: "Bytespace — Full-Stack Technical Assessment",
+    slug: "bytespace-new",
+    role: "Full-Stack Software Engineer",
+    category: "Assessment Project / Web Platform",
+    accent: "#8ea5ff",
+    visual: "product",
     description:
-      "Led the end-to-end development of a scalable full-stack e-commerce platform. Coordinated sprint tasks, built customer/seller/admin dashboards with RBAC, integrated Stripe checkout workflows, and optimized database queries with Prisma.",
+      "Full-stack web application featuring Next.js, TypeScript, and a hybrid database deployment, developed under tight deadlines as part of a technical assessment.",
     technologies: [
       "Next.js",
       "React.js",
       "TypeScript",
       "Node.js",
-      "Express.js",
       "PostgreSQL",
-      "Prisma ORM",
-      "Stripe",
+      "MongoDB",
       "Tailwind CSS",
+      "Vercel",
     ],
     highlights: [
-      "Led end-to-end development and sprint coordination (~1 Year)",
-      "Built customer, seller, and admin dashboards with RBAC",
-      "Integrated Stripe checkout workflows and payment handling",
-      "Optimized database queries with PostgreSQL and Prisma ORM",
+      "High-fidelity Next.js & TypeScript full-stack deployment created during a technical evaluation",
+      "Integrated hybrid database layers using PostgreSQL and MongoDB for dynamic data management",
+      "Implemented responsive UI components with clean state handling and page routing",
+      "Deployed live on Vercel with automated CI/CD deployment pipelines",
     ],
     repositoryLinks: [
       {
-        label: "Frontend",
-        href: "https://github.com/asifrayhanjoy/E-Commerce-Frontend.git",
-      },
-      {
-        label: "Backend",
-        href: "https://github.com/asifrayhanjoy/E-Commerce-Backend.git",
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
       },
     ],
+    liveDemo: "https://bytespace-new.vercel.app",
     caseStudy: [
       {
         title: "Scope",
-        body: "Led the end-to-end development of a scalable full-stack e-commerce platform.",
+        body: "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
       },
       {
         title: "System shape",
-        body: "Separate Next.js frontend and Node.js REST API backend with PostgreSQL, Prisma ORM, Stripe, and RBAC security.",
+        body: "Next.js & React.js full-stack application backed by Node.js, MongoDB, PostgreSQL, and Tailwind CSS.",
       },
       {
         title: "Engineering focus",
-        body: "Sprint coordination, dashboard architecture, secure auth, payment workflows, and optimized database querying.",
+        body: "Rapid prototype implementation under strict deadlines, clean component structure, dual DB data modeling, and Vercel cloud deployment.",
       },
     ],
   },
   {
-    name: "Next Thekana — Rental & Service Platform",
+    name: "Next Thekana — Real-Time Rental Platform",
     slug: "next-thekana",
-    role: "Team Member & Full-Stack Developer",
-    category: "",
+    role: "Full-Stack Software Engineer",
+    category: "Product Platform",
     accent: "#7dd3fc",
     visual: "product",
     description:
@@ -315,7 +361,7 @@ const projects: Project[] = [
       "Tailwind CSS",
     ],
     highlights: [
-      "Collaborated on a rental and service platform with team members",
+      "Collaborated on a real-time rental and service platform",
       "Built modular responsive UI components with Next.js & Tailwind CSS",
       "Integrated REST APIs for listing and service workflows",
       "Implemented real-time listing updates using WebSockets",
@@ -329,7 +375,7 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "Collaborated with team members to deliver user interfaces and real-time features for a rental platform.",
+        body: "Delivered user interfaces and real-time listing sync features for a rental platform.",
       },
       {
         title: "System shape",
@@ -344,7 +390,7 @@ const projects: Project[] = [
   {
     name: "Rentiful — Rental Web Application",
     slug: "rentful",
-    role: "Frontend Developer",
+    role: "Full-Stack Software Engineer",
     category: "Frontend Project",
     accent: "#7dd3fc",
     visual: "product",
@@ -386,7 +432,7 @@ const projects: Project[] = [
   {
     name: "Invoice Generator Web Application",
     slug: "invoice-generator",
-    role: "Frontend Developer",
+    role: "Full-Stack Software Engineer",
     category: "Productivity Tool",
     accent: "#ff8fc7",
     visual: "product",
@@ -424,221 +470,68 @@ const projects: Project[] = [
       },
     ],
   },
-  {
-    name: "PH Healthcare Platform",
-    slug: "ph-healthcare",
-    role: "Frontend Developer",
-    category: "Healthcare Project",
-    accent: "#7dd3fc",
-    visual: "product",
-    description:
-      "Developed responsive user interfaces for doctor profiling, appointment scheduling, and patient record management workflows.",
-    technologies: [
-      "React.js",
-      "Next.js",
-      "TypeScript",
-      "REST APIs",
-    ],
-    highlights: [
-      "Developed doctor profiling and search user interfaces",
-      "Built interactive appointment scheduling workflows",
-      "Created patient record management interfaces",
-      "Integrated frontend components with backend REST APIs",
-    ],
-    repositoryLinks: [
-      {
-        label: "GitHub",
-        href: "https://github.com/asifrayhanjoy",
-      },
-    ],
-    caseStudy: [
-      {
-        title: "Scope",
-        body: "Healthcare platform interfaces built for patient-doctor scheduling and record workflows.",
-      },
-      {
-        title: "System shape",
-        body: "Data-driven React/Next.js pages connected to healthcare REST APIs.",
-      },
-      {
-        title: "Engineering focus",
-        body: "Usability in multi-step workflows, API integration, and clean state handling.",
-      },
-    ],
-  },
-  {
-    name: "DigiVibe ( Part-Time Active Project)",
-    slug: "digivibe",
-    role: "Team Lead & Full-Stack Developer",
-    category: "Digital E-Commerce",
-    accent: "#20d6b5",
-    visual: "commerce",
-    description:
-      "A specialized real-time e-commerce platform for digital subscriptions, AI tools (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
-    technologies: [
-      "Next.js",
-      "React.js",
-      "TypeScript",
-      "Node.js",
-      "Express.js",
-      "Python",
-      "MongoDB",
-      "PostgreSQL",
-      "Prisma ORM",
-      "Tailwind CSS",
-    ],
-    highlights: [
-      "Specialized real-time e-commerce platform for digital subscriptions, AI tools, and IT utilities",
-      "Led end-to-end development, sprint milestone tracking, and task distribution as Team Lead",
-      "Built dual-database architecture leveraging MongoDB and PostgreSQL with Prisma ORM",
-      "Developed client & administrative interfaces with Next.js, Express.js, and Python backend microservices",
-    ],
-    repositoryLinks: [
-      {
-        label: "GitHub",
-        href: "https://github.com/asifrayhanjoy",
-      },
-    ],
-    liveDemo: "https://digi-vibe.vercel.app",
-    caseStudy: [
-      {
-        title: "Scope",
-        body: "A specialized real-time e-commerce platform for digital subscriptions, AI tools (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
-      },
-      {
-        title: "System shape",
-        body: "Next.js & React.js frontend connected to Node.js/Express.js & Python backend services with MongoDB, PostgreSQL, and Prisma ORM.",
-      },
-      {
-        title: "Engineering focus",
-        body: "Team leadership, multi-database schema design, digital subscription fulfillment, and high-performance API integration.",
-      },
-    ],
-  },
-  {
-    name: "Bytespace (Bytespace-new)",
-    slug: "bytespace-new",
-    role: "Full-Stack Developer",
-    category: "Assessment Project",
-    accent: "#8ea5ff",
-    visual: "product",
-    description:
-      "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
-    technologies: [
-      "Next.js",
-      "React.js",
-      "TypeScript",
-      "Node.js",
-      "MongoDB",
-      "PostgreSQL",
-      "Tailwind CSS",
-    ],
-    highlights: [
-      "Full-stack prototype application developed under tight deadlines as part of a technical evaluation",
-      "Successfully deployed live on Vercel with automated deployment pipelines",
-      "Implemented responsive UI components using Next.js, React.js, TypeScript, and Tailwind CSS",
-      "Integrated MongoDB and PostgreSQL database storage layers for dynamic data management",
-    ],
-    repositoryLinks: [
-      {
-        label: "GitHub",
-        href: "https://github.com/asifrayhanjoy",
-      },
-    ],
-    liveDemo: "https://bytespace-new.vercel.app",
-    caseStudy: [
-      {
-        title: "Scope",
-        body: "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
-      },
-      {
-        title: "System shape",
-        body: "Next.js & React.js full-stack application backed by Node.js, MongoDB, PostgreSQL, and Tailwind CSS.",
-      },
-      {
-        title: "Engineering focus",
-        body: "Rapid prototype implementation under strict deadlines, clean component structure, dual DB data modeling, and Vercel cloud deployment.",
-      },
-    ],
-  },
 ];
 
 const skillGroups: SkillGroup[] = [
   {
-    title: "Frontend",
+    title: "Frontend & Core",
     icon: Layers3,
-    description: "Modern UI architecture, responsive layouts & state management.",
+    description: "Modern UI architecture, responsive layouts & client state management.",
     skills: [
+      { name: "Next.js (App & Pages Router)", level: "Core" },
       { name: "React.js", level: "Core" },
-      { name: "Next.js", level: "Core" },
       { name: "TypeScript", level: "Core" },
       { name: "JavaScript (ES6+)", level: "Core" },
       { name: "Tailwind CSS", level: "Core" },
-      { name: "HTML5", level: "Core" },
-      { name: "CSS3", level: "Core" },
-      { name: "Zustand", level: "Core" },
-      { name: "Redux", level: "Core" },
     ],
   },
   {
-    title: "Backend & Database",
-    icon: Server,
-    description: "RESTful APIs, security, ORM, and data persistence.",
-    skills: [
-      { name: "Node.js", level: "Core" },
-      { name: "Express.js", level: "Core" },
-      { name: "REST APIs", level: "Core" },
-      { name: "WebSockets", level: "Working" },
-      { name: "PostgreSQL", level: "Core" },
-      { name: "MongoDB", level: "Working" },
-      { name: "Prisma ORM", level: "Core" },
-      { name: "JWT / RBAC", level: "Core" },
-    ],
-  },
-  {
-    title: "Tools & Workflow",
-    icon: Wrench,
-    description: "Version control, containers, Postman & AI-accelerated dev tools.",
-    skills: [
-      { name: "Git", level: "Core" },
-      { name: "GitHub", level: "Core" },
-      { name: "Docker", level: "Working" },
-      { name: "Postman", level: "Core" },
-      { name: "Cursor", level: "Core" },
-      { name: "Claude Code", level: "Core" },
-    ],
-  },
-  {
-    title: "Working Knowledge",
-    icon: Sparkles,
-    description: "Payment workflows, backend concepts, frameworks, and cloud.",
-    skills: [
-      { name: "Stripe", level: "Working" },
-      { name: "Microservices concepts", level: "Working" },
-      { name: "NestJS", level: "Working" },
-      { name: "Go", level: "Working" },
-      { name: "AWS", level: "Working" },
-    ],
-  },
-  {
-    title: "Browser Extension Development",
+    title: "Extensions & Specialized",
     icon: Code2,
-    description: "Chrome extensions, Manifest V3 architecture & Plasmo framework.",
+    description: "Chrome extensions, Manifest V3 architecture & DOM automation.",
     skills: [
       { name: "Plasmo Framework", level: "Core" },
       { name: "Chrome Manifest V3", level: "Core" },
-      { name: "WebExtensions API", level: "Core" },
+      { name: "MutationObserver", level: "Core" },
+      { name: "SPA DOM Lifecycle Handling", level: "Core" },
     ],
   },
   {
-    title: "DOM & Browser Automation",
-    icon: Sparkles,
-    description: "DOM mutation monitoring, SPA event handling & dynamic CSS injection.",
+    title: "Backend & Architecture",
+    icon: Server,
+    description: "RESTful APIs, real-time protocols, security & server automation.",
     skills: [
-      { name: "MutationObserver", level: "Core" },
-      { name: "SPA Lifecycle Handling (yt-navigate-finish)", level: "Core" },
-      { name: "Content Scripts", level: "Core" },
-      { name: "Dynamic CSS Injection", level: "Core" },
+      { name: "Node.js", level: "Core" },
+      { name: "Express.js", level: "Core" },
+      { name: "Python", level: "Working" },
+      { name: "REST APIs", level: "Core" },
+      { name: "WebSockets", level: "Working" },
+      { name: "JWT Authentication", level: "Core" },
+      { name: "RBAC", level: "Core" },
+    ],
+  },
+  {
+    title: "Databases & ORM",
+    icon: Database,
+    description: "Relational & Document database design with modern ORM mapping.",
+    skills: [
+      { name: "PostgreSQL", level: "Core" },
+      { name: "MongoDB", level: "Core" },
+      { name: "Prisma ORM", level: "Core" },
+      { name: "Supabase", level: "Working" },
+      { name: "MySQL", level: "Working" },
+    ],
+  },
+  {
+    title: "Workflow & Tooling",
+    icon: Wrench,
+    description: "Version control, containerization, deployments & AI-accelerated dev tools.",
+    skills: [
+      { name: "Git/GitHub", level: "Core" },
+      { name: "Docker", level: "Working" },
+      { name: "Vercel", level: "Core" },
+      { name: "Cursor", level: "Core" },
+      { name: "Claude Code", level: "Core" },
     ],
   },
 ];
@@ -1337,7 +1230,7 @@ function AboutSection() {
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
         <div className="space-y-6 text-base leading-8 text-(--portfolio-muted)]">
           <p>
-            I am a Full-Stack Web Developer, Extension Engineer, and Team Lead specializing in Next.js, React.js, TypeScript, Node.js, and Plasmo framework. With approximately 2 years of hands-on software development experience and roughly 1 year of team leadership and coordination experience, I combine technical execution with structured project delivery.
+            I am a Full-Stack Software Engineer & Technical Team Lead with 3 years of hands-on experience delivering scalable full-stack web platforms and high-performance browser extensions. I take an active leadership role directing sprint planning, technical code reviews, and architecture at DigiVibe, while maintaining deep expertise in TypeScript across frontend and backend, micro-interactions, robust REST APIs, JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma & MongoDB).
           </p>
 
           <div className="pt-2">
@@ -1347,20 +1240,20 @@ function AboutSection() {
             <div className="mt-4 space-y-3">
               {[
                 {
-                  label: "Team Leadership & Delivery",
-                  text: "Led and coordinated a development team for ~1 year—aligning sprint milestones, conducting code reviews, resolving technical blockers, and keeping releases on schedule.",
+                  label: "Team Leadership & Architecture",
+                  text: "Active leadership role directing sprint planning, technical code reviews, and system architecture at DigiVibe while coordinating team milestones.",
                 },
                 {
-                  label: "Frontend Architecture",
-                  text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, and Tailwind CSS with modern state management (Zustand, Redux, Context API).",
+                  label: "Frontend Architecture & Micro-interactions",
+                  text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, micro-interactions, and Tailwind CSS with modern client state management.",
                 },
                 {
-                  label: "Browser Extensions & Automation",
-                  text: "Experience building Chrome Manifest V3 extensions with Plasmo framework, DOM mutation monitoring (MutationObserver), SPA navigation handling, and dynamic CSS injection.",
+                  label: "Browser Extensions & Specialized Tools",
+                  text: "Extensive experience building Chrome Manifest V3 extensions with Plasmo framework, SPA DOM lifecycle handling, MutationObserver, and dynamic CSS injection.",
                 },
                 {
-                  label: "Backend & Data",
-                  text: "Hands-on experience developing RESTful APIs with Node.js and Express.js, implementing secure authentication (JWT/RBAC), and schema modeling with PostgreSQL, MongoDB, and Prisma ORM.",
+                  label: "Backend & Hybrid Database Design",
+                  text: "Hands-on expertise building robust REST APIs with Node.js and Express.js, implementing JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma ORM & MongoDB).",
                 },
                 {
                   label: "AI-Assisted Engineering",
@@ -1368,7 +1261,7 @@ function AboutSection() {
                 },
                 {
                   label: "Problem Solving & Adaptability",
-                  text: "Strong analytical mindset capable of quickly understanding unfamiliar codebases, adopting new technologies, and shipping clean, maintainable code.",
+                  text: "Strong analytical mindset capable of quickly understanding complex domain logic, adopting new technologies, and shipping clean, maintainable code.",
                 },
               ].map((item) => (
                 <div key={item.label} className="flex gap-3 text-sm leading-6">
@@ -1878,7 +1771,7 @@ function ExperienceSection() {
       id="experience"
       eyebrow="Experience & Background"
       title="Software Development & Team Leadership"
-      description="Approximately 2 years of hands-on development experience and 1 year of team leadership & project coordination."
+      description="3 years of professional experience across full-stack software development, system architecture, and technical team leadership."
     >
       <div className="grid gap-6">
         {experiences.map((exp) => (

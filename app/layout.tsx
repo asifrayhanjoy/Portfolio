@@ -4,11 +4,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio-neon-omega-77.vercel.app"),
   title:
-    "MD ASIF RAYHAN JOY | Full-Stack Web Developer, Extension Engineer & Team Lead",
+    "MD ASIF RAYHAN JOY | Full-Stack Software Engineer & Technical Team Lead",
   description:
-    "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows. Based in Dhaka, Bangladesh.",
+    "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB. 3 years of professional experience.",
   keywords: [
     "Full-Stack Developer",
+    "Full-Stack Software Engineer",
+    "Technical Team Lead",
     "Extension Engineer",
     "Browser Extension Developer",
     "Plasmo Developer",
@@ -17,14 +19,15 @@ export const metadata: Metadata = {
     "React.js Developer",
     "TypeScript Developer",
     "Node.js Developer",
-    "AI-Assisted Workflows",
+    "PostgreSQL",
+    "MongoDB",
     "Web Developer in Bangladesh",
   ],
   openGraph: {
     title:
-      "Md. Asif Rayhan Joy | Full-Stack Web Developer, Extension Engineer & Team Lead",
+      "Md. Asif Rayhan Joy | Full-Stack Software Engineer & Technical Team Lead",
     description:
-      "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows.",
+      "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
     url: "https://portfolio-neon-omega-77.vercel.app/",
     siteName: "Md. Asif Rayhan Joy Portfolio",
     type: "website",
@@ -32,9 +35,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "Md. Asif Rayhan Joy | Full-Stack Web Developer, Extension Engineer & Team Lead",
+      "Md. Asif Rayhan Joy | Full-Stack Software Engineer & Technical Team Lead",
     description:
-      "Full-Stack Web Developer, Extension Engineer & Team Lead specializing in Next.js, React.js, TypeScript, Node.js, Plasmo, PostgreSQL, and AI-assisted workflows.",
+      "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
   },
 };
 
