@@ -135,6 +135,7 @@ const coreStack = [
   { name: "React.js", color: "#7dd3fc" },
   { name: "TypeScript", color: "#8ea5ff" },
   { name: "Node.js", color: "#8bff9c" },
+  { name: "Go (Golang)", color: "#00add8" },
   { name: "Plasmo", color: "#ff4b4b" },
   { name: "Manifest V3", color: "#ffb86b" },
   { name: "Express.js", color: "#a7f3d0" },
@@ -309,6 +310,7 @@ const projects: Project[] = [
       "Next.js",
       "React.js",
       "TypeScript",
+      "Go (Golang)",
       "Node.js",
       "PostgreSQL",
       "MongoDB",
@@ -400,6 +402,7 @@ const projects: Project[] = [
       "Next.js",
       "React.js",
       "TypeScript",
+      "Go (Golang)",
       "Tailwind CSS",
     ],
     highlights: [
@@ -482,6 +485,7 @@ const skillGroups: SkillGroup[] = [
       { name: "React.js", level: "Core" },
       { name: "TypeScript", level: "Core" },
       { name: "JavaScript (ES6+)", level: "Core" },
+      { name: "Go (Golang)", level: "Working" },
       { name: "Tailwind CSS", level: "Core" },
     ],
   },
@@ -503,8 +507,11 @@ const skillGroups: SkillGroup[] = [
     skills: [
       { name: "Node.js", level: "Core" },
       { name: "Express.js", level: "Core" },
+      { name: "Go (Golang)", level: "Working" },
+      { name: "Gin Framework", level: "Working" },
       { name: "Python", level: "Working" },
       { name: "REST APIs", level: "Core" },
+      { name: "Concurrency / Goroutines", level: "Working" },
       { name: "WebSockets", level: "Working" },
       { name: "JWT Authentication", level: "Core" },
       { name: "RBAC", level: "Core" },
@@ -755,6 +762,7 @@ function PortfolioPage() {
       "Next.js",
       "Node.js",
       "TypeScript",
+      "Go (Golang)",
       "MongoDB",
       "PostgreSQL",
       "Prisma",
@@ -1171,7 +1179,7 @@ function DeveloperPanel() {
             {[
               ["Client", "React / Next.js / Tailwind"],
               ["Extension", "Plasmo / Manifest V3 / DOM"],
-              ["Server", "Node.js / API Routes / Auth"],
+              ["Server", "Node.js / Go / APIs / Auth"],
               ["Data", "Prisma / PostgreSQL / MongoDB"],
             ].map(([label, value]) => (
               <div key={label} className="flex items-center gap-3">

@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     "React.js Developer",
     "TypeScript Developer",
     "Node.js Developer",
+    "Go Developer",
+    "Golang Developer",
     "PostgreSQL",
     "MongoDB",
     "Web Developer in Bangladesh",
