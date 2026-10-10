@@ -36,7 +36,10 @@ import {
   type PointerEvent,
   type ReactNode,
   type SVGProps,
+  memo,
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -651,19 +654,28 @@ function useActiveSection() {
   const [activeSection, setActiveSection] = useState(navItems[0].id);
 
   useEffect(() => {
+    let ticking = false;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const visibleEntry = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-        if (visibleEntry?.target.id) {
-          setActiveSection(visibleEntry.target.id);
+            if (visibleEntry?.target.id) {
+              const targetId = visibleEntry.target.id;
+              setActiveSection((prev) => (prev === targetId ? prev : targetId));
+            }
+            ticking = false;
+          });
+          ticking = true;
         }
       },
       {
-        rootMargin: "-32% 0px -52% 0px",
-        threshold: [0.08, 0.24, 0.45],
+        rootMargin: "-30% 0px -45% 0px",
+        threshold: [0.1, 0.3],
       },
     );
 
@@ -685,122 +697,146 @@ export default function Home() {
   return <PortfolioPage />;
 }
 
-function PortfolioPage() {
+const CursorTrailLayer = memo(function CursorTrailLayer() {
   const [cursorSparks, setCursorSparks] = useState<CursorSpark[]>([]);
   const nextSparkId = useRef(0);
   const lastSparkAt = useRef(0);
-  const sparkTimeouts = useRef<number[]>([]);
-  const activeSection = useActiveSection();
 
   useEffect(() => {
-    const timeoutIds = sparkTimeouts.current;
+    if (typeof window === "undefined" || !window.matchMedia("(pointer: fine)").matches) {
+      return;
+    }
+
+    let rafId: number | null = null;
+    const timeouts: number[] = [];
+
+    const handlePointerMove = (event: globalThis.PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const now = window.performance.now();
+      if (now - lastSparkAt.current < 55) {
+        return;
+      }
+      lastSparkAt.current = now;
+
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+
+      rafId = requestAnimationFrame(() => {
+        const sparkId = nextSparkId.current;
+        nextSparkId.current += 1;
+
+        const spark: CursorSpark = {
+          id: sparkId,
+          x: event.clientX,
+          y: event.clientY,
+          color: cursorSparkColors[sparkId % cursorSparkColors.length],
+          size: 5 + (sparkId % 3) * 2,
+          driftX: Math.round((Math.random() - 0.5) * 34),
+          driftY: Math.round((Math.random() - 0.5) * 34),
+        };
+
+        setCursorSparks((currentSparks) => [...currentSparks.slice(-10), spark]);
+
+        const timeoutId = window.setTimeout(() => {
+          setCursorSparks((currentSparks) =>
+            currentSparks.filter((item) => item.id !== spark.id),
+          );
+        }, 650);
+
+        timeouts.push(timeoutId);
+      });
+    };
+
+    const handlePointerLeave = () => {
+      setCursorSparks([]);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
     return () => {
-      timeoutIds.forEach((timeoutId) => {
-        window.clearTimeout(timeoutId);
-      });
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
+      timeouts.forEach((id) => window.clearTimeout(id));
     };
   }, []);
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse") {
-      return;
-    }
+  if (cursorSparks.length === 0) {
+    return null;
+  }
 
-    const now = window.performance.now();
+  return (
+    <div className="cursor-trail-layer" aria-hidden="true">
+      {cursorSparks.map((spark) => (
+        <span
+          key={spark.id}
+          className="cursor-spark"
+          style={
+            {
+              "--spark-left": `${spark.x}px`,
+              "--spark-top": `${spark.y}px`,
+              "--spark-size": `${spark.size}px`,
+              "--spark-color": spark.color,
+              "--spark-drift-x": `${spark.driftX}px`,
+              "--spark-drift-y": `${spark.driftY}px`,
+            } as CSSProperties
+          }
+        />
+      ))}
+    </div>
+  );
+});
 
-    if (now - lastSparkAt.current < 46) {
-      return;
-    }
+function PortfolioPage() {
+  const activeSection = useActiveSection();
 
-    lastSparkAt.current = now;
-
-    const sparkId = nextSparkId.current;
-    nextSparkId.current += 1;
-
-    const spark: CursorSpark = {
-      id: sparkId,
-      x: event.clientX,
-      y: event.clientY,
-      color: cursorSparkColors[sparkId % cursorSparkColors.length],
-      size: 5 + (sparkId % 3) * 2,
-      driftX: Math.round((Math.random() - 0.5) * 34),
-      driftY: Math.round((Math.random() - 0.5) * 34),
-    };
-
-    setCursorSparks((currentSparks) => [...currentSparks.slice(-13), spark]);
-
-    const timeoutId = window.setTimeout(() => {
-      setCursorSparks((currentSparks) =>
-        currentSparks.filter((item) => item.id !== spark.id),
-      );
-    }, 760);
-
-    sparkTimeouts.current.push(timeoutId);
-  };
-
-  const handlePointerLeave = () => {
-    setCursorSparks([]);
-  };
-
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: personal.name,
-    jobTitle: personal.title,
-    email: `mailto:${personal.email}`,
-    telephone: personal.phone,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Dhaka",
-      addressRegion: "Dhaka",
-      addressCountry: "BD",
-    },
-    sameAs: [personal.github, personal.linkedin].filter(Boolean),
-    knowsAbout: [
-      "React",
-      "Next.js",
-      "Node.js",
-      "TypeScript",
-      "Go (Golang)",
-      "MongoDB",
-      "PostgreSQL",
-      "Prisma",
-    ],
-  };
+  const structuredData = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: personal.name,
+      jobTitle: personal.title,
+      email: `mailto:${personal.email}`,
+      telephone: personal.phone,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Dhaka",
+        addressRegion: "Dhaka",
+        addressCountry: "BD",
+      },
+      sameAs: [personal.github, personal.linkedin].filter(Boolean),
+      knowsAbout: [
+        "React",
+        "Next.js",
+        "Node.js",
+        "TypeScript",
+        "Go (Golang)",
+        "MongoDB",
+        "PostgreSQL",
+        "Prisma",
+      ],
+    }),
+    [],
+  );
 
   return (
     <div
       className="portfolio-page min-h-screen overflow-x-hidden bg-(--portfolio-bg)] pb-24 text-(--portfolio-text)] lg:pb-0"
       data-theme="dark"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
     >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <div className="cursor-trail-layer" aria-hidden="true">
-        {cursorSparks.map((spark) => (
-          <span
-            key={spark.id}
-            className="cursor-spark"
-            style={
-              {
-                "--spark-left": `${spark.x}px`,
-                "--spark-top": `${spark.y}px`,
-                "--spark-size": `${spark.size}px`,
-                "--spark-color": spark.color,
-                "--spark-drift-x": `${spark.driftX}px`,
-                "--spark-drift-y": `${spark.driftY}px`,
-              } as CSSProperties
-            }
-          />
-        ))}
-      </div>
-      <Header
-        activeSection={activeSection}
-      />
+      <CursorTrailLayer />
+      <Header activeSection={activeSection} />
       <SideRail activeSection={activeSection} />
       <MobileDock activeSection={activeSection} />
 
@@ -821,21 +857,38 @@ function PortfolioPage() {
   );
 }
 
-function Header({
+const Header = memo(function Header({
   activeSection,
 }: {
   activeSection: string;
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isScrolledRef = useRef(false);
 
   useEffect(() => {
-    const updateScrolled = () => setIsScrolled(window.scrollY > 18);
+    let ticking = false;
+
+    const updateScrolled = () => {
+      const scrolled = window.scrollY > 18;
+      if (scrolled !== isScrolledRef.current) {
+        isScrolledRef.current = scrolled;
+        setIsScrolled(scrolled);
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrolled);
+        ticking = true;
+      }
+    };
 
     updateScrolled();
-    window.addEventListener("scroll", updateScrolled, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => window.removeEventListener("scroll", updateScrolled);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -851,7 +904,7 @@ function Header({
     };
   }, [isMenuOpen]);
 
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   return (
     <header
@@ -970,9 +1023,9 @@ function Header({
       </AnimatePresence>
     </header>
   );
-}
+});
 
-function SideRail({ activeSection }: { activeSection: string }) {
+const SideRail = memo(function SideRail({ activeSection }: { activeSection: string }) {
   return (
     <aside
       aria-label="Section shortcuts"
@@ -1002,10 +1055,13 @@ function SideRail({ activeSection }: { activeSection: string }) {
       })}
     </aside>
   );
-}
+});
 
-function MobileDock({ activeSection }: { activeSection: string }) {
-  const mobileItems = [navItems[0], navItems[1], navItems[2], navItems[4]];
+const MobileDock = memo(function MobileDock({ activeSection }: { activeSection: string }) {
+  const mobileItems = useMemo(
+    () => [navItems[0], navItems[1], navItems[2], navItems[4]],
+    [],
+  );
 
   return (
     <nav
@@ -1033,9 +1089,9 @@ function MobileDock({ activeSection }: { activeSection: string }) {
       })}
     </nav>
   );
-}
+});
 
-function HeroSection() {
+const HeroSection = memo(function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -1050,6 +1106,7 @@ function HeroSection() {
           fill
           priority
           sizes="100vw"
+          decoding="async"
           className="object-cover object-[64%_50%]"
         />
       </div>
@@ -1122,9 +1179,9 @@ function HeroSection() {
       </div>
     </section>
   );
-}
+});
 
-function DeveloperPanel() {
+const DeveloperPanel = memo(function DeveloperPanel() {
   return (
     <div className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-panel)] p-4 shadow-(--portfolio-shadow)] backdrop-blur-xl">
       <div className="flex items-center justify-between border-b border-(--portfolio-line)] pb-4">
@@ -1195,10 +1252,10 @@ function DeveloperPanel() {
       </div>
     </div>
   );
-}
+});
 
-function StackRibbon() {
-  const marqueeStack = [...coreStack, ...coreStack];
+const StackRibbon = memo(function StackRibbon() {
+  const marqueeStack = useMemo(() => [...coreStack, ...coreStack], []);
 
   return (
     <section className="border-b border-(--portfolio-line)] bg-(--portfolio-bg)] px-4 py-9 sm:px-6 lg:px-8">
@@ -1225,9 +1282,9 @@ function StackRibbon() {
       </div>
     </section>
   );
-}
+});
 
-function AboutSection() {
+const AboutSection = memo(function AboutSection() {
   return (
     <Section
       id="about"
@@ -1323,7 +1380,7 @@ function AboutSection() {
       </div>
     </Section>
   );
-}
+});
 
 function ProjectsSection() {
   return (
@@ -2171,7 +2228,7 @@ function Footer() {
   );
 }
 
-function Section({
+const Section = memo(function Section({
   id,
   eyebrow,
   title,
@@ -2192,7 +2249,7 @@ function Section({
       className="portfolio-section px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div className="mx-auto max-w-7xl">
@@ -2217,7 +2274,7 @@ function Section({
       </div>
     </motion.section>
   );
-}
+});
 
 function PrimaryLink({
   href,

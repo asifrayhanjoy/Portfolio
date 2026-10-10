@@ -205,7 +205,6 @@ body {
       rgba(4, 14, 24, 0.52) 48%,
       rgba(3, 9, 17, 0.34) 100%
     ),
-    url("/portfolio-hero-abstract.png") center top / cover fixed,
     linear-gradient(90deg, rgba(173, 232, 255, 0.035) 0, transparent 12%, transparent 88%, rgba(173, 232, 255, 0.025) 100%),
     linear-gradient(180deg, rgba(173, 232, 255, 0.05), transparent 18%, transparent 82%, rgba(173, 232, 255, 0.02)),
     repeating-linear-gradient(
@@ -245,7 +244,6 @@ body {
       rgba(234, 246, 242, 0.82) 48%,
       rgba(234, 246, 242, 0.7) 100%
     ),
-    url("/portfolio-hero-abstract.png") center top / cover fixed,
     repeating-linear-gradient(
       90deg,
       rgba(13, 91, 89, 0.04) 0,
@@ -406,6 +404,8 @@ body {
 
 .portfolio-section {
   scroll-margin-top: 96px;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 650px;
 }
 
 .portfolio-marquee-shell {
@@ -443,6 +443,8 @@ body {
   width: max-content;
   animation: portfolio-marquee 42s linear infinite;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .portfolio-marquee-shell:hover .portfolio-marquee-track {
@@ -465,11 +467,11 @@ body {
 
 @keyframes portfolio-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
