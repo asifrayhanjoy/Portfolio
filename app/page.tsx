@@ -10,7 +10,11 @@ import {
   BookOpen,
   Briefcase,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Code2,
+  Compass,
+  Cpu,
   Database,
   ExternalLink,
   FileText,
@@ -21,19 +25,20 @@ import {
   Mail,
   MapPin,
   Menu,
+  Pause,
   Phone,
+  Play,
   Rocket,
   Send,
   Server,
-  ShieldCheck,
   Sparkles,
+  Terminal,
   Wrench,
   X,
 } from "lucide-react";
 import {
   type ComponentType,
   type CSSProperties,
-  type PointerEvent,
   type ReactNode,
   type SVGProps,
   memo,
@@ -45,6 +50,10 @@ import {
 } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+
+/* =========================================================================
+   TYPES & DATA MODELS
+   ========================================================================= */
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 type SkillLevel = "Core" | "Working" | "Learning" | "Basic";
@@ -69,6 +78,10 @@ type Project = {
   description: string;
   accent: string;
   visual: "commerce" | "product" | "extension";
+  image: string;
+  fallbackImage?: string;
+  badge: string;
+  statBadge: string;
   technologies: string[];
   highlights: string[];
   repositoryLinks: ProjectLink[];
@@ -99,15 +112,52 @@ type CursorSpark = {
   driftY: number;
 };
 
+/* =========================================================================
+   CINEMATIC BACKGROUND SLIDESHOW ASSETS
+   5 Ultra-High-Definition Developer Workspaces & Coding Screens
+   ========================================================================= */
+
+const backgroundSlides = [
+  {
+    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=2560&q=85",
+    alt: "Developer Code Editor on Dual Displays",
+    caption: "Full-Stack Code Architecture",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2560&q=85",
+    alt: "Clean Laptop Workspace with Code Matrix",
+    caption: "Modern Frontend Engineering",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=2560&q=85",
+    alt: "Cyberpunk Developer Setup at Night",
+    caption: "High-Performance Web Workflows",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2560&q=85",
+    alt: "Glowing Cyber Matrix Digital Code Streams",
+    caption: "REST APIs & Data Pipelines",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=2560&q=85",
+    alt: "Modern Developer Desk with Live Code View",
+    caption: "Clean Component Architecture",
+  },
+];
+
+/* =========================================================================
+   PORTFOLIO CONTENT & IDENTITY (STRICTLY FULL-STACK WEB DEVELOPER)
+   ========================================================================= */
+
 const personal = {
-  name: "Md. Asif Rayhan Joy",
+  name: "MD. Asif Rayhan Joy",
   shortName: "Asif Rayhan",
-  title: "Full-Stack Software Engineer & Technical Team Lead",
+  title: "Full-Stack Web Developer",
   headline:
-    "Full-Stack Software Engineer & Technical Team Lead | Next.js · React.js · TypeScript · Node.js · Plasmo",
+    "Full-Stack Web Developer | Next.js · React.js · TypeScript · Node.js · Plasmo",
   subtitle:
-    "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
-  bio: "Full-Stack Engineer & Team Lead with 3 years of professional experience delivering scalable full-stack web platforms and high-performance browser extensions with modern frontend architectures, robust backend systems, and technical leadership.",
+    "Full-Stack Web Developer specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
+  bio: "Full-Stack Web Developer with 3 years of professional experience delivering scalable full-stack web platforms and high-performance browser extensions with modern frontend architectures, robust backend systems, and clean code.",
   location: "Dhaka, Bangladesh",
   email: "mdasifrayhanjoy2@gmail.com",
   phone: "01302271472",
@@ -118,47 +168,48 @@ const personal = {
 
 const navItems: NavItem[] = [
   { label: "Home", href: "#home", id: "home", icon: HomeIcon },
-  { label: "About", href: "#about", id: "about", icon: BookOpen },
+  { label: "Projects", href: "#projects", id: "projects", icon: Code2 },
+  { label: "Tech Stack", href: "#skills", id: "skills", icon: Layers3 },
   { label: "Experience", href: "#experience", id: "experience", icon: Briefcase },
-  { label: "Projects", href: "#projects", id: "projects", icon: Briefcase },
-  { label: "Skills", href: "#skills", id: "skills", icon: Code2 },
+  { label: "About", href: "#about", id: "about", icon: BookOpen },
   { label: "Process", href: "#process", id: "process", icon: Rocket },
   { label: "Contact", href: "#contact", id: "contact", icon: Mail },
 ];
 
 const heroStats = [
-  { value: "1Y", label: "Team leadership" },
-  { value: "3Y", label: "Dev experience" },
-  { value: "AI", label: "Accelerated workflows" },
-  { value: "BD", label: "Dhaka, Bangladesh" },
+  { value: "3Y+", label: "Web Development", sub: "Production web applications" },
+  { value: "15+", label: "Full-Stack Modules", sub: "APIs, UIs, DB schemas" },
+  { value: "AI", label: "Accelerated Workflows", sub: "Cursor, Claude Code, RAG" },
+  { value: "BD", label: "Dhaka, Bangladesh", sub: "Available for global remote" },
 ];
 
 const coreStack = [
-  { name: "Next.js", color: "#20d6b5" },
-  { name: "React.js", color: "#7dd3fc" },
-  { name: "TypeScript", color: "#8ea5ff" },
-  { name: "Node.js", color: "#8bff9c" },
+  { name: "Next.js 15", color: "#38bdf8" },
+  { name: "React 19", color: "#61dafb" },
+  { name: "TypeScript", color: "#818cf8" },
+  { name: "Node.js", color: "#4ade80" },
+  { name: "NestJS", color: "#ea284e" },
   { name: "Go (Golang)", color: "#00add8" },
-  { name: "Plasmo", color: "#ff4b4b" },
-  { name: "Manifest V3", color: "#ffb86b" },
-  { name: "Express.js", color: "#a7f3d0" },
-  { name: "PostgreSQL", color: "#8fb7ff" },
-  { name: "MongoDB", color: "#70e08f" },
-  { name: "Prisma ORM", color: "#c4a7ff" },
-  { name: "Tailwind CSS", color: "#67e8f9" },
-  { name: "Zustand", color: "#ffcf70" },
-  { name: "Redux", color: "#ff8fc7" },
-  { name: "JWT / RBAC", color: "#b5a7ff" },
-  { name: "Stripe", color: "#b5a7ff" },
-  { name: "Docker", color: "#75b7ff" },
+  { name: "Plasmo", color: "#f43f5e" },
+  { name: "Manifest V3", color: "#fb923c" },
+  { name: "PostgreSQL", color: "#60a5fa" },
+  { name: "MongoDB", color: "#34d399" },
+  { name: "Prisma ORM", color: "#c084fc" },
+  { name: "Redis", color: "#ef4444" },
+  { name: "Tailwind CSS", color: "#22d3ee" },
+  { name: "TanStack Query", color: "#f97316" },
+  { name: "Zustand", color: "#fbbf24" },
+  { name: "shadcn/ui", color: "#f472b6" },
+  { name: "Docker", color: "#38bdf8" },
+  { name: "Vitest", color: "#a3e635" },
 ];
 
-const cursorSparkColors = ["#20d6b5", "#7dd3fc", "#ffb86b", "#ff8fc7"];
+const cursorSparkColors = ["#00f5a0", "#00d9f5", "#38bdf8", "#818cf8", "#f472b6"];
 
 const capabilityHighlights = [
   {
-    title: "Team Leadership & Delivery",
-    body: "Active leadership role directing sprint planning, technical code reviews, and architecture at DigiVibe—aligning milestones and keeping releases on schedule.",
+    title: "System Architecture & Delivery",
+    body: "Directing sprint delivery, technical code reviews, and architecture at DigiVibe—aligning milestones and keeping releases on schedule.",
   },
   {
     title: "Frontend Architecture & Browser Extensions",
@@ -181,15 +232,14 @@ type ExperienceEntry = {
 const experiences: ExperienceEntry[] = [
   {
     role: "Team Lead & Full-Stack Developer",
-    type: "DigiVibe (Full-time / Technical Leadership)",
+    type: "DigiVibe (Full-time / Web Platform Engineering)",
     duration: "Jun 2025 – Present",
     location: "Dhaka, Bangladesh (Remote)",
     bullets: [
-      "Leading sprint delivery, task allocation, code reviews, and system architecture as Team Lead & Full-Stack Developer at DigiVibe.",
-      "Architected multi-portal e-commerce subscription workflows covering Customer, Merchant, and Admin web applications.",
-      "Implemented secure JWT rotation, role-based access control (RBAC), and high-throughput Node.js/Express REST APIs.",
-      "Integrated Python task automation scripts for background processing and service integrations.",
-      "Engineered hybrid database architecture utilizing Prisma ORM with PostgreSQL for transactional data and MongoDB for dynamic catalog storage.",
+      "Led cross-functional engineering sprints, daily standups, code reviews, and deployment pipelines.",
+      "Architected 3 isolated sub-systems (Customer, Merchant, Admin Portals) with JWT token rotation and fine-grained RBAC.",
+      "Designed hybrid transactional schemas using PostgreSQL (Prisma) and document stores in MongoDB.",
+      "Automated background tasks with Python and low-latency session caching via Redis.",
     ],
   },
   {
@@ -206,33 +256,47 @@ const experiences: ExperienceEntry[] = [
   },
 ];
 
+/* =========================================================================
+   PROJECT SHOWCASE WITH REAL HIGH-RES VISUAL MOCKUPS
+   ========================================================================= */
+
 const projects: Project[] = [
   {
     name: "DigiVibe — Digital Subscription Platform",
     slug: "digivibe",
-    role: "Team Lead & Full-Stack Developer",
-    category: "Digital E-Commerce & Subscriptions",
-    accent: "#20d6b5",
+    role: "Team Lead & Full-Stack Developer (Jun 2025 – Present)",
+    category: "Full-Stack & E-Commerce Platform",
+    accent: "#00f5a0",
     visual: "commerce",
+    // 📸 REAL SCREENSHOT ASSET: Drop your screenshot into public/assets/digivibe-preview.png
+    // image: "/assets/digivibe-preview.png" for https://digi-vibe.vercel.app/en
+    image: "/assets/digivibe-preview.png",
+    fallbackImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85",
+    badge: "Production Live",
+    statBadge: "Multi-Portal SaaS",
     description:
       "A multi-portal real-time e-commerce subscription platform for digital tools, AI services (ChatGPT, YouTube Premium, VPNs), and IT utility products.",
     technologies: [
-      "Next.js",
-      "React.js",
+      "Next.js 15",
+      "React",
       "TypeScript",
       "Node.js",
       "Express.js",
+      "NestJS",
       "Python",
-      "PostgreSQL",
+      "Go",
+      "PostgreSQL (Prisma)",
       "MongoDB",
-      "Prisma ORM",
+      "Redis",
+      "SQLite",
+      "MySQL",
       "Tailwind CSS",
     ],
     highlights: [
-      "Led end-to-end development, sprint milestone tracking, and task distribution as Technical Team Lead",
-      "Architected multi-portal workflows for Customer, Merchant, and Admin web applications",
-      "Implemented secure JWT rotation, role-based access control (RBAC), and Node.js REST APIs",
-      "Engineered hybrid database architecture leveraging PostgreSQL with Prisma ORM and MongoDB",
+      "Led cross-functional engineering sprints, daily standups, code reviews, and deployment pipelines",
+      "Architected 3 isolated sub-systems (Customer, Merchant, Admin Portals) with JWT token rotation and fine-grained RBAC",
+      "Designed hybrid transactional schemas using PostgreSQL (Prisma) and document stores in MongoDB",
+      "Automated background tasks with Python and low-latency session caching via Redis",
     ],
     repositoryLinks: [
       {
@@ -247,36 +311,42 @@ const projects: Project[] = [
         body: "Led the architecture and development of DigiVibe, a multi-portal subscription platform for digital products and AI utilities.",
       },
       {
-        title: "System shape",
-        body: "Next.js & React frontend with Node.js/Express REST APIs, Python task automation scripts, and hybrid PostgreSQL (Prisma ORM) & MongoDB database layers.",
+        title: "System Shape",
+        body: "Next.js 15 & React frontend with Node.js/Express and NestJS REST APIs, Python task automation scripts, and hybrid PostgreSQL (Prisma ORM) & MongoDB database layers.",
       },
       {
-        title: "Engineering focus",
-        body: "Team leadership, multi-portal state management, JWT rotation, RBAC security, and hybrid database schema design.",
+        title: "Engineering Focus",
+        body: "Multi-portal state management, JWT token rotation, RBAC security, Redis caching, and hybrid database schema design.",
       },
     ],
   },
   {
-    name: "YouTube Cleaner — Ad-Free & Utility Extension",
+    name: "YouTube Cleaner — Web Dashboard & Extension",
     slug: "youtube-cleaner",
     role: "Extension Developer & Frontend Engineer",
-    category: "Browser Extension / Automation",
-    accent: "#ff4b4b",
+    category: "Browser Systems & Tooling",
+    accent: "#f43f5e",
     visual: "extension",
+    // 📸 AUTHENTIC OFFICIAL YOUTUBE BRAND BADGE (Icon + Wordmark + Extension Tag)
+    image: "/assets/youtube-brand-badge.svg",
+    fallbackImage: "/assets/youtube-brand-badge.svg",
+    badge: "Manifest V3 Active",
+    statBadge: "0ms DOM Latency",
     description:
-      "A Manifest V3 Chrome extension built with Plasmo and TypeScript for real-time SPA DOM mutation cleanup, ad suppression, and auto-skipping promotional segments.",
+      "A Manifest V3 Chrome extension and web companion dashboard built with Plasmo and TypeScript for real-time SPA DOM mutation cleanup, ad suppression, and auto-skipping promotional segments.",
     technologies: [
       "TypeScript",
       "Plasmo Framework",
       "Chrome Manifest V3",
+      "DOM APIs",
+      "CSS Injection",
       "MutationObserver",
-      "SPA DOM Lifecycle Handling",
-      "Dynamic CSS Injection",
+      "SPA Navigation Hooks",
     ],
     highlights: [
-      "Automated real-time suppression of in-stream video ads without interrupting video playback",
-      "Utilized MutationObserver and YouTube SPA lifecycle events (yt-navigate-finish) for DOM mutation cleanup",
-      "Implemented programmatic skip-button triggers and video automation with false-positive guardrails",
+      "Built an automated Chrome MV3 utility to eliminate dynamic DOM overlays and ad blocks in real time",
+      "Intercepted SPA navigation events (yt-navigate-finish) to preserve extension execution state across dynamic client-side routes",
+      "Implemented debounced MutationObserver listeners to prevent layout thrashing, DOM loops, and video stutter",
       "Injected dynamic stylesheet rules to remove companion cards, banner ads, and feed clutter",
     ],
     repositoryLinks: [
@@ -285,46 +355,54 @@ const projects: Project[] = [
         href: "https://github.com/asifrayhanjoy",
       },
     ],
+    liveDemo: "https://youtube-cleaner-web.vercel.app/",
     caseStudy: [
       {
         title: "Scope",
-        body: "Built a lightweight, high-performance Chrome extension using Plasmo framework & TypeScript to eliminate video ads and cleanup YouTube's SPA DOM.",
+        body: "Built a lightweight, high-performance Chrome extension and web dashboard using Plasmo framework & TypeScript to eliminate video ads and cleanup YouTube's SPA DOM.",
       },
       {
-        title: "System shape",
+        title: "System Shape",
         body: "Manifest V3 content scripts, background service worker, MutationObserver DOM watchers, and dynamic CSS injection rules.",
       },
       {
-        title: "Engineering focus",
-        body: "Real-time DOM mutation cleanup, SPA lifecycle event handling (yt-navigate-finish), skip trigger automation, and false-positive guardrails.",
+        title: "Engineering Focus",
+        body: "Real-time DOM mutation cleanup, SPA lifecycle event handling (yt-navigate-finish), debounced listeners, and false-positive guardrails.",
       },
     ],
   },
   {
     name: "Bytespace — Full-Stack Technical Assessment",
     slug: "bytespace-new",
-    role: "Full-Stack Software Engineer",
-    category: "Assessment Project / Web Platform",
-    accent: "#8ea5ff",
+    role: "Full-Stack Web Developer",
+    category: "Full-Stack Web Application",
+    accent: "#818cf8",
     visual: "product",
+    // 📸 High-resolution evaluation & code platform dashboard UI mockup
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=85",
+    fallbackImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=85",
+    badge: "Evaluation Platform",
+    statBadge: "Hybrid PostgreSQL + Mongo",
     description:
       "Full-stack web application featuring Next.js, TypeScript, and a hybrid database deployment, developed under tight deadlines as part of a technical assessment.",
     technologies: [
       "Next.js",
-      "React.js",
+      "React",
       "TypeScript",
-      "Go (Golang)",
       "Node.js",
+      "NestJS",
+      "Go",
       "PostgreSQL",
       "MongoDB",
+      "Redis",
       "Tailwind CSS",
       "Vercel",
     ],
     highlights: [
-      "High-fidelity Next.js & TypeScript full-stack deployment created during a technical evaluation",
-      "Integrated hybrid database layers using PostgreSQL and MongoDB for dynamic data management",
-      "Implemented responsive UI components with clean state handling and page routing",
-      "Deployed live on Vercel with automated CI/CD deployment pipelines",
+      "High-fidelity full-stack prototype engineered under tight technical evaluation deadlines",
+      "Implemented hybrid database persistence leveraging PostgreSQL for relational records and MongoDB for dynamic data",
+      "Automated preview deployments and CI/CD pipelines via Vercel",
+      "Engineered low-latency session caching and responsive UI state management",
     ],
     repositoryLinks: [
       {
@@ -339,11 +417,11 @@ const projects: Project[] = [
         body: "Full-stack prototype application developed as part of a technical evaluation under tight deadlines, deployed on Vercel.",
       },
       {
-        title: "System shape",
-        body: "Next.js & React.js full-stack application backed by Node.js, MongoDB, PostgreSQL, and Tailwind CSS.",
+        title: "System Shape",
+        body: "Next.js & React full-stack application backed by Node.js, NestJS, MongoDB, PostgreSQL, Redis, and Tailwind CSS.",
       },
       {
-        title: "Engineering focus",
+        title: "Engineering Focus",
         body: "Rapid prototype implementation under strict deadlines, clean component structure, dual DB data modeling, and Vercel cloud deployment.",
       },
     ],
@@ -351,25 +429,30 @@ const projects: Project[] = [
   {
     name: "Next Thekana — Real-Time Rental Platform",
     slug: "next-thekana",
-    role: "Full-Stack Software Engineer",
-    category: "Product Platform",
-    accent: "#7dd3fc",
+    role: "Full-Stack Web Developer",
+    category: "Real-Time Web Platform",
+    accent: "#38bdf8",
     visual: "product",
+    // 📸 Real-time rental & listing platform UI mockup
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=85",
+    fallbackImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=85",
+    badge: "WebSocket Sync",
+    statBadge: "Real-Time Feeds",
     description:
-      "Collaborated on a rental and service platform. Built modular responsive UI components, integrated REST APIs, and implemented real-time listing updates using WebSockets.",
+      "Collaborated on a real-time rental and service platform featuring duplex WebSocket sync, modular responsive UI components, and secure RESTful backend endpoints.",
     technologies: [
       "Next.js",
-      "React.js",
+      "React",
       "TypeScript",
-      "REST APIs",
-      "WebSockets",
       "Tailwind CSS",
+      "Node.js",
+      "WebSockets",
+      "REST APIs",
     ],
     highlights: [
-      "Collaborated on a real-time rental and service platform",
-      "Built modular responsive UI components with Next.js & Tailwind CSS",
-      "Integrated REST APIs for listing and service workflows",
-      "Implemented real-time listing updates using WebSockets",
+      "Integrated duplex WebSocket channels for instant booking state synchronization and live listing updates",
+      "Built responsive, reusable UI components optimized across mobile and desktop viewports",
+      "Connected secure REST API layers for advanced search filters and inquiries",
     ],
     repositoryLinks: [
       {
@@ -383,36 +466,88 @@ const projects: Project[] = [
         body: "Delivered user interfaces and real-time listing sync features for a rental platform.",
       },
       {
-        title: "System shape",
+        title: "System Shape",
         body: "Modular frontend architecture connected to RESTful backend endpoints and WebSocket feeds.",
       },
       {
-        title: "Engineering focus",
-        body: "Component reusability, responsive UI, real-time data sync, and team collaboration.",
+        title: "Engineering Focus",
+        body: "Component reusability, responsive UI, real-time data sync, and clean API integration.",
+      },
+    ],
+  },
+  {
+    name: "Invoice Generator & Impact Tracker",
+    slug: "invoice-generator",
+    role: "Full-Stack Web Developer",
+    category: "SaaS & Financial Tooling",
+    accent: "#f472b6",
+    visual: "product",
+    // 📸 High-res financial invoice & calculation engine UI mockup
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=85",
+    fallbackImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=85",
+    badge: "Production Live",
+    statBadge: "Dynamic Calc Engine",
+    description:
+      "In-browser financial calculation engine and SaaS invoice generation platform producing structured, print-ready vector PDFs and shareable client payment links.",
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vector PDF Engine",
+    ],
+    highlights: [
+      "In-browser calculation engine computing dynamic subtotals, tiered discounts, and multi-region tax/VAT splits",
+      "Client-side vector PDF generation producing structured, print-ready invoices directly from dynamic form state",
+      "Shareable client payment links and robust schema validation",
+    ],
+    repositoryLinks: [
+      {
+        label: "GitHub",
+        href: "https://github.com/asifrayhanjoy",
+      },
+    ],
+    liveDemo: "https://my-app-tl6i.vercel.app/",
+    caseStudy: [
+      {
+        title: "Scope",
+        body: "Created a focused financial productivity tool for generating client invoices, managing billing records, and tracking transaction impact.",
+      },
+      {
+        title: "System Shape",
+        body: "Next.js & React interactive form components with client-side vector PDF compilation and dynamic calculation modules.",
+      },
+      {
+        title: "Engineering Focus",
+        body: "Form handling, calculation precision, PDF export formatting, and seamless cloud deployment.",
       },
     ],
   },
   {
     name: "Rentiful — Rental Web Application",
     slug: "rentful",
-    role: "Full-Stack Software Engineer",
-    category: "Frontend Project",
-    accent: "#7dd3fc",
+    role: "Full-Stack Web Developer",
+    category: "Web Application",
+    accent: "#2dd4bf",
     visual: "product",
+    // 📸 Modular rental web application component architecture UI mockup
+    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1600&q=85",
+    fallbackImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1600&q=85",
+    badge: "Modular UI",
+    statBadge: "Component Architecture",
     description:
       "Developed a modern rental web application focusing on component-based architecture, clean state management, and optimized responsive layouts.",
     technologies: [
       "Next.js",
-      "React.js",
+      "React",
       "TypeScript",
-      "Go (Golang)",
       "Tailwind CSS",
+      "State Management",
     ],
     highlights: [
-      "Developed a modern rental web application",
-      "Applied component-based architecture for scalability",
-      "Implemented clean state management and routing",
-      "Optimized responsive layouts across all device viewports",
+      "Designed component-based scalable architecture decoupling UI presentation from logic",
+      "Clean global state handling and efficient client-side routing",
+      "Mobile-first responsive layouts with sub-second rendering",
     ],
     repositoryLinks: [
       {
@@ -426,34 +561,40 @@ const projects: Project[] = [
         body: "Designed and implemented a rental web application focused on frontend polish and usability.",
       },
       {
-        title: "System shape",
+        title: "System Shape",
         body: "React/Next.js page routing and component system styled with Tailwind CSS.",
       },
       {
-        title: "Engineering focus",
+        title: "Engineering Focus",
         body: "Clean component boundaries, intuitive UI flows, and state management.",
       },
     ],
   },
   {
-    name: "Invoice Generator Web Application",
-    slug: "invoice-generator",
-    role: "Full-Stack Software Engineer",
-    category: "Productivity Tool",
-    accent: "#ff8fc7",
+    name: "PH Healthcare — Clinical & Appointment Platform",
+    slug: "ph-healthcare",
+    role: "Full-Stack Web Developer",
+    category: "Healthcare & Utility Platform",
+    accent: "#06b6d4",
     visual: "product",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=85",
+    fallbackImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=85",
+    badge: "Medical Portal",
+    statBadge: "Slot Scheduling Engine",
     description:
-      "Built a responsive invoice-generation tool featuring dynamic calculation workflows, line-item management, and structured printable output.",
+      "A clinical management and appointment scheduling platform featuring patient booking pipelines, calendar slot management, and responsive medical dashboards.",
     technologies: [
-      "React.js",
+      "Next.js",
+      "React",
       "TypeScript",
+      "Node.js",
       "Tailwind CSS",
     ],
     highlights: [
-      "Built a responsive invoice-generation tool",
-      "Implemented dynamic calculation workflows for totals and taxes",
-      "Developed interactive line-item management and form state",
-      "Created structured printable output and export formatting",
+      "Patient appointment booking pipelines, calendar slot management, and responsive medical dashboards",
+      "Interactive doctor scheduling and real-time consultation slot reservation systems",
+      "Role-based patient history access control and secure health profile management",
+      "Mobile-first responsive layouts with streamlined clinician workflows",
     ],
     repositoryLinks: [
       {
@@ -464,15 +605,15 @@ const projects: Project[] = [
     caseStudy: [
       {
         title: "Scope",
-        body: "Created a focused productivity tool for managing and generating client invoices.",
+        body: "Engineered PH Healthcare, a full-stack digital medical clinic application connecting patients with healthcare specialists.",
       },
       {
-        title: "System shape",
-        body: "Interactive React form components with dynamic calculation logic.",
+        title: "System Shape",
+        body: "Next.js application backed by Node.js service endpoints, dynamic booking matrices, and secure patient portals.",
       },
       {
-        title: "Engineering focus",
-        body: "Form handling, calculation precision, and printable layout optimization.",
+        title: "Engineering Focus",
+        body: "Calendar scheduling concurrency, booking slot locking, responsive dashboard layouts, and robust form validation.",
       },
     ],
   },
@@ -480,44 +621,51 @@ const projects: Project[] = [
 
 const skillGroups: SkillGroup[] = [
   {
-    title: "Frontend & Core",
+    title: "Frontend & State",
     icon: Layers3,
     description: "Modern UI architecture, responsive layouts & client state management.",
     skills: [
-      { name: "Next.js (App & Pages Router)", level: "Core" },
-      { name: "React.js", level: "Core" },
+      { name: "Next.js 15 (App & Pages Router)", level: "Core" },
+      { name: "React 19", level: "Core" },
       { name: "TypeScript", level: "Core" },
-      { name: "JavaScript (ES6+)", level: "Core" },
-      { name: "Go (Golang)", level: "Working" },
+      { name: "TanStack Query", level: "Core" },
+      { name: "Zustand", level: "Core" },
+      { name: "Radix Primitives", level: "Core" },
+      { name: "shadcn/ui", level: "Core" },
       { name: "Tailwind CSS", level: "Core" },
+      { name: "JavaScript (ES6+)", level: "Core" },
     ],
   },
   {
-    title: "Extensions & Specialized",
+    title: "Browser Systems & Tooling",
     icon: Code2,
     description: "Chrome extensions, Manifest V3 architecture & DOM automation.",
     skills: [
+      { name: "Chrome Extensions (Manifest V3)", level: "Core" },
       { name: "Plasmo Framework", level: "Core" },
-      { name: "Chrome Manifest V3", level: "Core" },
       { name: "MutationObserver", level: "Core" },
-      { name: "SPA DOM Lifecycle Handling", level: "Core" },
+      { name: "DOM Automation", level: "Core" },
+      { name: "SPA Navigation Hooks", level: "Core" },
     ],
   },
   {
-    title: "Backend & Architecture",
+    title: "Backend & Microservices",
     icon: Server,
-    description: "RESTful APIs, real-time protocols, security & server automation.",
+    description: "RESTful APIs, microservices, real-time protocols & server automation.",
     skills: [
+      { name: "NestJS", level: "Core" },
       { name: "Node.js", level: "Core" },
       { name: "Express.js", level: "Core" },
-      { name: "Go (Golang)", level: "Working" },
-      { name: "Gin Framework", level: "Working" },
       { name: "Python", level: "Working" },
-      { name: "REST APIs", level: "Core" },
-      { name: "Concurrency / Goroutines", level: "Working" },
-      { name: "WebSockets", level: "Working" },
-      { name: "JWT Authentication", level: "Core" },
-      { name: "RBAC", level: "Core" },
+      { name: "Go (Golang)", level: "Working" },
+      { name: "RESTful APIs", level: "Core" },
+      { name: "GraphQL", level: "Working" },
+      { name: "gRPC", level: "Working" },
+      { name: "WebSockets", level: "Core" },
+      { name: "Kafka", level: "Working" },
+      { name: "Redis", level: "Core" },
+      { name: "JWT (Token Rotation)", level: "Core" },
+      { name: "RBAC Security", level: "Core" },
     ],
   },
   {
@@ -526,21 +674,25 @@ const skillGroups: SkillGroup[] = [
     description: "Relational & Document database design with modern ORM mapping.",
     skills: [
       { name: "PostgreSQL", level: "Core" },
-      { name: "MongoDB", level: "Core" },
       { name: "Prisma ORM", level: "Core" },
-      { name: "Supabase", level: "Working" },
+      { name: "MongoDB", level: "Core" },
       { name: "MySQL", level: "Working" },
+      { name: "SQLite", level: "Working" },
+      { name: "Supabase", level: "Working" },
+      { name: "Redis", level: "Core" },
     ],
   },
   {
-    title: "Workflow & Tooling",
+    title: "DevOps & Testing",
     icon: Wrench,
-    description: "Version control, containerization, deployments & AI-accelerated dev tools.",
+    description: "Testing frameworks, containerization, CI/CD pipelines & developer tooling.",
     skills: [
-      { name: "Git/GitHub", level: "Core" },
+      { name: "Vitest", level: "Core" },
       { name: "Docker", level: "Working" },
-      { name: "Vercel", level: "Core" },
-      { name: "Cursor", level: "Core" },
+      { name: "Vercel CI/CD", level: "Core" },
+      { name: "Postman", level: "Core" },
+      { name: "Git / GitHub", level: "Core" },
+      { name: "Cursor AI", level: "Core" },
       { name: "Claude Code", level: "Core" },
     ],
   },
@@ -551,19 +703,19 @@ const processSteps = [
     step: "01",
     title: "Understand",
     body: "Clarify the workflow, users, data needs, constraints, and success criteria before choosing the implementation path.",
-    tags: ["User flow", "Requirements", "Success criteria"],
+    tags: ["User Flow", "Requirements", "Success Criteria"],
   },
   {
     step: "02",
     title: "Shape",
     body: "Map the pages, API contracts, database models, authentication flow, and reusable UI structure.",
-    tags: ["Architecture", "Data model", "API contracts"],
+    tags: ["System Arch", "Data Model", "API Contracts"],
   },
   {
     step: "03",
     title: "Build",
     body: "Implement the interface, backend logic, validations, integrations, and state flows with practical TypeScript discipline.",
-    tags: ["UI systems", "Server logic", "Integrations"],
+    tags: ["Design System", "Server Logic", "Integrations"],
   },
   {
     step: "04",
@@ -597,23 +749,17 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-const levelStyles: Record<SkillLevel, string> = {
-  Core: "border-(--level-core-border)] bg-(--level-core-bg)] text-(--level-core-text)]",
-  Working:
-    "border-(--level-working-border)] bg-(--level-working-bg)] text-(--level-working-text)]",
-  Learning:
-    "border-(--level-learning-border)] bg-(--level-learning-bg)] text-(--level-learning-text)]",
-  Basic:
-    "border-(--level-basic-border)] bg-(--level-basic-bg)] text-(--level-basic-text)]",
-};
-
 const copyrightYear = 2026;
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Github(props: SVGProps<SVGSVGElement>) {
+/* =========================================================================
+   CUSTOM SOCIAL ICONS
+   ========================================================================= */
+
+function GithubIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -631,7 +777,7 @@ function Github(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function Linkedin(props: SVGProps<SVGSVGElement>) {
+function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -649,6 +795,10 @@ function Linkedin(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/* =========================================================================
+   INTERSECTION OBSERVER HOOK
+   ========================================================================= */
 
 function useActiveSection() {
   const [activeSection, setActiveSection] = useState(navItems[0].id);
@@ -674,14 +824,13 @@ function useActiveSection() {
         }
       },
       {
-        rootMargin: "-30% 0px -45% 0px",
+        rootMargin: "-25% 0px -40% 0px",
         threshold: [0.1, 0.3],
       },
     );
 
     navItems.forEach((item) => {
       const element = document.getElementById(item.id);
-
       if (element) {
         observer.observe(element);
       }
@@ -693,9 +842,9 @@ function useActiveSection() {
   return activeSection;
 }
 
-export default function Home() {
-  return <PortfolioPage />;
-}
+/* =========================================================================
+   CURSOR TRAIL INTERACTION
+   ========================================================================= */
 
 const CursorTrailLayer = memo(function CursorTrailLayer() {
   const [cursorSparks, setCursorSparks] = useState<CursorSpark[]>([]);
@@ -716,7 +865,7 @@ const CursorTrailLayer = memo(function CursorTrailLayer() {
       }
 
       const now = window.performance.now();
-      if (now - lastSparkAt.current < 55) {
+      if (now - lastSparkAt.current < 45) {
         return;
       }
       lastSparkAt.current = now;
@@ -734,12 +883,12 @@ const CursorTrailLayer = memo(function CursorTrailLayer() {
           x: event.clientX,
           y: event.clientY,
           color: cursorSparkColors[sparkId % cursorSparkColors.length],
-          size: 5 + (sparkId % 3) * 2,
-          driftX: Math.round((Math.random() - 0.5) * 34),
-          driftY: Math.round((Math.random() - 0.5) * 34),
+          size: 4 + (sparkId % 3) * 2,
+          driftX: Math.round((Math.random() - 0.5) * 32),
+          driftY: Math.round((Math.random() - 0.5) * 32),
         };
 
-        setCursorSparks((currentSparks) => [...currentSparks.slice(-10), spark]);
+        setCursorSparks((currentSparks) => [...currentSparks.slice(-8), spark]);
 
         const timeoutId = window.setTimeout(() => {
           setCursorSparks((currentSparks) =>
@@ -794,302 +943,312 @@ const CursorTrailLayer = memo(function CursorTrailLayer() {
   );
 });
 
-function PortfolioPage() {
-  const activeSection = useActiveSection();
+/* =========================================================================
+   DYNAMIC BACKGROUND SLIDESHOW WITH TUNED VISIBILITY & KEN BURNS
+   - Clearly discernible imagery with tuned overlay tint (0.65 -> 0.75)
+   - Subtle backdrop blur (2px)
+   - Smooth 4.6s Ken Burns pan & zoom motion
+   ========================================================================= */
 
-  const structuredData = useMemo(
-    () => ({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: personal.name,
-      jobTitle: personal.title,
-      email: `mailto:${personal.email}`,
-      telephone: personal.phone,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Dhaka",
-        addressRegion: "Dhaka",
-        addressCountry: "BD",
-      },
-      sameAs: [personal.github, personal.linkedin].filter(Boolean),
-      knowsAbout: [
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "Go (Golang)",
-        "MongoDB",
-        "PostgreSQL",
-        "Prisma",
-      ],
-    }),
-    [],
-  );
+const BackgroundSlideshow = memo(function BackgroundSlideshow() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!isPlaying || shouldReduceMotion) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % backgroundSlides.length);
+    }, 4600);
+
+    return () => clearInterval(timer);
+  }, [isPlaying, shouldReduceMotion]);
+
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + backgroundSlides.length) % backgroundSlides.length);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % backgroundSlides.length);
+  }, []);
 
   return (
-    <div
-      className="portfolio-page min-h-screen overflow-x-hidden bg-(--portfolio-bg)] pb-24 text-(--portfolio-text)] lg:pb-0"
-      data-theme="dark"
-    >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+      {/* 5 Background Slides with Smooth Crossfade & Active Ken Burns Pan/Zoom */}
+      {backgroundSlides.map((slide, index) => {
+        const isActive = index === currentIndex;
+
+        return (
+          <div
+            key={slide.url}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+              isActive ? "opacity-75" : "opacity-0",
+            )}
+          >
+            <img
+              src={slide.url}
+              alt={slide.alt}
+              className={cn(
+                "w-full h-full object-cover object-center transform-gpu",
+                isActive && !shouldReduceMotion && "kenburns-active",
+              )}
+            />
+          </div>
+        );
+      })}
+
+      {/* Tuned Luxury Dark Gradient Overlay for Discernible Background & Flawless Legibility */}
+      <div
+        className="absolute inset-0 backdrop-blur-[2px]"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(10, 15, 30, 0.65) 0%, rgba(7, 10, 20, 0.70) 50%, rgba(5, 7, 15, 0.78) 100%)",
+        }}
       />
-      <CursorTrailLayer />
-      <Header activeSection={activeSection} />
-      <SideRail activeSection={activeSection} />
-      <MobileDock activeSection={activeSection} />
+      <div className="absolute inset-0 bg-tech-grid opacity-15" />
 
-      <main className="relative z-10">
-        <HeroSection />
-        <StackRibbon />
-        <AboutSection />
-        <ExperienceSection />
-        <ProjectsSection />
-        <SkillsSection />
-        <AiCapabilitiesSection />
-        <ProcessSection />
-        <ContactSection />
-      </main>
+      {/* Floating HUD Controls (Interactive) */}
+      <div className="absolute bottom-6 right-6 pointer-events-auto hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/80 px-3 py-1.5 backdrop-blur-xl shadow-2xl z-20">
+        <button
+          type="button"
+          onClick={handlePrev}
+          aria-label="Previous background"
+          className="grid size-6 place-items-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition"
+        >
+          <ChevronLeft className="size-3.5" />
+        </button>
 
-      <Footer />
+        <div className="flex items-center gap-1.5 px-1.5">
+          {backgroundSlides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setCurrentIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300",
+                i === currentIndex
+                  ? "w-5 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"
+                  : "w-1.5 bg-white/20 hover:bg-white/40",
+              )}
+            />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={handleNext}
+          aria-label="Next background"
+          className="grid size-6 place-items-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition"
+        >
+          <ChevronRight className="size-3.5" />
+        </button>
+
+        <span className="text-[10px] font-mono text-slate-400 px-1 border-l border-white/10">
+          0{currentIndex + 1}/0{backgroundSlides.length}
+        </span>
+
+        <button
+          type="button"
+          onClick={() => setIsPlaying((p) => !p)}
+          aria-label={isPlaying ? "Pause background slideshow" : "Play background slideshow"}
+          className="grid size-6 place-items-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition"
+        >
+          {isPlaying ? <Pause className="size-2.5" /> : <Play className="size-2.5" />}
+        </button>
+      </div>
     </div>
   );
-}
+});
 
-const Header = memo(function Header({
+/* =========================================================================
+   STICKY / FLOATING GLASSMORPHISM NAVBAR (RECRUITER & CEO-CENTRIC)
+   - Quick navigation: Projects, Tech Stack, Experience, About, Contact
+   - Quick Actions: Resume / CV, GitHub, LinkedIn, "Hire Me / Book Call"
+   ========================================================================= */
+
+const FloatingNavbar = memo(function FloatingNavbar({
   activeSection,
 }: {
   activeSection: string;
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isScrolledRef = useRef(false);
 
   useEffect(() => {
-    let ticking = false;
-
-    const updateScrolled = () => {
-      const scrolled = window.scrollY > 18;
-      if (scrolled !== isScrolledRef.current) {
-        isScrolledRef.current = scrolled;
-        setIsScrolled(scrolled);
-      }
-      ticking = false;
-    };
-
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(updateScrolled);
-        ticking = true;
-      }
+      setIsScrolled(window.scrollY > 25);
     };
-
-    updateScrolled();
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (!isMenuOpen) {
-      return;
-    }
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [isMenuOpen]);
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-all duration-300",
-        isScrolled
-          ? "border-(--portfolio-line)] bg-(--portfolio-nav)] shadow-[0_18px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl"
-          : "border-transparent bg-transparent",
-      )}
-    >
-      <nav
-        aria-label="Primary navigation"
-        className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
-      >
-        <a
-          href="#home"
-          onClick={closeMenu}
-          className="group inline-flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 flex justify-center p-3 sm:p-5 transition-all duration-300 pointer-events-none">
+        <nav
+          aria-label="Primary navigation"
+          className={cn(
+            "pointer-events-auto flex items-center justify-between w-full max-w-[1440px] rounded-full px-4 sm:px-6 py-2.5 transition-all duration-300",
+            isScrolled
+              ? "bg-slate-950/85 border border-white/15 shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
+              : "bg-slate-950/50 border border-white/10 backdrop-blur-xl shadow-lg",
+          )}
         >
-          <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-(--portfolio-line-strong)] bg-(--portfolio-text)] font-mono text-sm font-black text-(--portfolio-bg)] shadow-[0_0_28px_var(--portfolio-glow)]">
-            AR
-          </span>
-          <span className="hidden min-w-0 leading-none sm:block">
-            <span className="block truncate font-mono text-base font-black tracking-wide">
-              ASIF.dev
-            </span>
-            <span className="mt-1 block truncate text-xs font-semibold uppercase tracking-[0.18em] text-(--portfolio-muted)]">
-              Full-stack portfolio
-            </span>
-          </span>
-        </a>
+          {/* Brand Logo */}
+          <a
+            href="#home"
+            className="group flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-full"
+          >
+            <div className="relative flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 via-teal-400 to-indigo-500 font-mono text-xs font-black text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.5)] transition group-hover:scale-105">
+              AR
+            </div>
+            <div className="hidden sm:block leading-none">
+              <span className="font-mono text-sm font-bold tracking-tight text-white group-hover:text-cyan-300 transition">
+                ASIF<span className="text-cyan-400">.DEV</span>
+              </span>
+              <span className="block text-[10px] font-mono tracking-widest uppercase text-slate-400 mt-0.5">
+                Full-Stack Developer
+              </span>
+            </div>
+          </a>
 
-        <div className="hidden items-center gap-1 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] p-1 shadow-sm backdrop-blur md:flex">
-          {navItems.map((item) => (
+          {/* Desktop Nav Items */}
+          <div className="hidden md:flex items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1 backdrop-blur-md">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400",
+                    isActive
+                      ? "text-white bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
+                      : "text-slate-400 hover:text-white hover:bg-white/5",
+                  )}
+                >
+                  {item.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,1)]" />
+                  )}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Action Hub */}
+          <div className="flex items-center gap-2">
+            {/* Quick Resume Link */}
             <a
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "rounded-md px-3 py-2 text-sm font-bold transition-[transform,color,background-color] duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
-                activeSection === item.id
-                  ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)] hover:bg-(--portfolio-text)]"
-                  : "text-(--portfolio-muted)] hover:bg-(--portfolio-surface-muted)] hover:text-(--portfolio-text)]",
-              )}
+              href={`mailto:${personal.email}?subject=Resume%20Request%20-%20Md.%20Asif%20Rayhan%20Joy`}
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-mono font-medium text-slate-300 hover:text-white hover:bg-white/10 transition"
+              title="Request Resume / CV"
             >
-              {item.label}
+              <FileText className="size-3.5 text-cyan-400" />
+              <span>Resume</span>
             </a>
-          ))}
-        </div>
 
-        <div className="flex items-center gap-2">
-          <a
-            href={personal.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub profile"
-            className="hidden size-10 place-items-center rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] text-(--portfolio-muted)] transition hover:border-(--portfolio-line-strong)] hover:text-(--portfolio-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)] sm:grid"
-          >
-            <Github className="size-4" aria-hidden="true" />
-          </a>
-          <a
-            href="#contact"
-            className="hidden min-h-10 items-center gap-2 rounded-lg bg-(--portfolio-text)] px-4 text-sm font-black text-(--portfolio-bg)] shadow-sm transition hover:bg-(--portfolio-accent)] hover:text-(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)] lg:inline-flex"
-          >
-            Hire Me
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </a>
-          <button
-            type="button"
-            aria-label="Open navigation menu"
-            aria-expanded={isMenuOpen}
-            onClick={() => setIsMenuOpen((value) => !value)}
-            className="grid size-10 place-items-center rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] text-(--portfolio-text)] transition hover:border-(--portfolio-line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)] md:hidden"
-          >
-            {isMenuOpen ? (
-              <X className="size-5" aria-hidden="true" />
-            ) : (
-              <Menu className="size-5" aria-hidden="true" />
-            )}
-          </button>
-        </div>
-      </nav>
+            <a
+              href={personal.github}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub Profile"
+              className="hidden sm:grid size-8 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-cyan-400/40 hover:bg-white/10 transition"
+            >
+              <GithubIcon className="size-4" />
+            </a>
+            <a
+              href={personal.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn Profile"
+              className="hidden sm:grid size-8 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-cyan-400/40 hover:bg-white/10 transition"
+            >
+              <LinkedinIcon className="size-4" />
+            </a>
 
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-teal-400 px-4 py-1.5 text-xs font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.35)] hover:shadow-[0_0_30px_rgba(34,211,238,0.6)] hover:brightness-110 transition active:scale-95"
+            >
+              <span>Hire Me</span>
+              <ArrowRight className="size-3.5" />
+            </a>
+
+            {/* Mobile Hamburger */}
+            <button
+              type="button"
+              aria-label="Toggle Navigation Menu"
+              aria-expanded={isMenuOpen}
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10 transition md:hidden"
+            >
+              {isMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
-        {isMenuOpen ? (
+        {isMenuOpen && (
           <motion.div
-            className="fixed inset-x-4 top-24 z-50 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] p-3 shadow-(--portfolio-shadow)] backdrop-blur-xl md:hidden"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.18 }}
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-4 top-20 z-50 rounded-3xl border border-white/15 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-3xl md:hidden"
           >
             <div className="grid gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-
+                const isActive = activeSection === item.id;
                 return (
                   <a
                     key={item.href}
                     href={item.href}
                     onClick={closeMenu}
                     className={cn(
-                      "flex min-h-12 items-center gap-3 rounded-md px-4 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
-                      activeSection === item.id
-                        ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)]"
-                        : "text-(--portfolio-muted)] hover:bg-(--portfolio-surface-muted)] hover:text-(--portfolio-text)]",
+                      "flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition",
+                      isActive
+                        ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+                        : "text-slate-300 hover:bg-white/5 hover:text-white",
                     )}
                   >
-                    <Icon className="size-4" aria-hidden="true" />
+                    <Icon className="size-4 text-cyan-400" />
                     {item.label}
                   </a>
                 );
               })}
+              <div className="pt-2 mt-2 border-t border-white/10 flex gap-2">
+                <a
+                  href="#contact"
+                  onClick={closeMenu}
+                  className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-400 to-teal-400 py-3 text-sm font-bold text-slate-950 shadow-lg"
+                >
+                  Hire Me / Book Call
+                  <ArrowRight className="size-4" />
+                </a>
+              </div>
             </div>
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
-    </header>
+    </>
   );
 });
 
-const SideRail = memo(function SideRail({ activeSection }: { activeSection: string }) {
-  return (
-    <aside
-      aria-label="Section shortcuts"
-      className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] p-2 shadow-(--portfolio-shadow)] backdrop-blur-xl lg:flex lg:flex-col lg:gap-2"
-    >
-      {navItems.map((item) => {
-        const Icon = item.icon;
-
-        return (
-          <a
-            key={item.href}
-            href={item.href}
-            aria-label={item.label}
-            className={cn(
-              "group relative grid size-11 place-items-center rounded-lg transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
-              activeSection === item.id
-                ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)]"
-                : "bg-(--portfolio-surface-muted)] text-(--portfolio-muted)] hover:text-(--portfolio-text)]",
-            )}
-          >
-            <Icon className="size-5" aria-hidden="true" />
-            <span className="pointer-events-none absolute left-14 top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-(--portfolio-line)] bg-(--portfolio-surface)] px-3 py-2 text-xs font-bold text-(--portfolio-text)] shadow-sm group-hover:block">
-              {item.label}
-            </span>
-          </a>
-        );
-      })}
-    </aside>
-  );
-});
-
-const MobileDock = memo(function MobileDock({ activeSection }: { activeSection: string }) {
-  const mobileItems = useMemo(
-    () => [navItems[0], navItems[1], navItems[2], navItems[4]],
-    [],
-  );
-
-  return (
-    <nav
-      aria-label="Mobile shortcuts"
-      className="fixed inset-x-3 bottom-3 z-50 grid grid-cols-4 gap-1 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] p-1 shadow-(--portfolio-shadow)] backdrop-blur-xl lg:hidden"
-    >
-      {mobileItems.map((item) => {
-        const Icon = item.icon;
-
-        return (
-          <a
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "grid min-h-14 place-items-center rounded-md px-1 text-[11px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]",
-              activeSection === item.id
-                ? "bg-(--portfolio-accent)] text-(--portfolio-accent-contrast)]"
-                : "text-(--portfolio-muted)]",
-            )}
-          >
-            <Icon className="mb-1 size-4" aria-hidden="true" />
-            <span className="max-w-full truncate">{item.label}</span>
-          </a>
-        );
-      })}
-    </nav>
-  );
-});
+/* =========================================================================
+   HERO SECTION (AWWWARDS / LINEAR HIGH-END TECH AESTHETIC)
+   - Name strictly on ONE SINGLE LINE (whitespace-nowrap)
+   - Zero "Team Lead" / "Leadership" phrasing
+   - Core identity: "Full-Stack Web Developer"
+   ========================================================================= */
 
 const HeroSection = memo(function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -1097,927 +1256,1101 @@ const HeroSection = memo(function HeroSection() {
   return (
     <section
       id="home"
-      className="portfolio-section relative isolate overflow-hidden border-b border-(--portfolio-line)] px-4 pt-28 sm:px-6 lg:px-8"
+      className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-28 pb-16 sm:px-8 md:px-12 lg:px-16 xl:px-20 overflow-hidden"
     >
-      <div className="absolute inset-0 -z-30" aria-hidden="true">
-        <Image
-          src="/portfolio-hero-abstract.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          decoding="async"
-          className="object-cover object-[64%_50%]"
-        />
-      </div>
-      <div className="absolute inset-0 -z-20 bg-(--portfolio-hero-overlay)]" />
-      <div className="absolute inset-0 -z-10 bg-(--portfolio-grid)] opacity-45" />
+      <div className="mx-auto w-full max-w-[1440px]">
+        <div className="grid gap-12 xl:gap-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:justify-between w-full">
+          {/* Left Column: Headlines & Call to Actions */}
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-2xl lg:max-w-none"
+          >
+            {/* Status Pill */}
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 px-3.5 py-1.5 text-xs font-mono font-medium text-cyan-300 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+              </span>
+              <span>Available for Full-Stack Web Development Roles</span>
+            </div>
 
-      <div className="mx-auto grid min-h-[78svh] w-full max-w-7xl items-center gap-10 pb-14 pt-10 lg:grid-cols-[1fr_0.78fr]">
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="max-w-4xl"
-        >
-          <div className="inline-flex items-center gap-3 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-muted)] shadow-sm backdrop-blur">
-            <span className="grid size-2.5 place-items-center rounded-full bg-(--portfolio-success)] shadow-[0_0_18px_var(--portfolio-success)]" />
-            Open to full-stack web roles
-          </div>
+            {/* Sub-headline */}
+            <p className="mt-6 font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+              Full-Stack Web Developer
+            </p>
 
-          <p className="mt-8 text-sm font-bold uppercase tracking-[0.2em] text-(--portfolio-accent)]">
-            Full-Stack Web Developer, Extension Engineer & Team Lead
-          </p>
-          <h1 className="mt-4 max-w-5xl break-words text-5xl font-semibold leading-[1.04] text-(--portfolio-text)] sm:text-6xl lg:text-7xl">
-            {personal.name}
-          </h1>
-          <p className="mt-6 max-w-2xl text-xl font-semibold leading-8 text-(--portfolio-text)] sm:text-2xl sm:leading-9">
-            {personal.subtitle}
-          </p>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-(--portfolio-muted)]">
-            {personal.bio}
-          </p>
+            {/* Full Name strictly on ONE SINGLE LINE */}
+            <h1 className="mt-3 font-extrabold tracking-tight text-white whitespace-nowrap text-[clamp(1.9rem,5.2vw,4.5rem)] leading-none">
+              {personal.name}
+            </h1>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <PrimaryLink href="#projects" icon={ArrowRight}>
-              View Projects
-            </PrimaryLink>
-            <SecondaryLink href={personal.github} icon={Github} external>
-              GitHub
-            </SecondaryLink>
-            <SecondaryLink href={personal.linkedin} icon={Linkedin} external>
-              LinkedIn
-            </SecondaryLink>
-            <SecondaryLink href="#contact" icon={Mail}>
-              Contact
-            </SecondaryLink>
-          </div>
+            {/* Subtitle with High-Contrast Typography */}
+            <p className="mt-5 text-lg sm:text-xl font-semibold leading-relaxed text-slate-200 max-w-2xl">
+              {personal.subtitle}
+            </p>
 
-          <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold text-(--portfolio-muted)]">
-            <span className="inline-flex items-center gap-2">
-              <MapPin className="size-4 text-(--portfolio-accent)]" />
-              {personal.location}
-            </span>
-            <a
-              href={`mailto:${personal.email}`}
-              className="inline-flex items-center gap-2 transition hover:text-(--portfolio-text)]"
-            >
-              <Mail className="size-4 text-(--portfolio-warm)]" />
-              {personal.email}
-            </a>
-          </div>
-        </motion.div>
+            {/* Bio paragraph */}
+            <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-400 max-w-2xl">
+              {personal.bio}
+            </p>
 
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.08, ease: "easeOut" }}
-          className="hidden lg:block"
-        >
-          <DeveloperPanel />
-        </motion.div>
+            {/* Action Buttons */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-500 px-6 py-3 text-sm font-bold text-slate-950 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_40px_rgba(6,182,212,0.7)] hover:brightness-110 transition active:scale-95"
+              >
+                <span>Live Projects</span>
+                <ArrowRight className="size-4" />
+              </a>
+
+              <a
+                href={personal.github}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/10 hover:border-white/20 transition active:scale-95 backdrop-blur-md"
+              >
+                <GithubIcon className="size-4" />
+                <span>GitHub</span>
+                <ArrowUpRight className="size-3.5 text-slate-400" />
+              </a>
+
+              <a
+                href={personal.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/10 hover:border-white/20 transition active:scale-95 backdrop-blur-md"
+              >
+                <LinkedinIcon className="size-4" />
+                <span>LinkedIn</span>
+                <ArrowUpRight className="size-3.5 text-slate-400" />
+              </a>
+
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/20 px-5 py-3 text-sm font-semibold text-cyan-300 hover:bg-cyan-950/40 hover:border-cyan-500/50 transition active:scale-95 backdrop-blur-md"
+              >
+                <Mail className="size-4" />
+                <span>Get in Touch</span>
+              </a>
+            </div>
+
+            {/* Meta Details */}
+            <div className="mt-8 flex flex-wrap items-center gap-5 text-xs font-mono text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <MapPin className="size-3.5 text-cyan-400" />
+                {personal.location}
+              </span>
+              <a
+                href={`mailto:${personal.email}`}
+                className="flex items-center gap-1.5 hover:text-cyan-300 transition"
+              >
+                <Mail className="size-3.5 text-amber-400" />
+                {personal.email}
+              </a>
+              <span className="flex items-center gap-1.5">
+                <Phone className="size-3.5 text-emerald-400" />
+                {personal.phone}
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Active Project Focus & Live Terminal Widget */}
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-xl lg:max-w-none lg:ml-auto"
+          >
+            <div className="glass-panel rounded-3xl p-6 sm:p-7 relative overflow-hidden">
+              {/* Terminal Window Header */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex items-center gap-2">
+                  <span className="size-3 rounded-full bg-[#ff5f57]" />
+                  <span className="size-3 rounded-full bg-[#ffbd2e]" />
+                  <span className="size-3 rounded-full bg-[#28c840]" />
+                  <span className="ml-2 font-mono text-xs text-slate-400 flex items-center gap-1.5">
+                    <Terminal className="size-3 text-cyan-400" />
+                    active-project.tsx
+                  </span>
+                </div>
+                <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  ACTIVE WORKFLOW
+                </span>
+              </div>
+
+              {/* Current Focus / Active Project Showcase */}
+              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4.5">
+                <div className="flex items-center justify-between">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                    Current Focus · Production Web App
+                  </p>
+                  <span className="font-mono text-[10px] text-slate-400">Next.js 16</span>
+                </div>
+                <h2 className="mt-2 text-xl font-bold text-white">
+                  DigiVibe — Digital Subscription Platform
+                </h2>
+                <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                  Full-stack e-commerce engine with multi-portal client apps, high-throughput Node.js REST APIs, JWT authentication, and a hybrid PostgreSQL & MongoDB data layer.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {["Next.js", "TypeScript", "Prisma ORM", "PostgreSQL", "MongoDB"].map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-cyan-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                  <a
+                    href="https://digi-vibe.vercel.app/en"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-400/20 to-teal-400/20 border border-cyan-400/30 px-3 py-1.5 text-xs font-mono font-bold text-cyan-300 hover:bg-cyan-400/30 hover:border-cyan-400/50 transition active:scale-95"
+                  >
+                    <span>Live Demo</span>
+                    <ArrowUpRight className="size-3" />
+                  </a>
+                  <span className="font-mono text-[10px] text-emerald-400 flex items-center gap-1">
+                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    digi-vibe.vercel.app
+                  </span>
+                </div>
+              </div>
+
+              {/* Stats 2x2 Grid (Developer Focused) */}
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                {heroStats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="rounded-2xl border border-white/5 bg-white/[0.02] p-3.5 hover:border-cyan-500/20 transition"
+                  >
+                    <p className="font-mono text-2xl font-black text-white">
+                      {stat.value}
+                    </p>
+                    <p className="mt-1 text-xs font-bold text-slate-300">
+                      {stat.label}
+                    </p>
+                    <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+                      {stat.sub}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Architecture Layer Stack */}
+              <div className="mt-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-300">
+                    <Cpu className="size-3.5 text-cyan-400" />
+                    Stack Architecture Map
+                  </span>
+                  <span className="text-[10px] text-cyan-400">60 FPS Render</span>
+                </div>
+                <div className="mt-3 space-y-2 text-xs">
+                  {[
+                    ["Client", "React 19 · Next.js 15 · TanStack · Zustand · Tailwind"],
+                    ["Extensions", "Plasmo · Manifest V3 · DOM Automation · Hooks"],
+                    ["Backend", "NestJS · Node.js · Express · Go · Python · gRPC"],
+                    ["Data Layer", "PostgreSQL (Prisma) · MongoDB · Redis · Kafka"],
+                  ].map(([layer, tech]) => (
+                    <div key={layer} className="flex items-center gap-3">
+                      <span className="w-20 shrink-0 font-mono text-[11px] font-semibold text-slate-400">
+                        {layer}
+                      </span>
+                      <span className="h-px flex-1 bg-white/10" />
+                      <span className="font-mono text-[11px] font-medium text-slate-300 text-right">
+                        {tech}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 });
 
-const DeveloperPanel = memo(function DeveloperPanel() {
+/* =========================================================================
+   INFINITE MARQUEE TECH RIBBON
+   ========================================================================= */
+
+const StackRibbon = memo(function StackRibbon() {
+  const marqueeList = useMemo(() => [...coreStack, ...coreStack], []);
+
   return (
-    <div className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-panel)] p-4 shadow-(--portfolio-shadow)] backdrop-blur-xl">
-      <div className="flex items-center justify-between border-b border-(--portfolio-line)] pb-4">
-        <div className="flex items-center gap-2">
-          <span className="size-3 rounded-full bg-[#ff5f57]" />
-          <span className="size-3 rounded-full bg-[#ffbd2e]" />
-          <span className="size-3 rounded-full bg-[#28c840]" />
+    <section className="relative z-10 border-y border-white/10 bg-slate-950/60 backdrop-blur-xl py-6 overflow-hidden">
+      <div className="relative mx-auto max-w-7xl px-4">
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Core Production Technologies & Frameworks
+          </p>
+          <span className="h-px flex-1 bg-white/10" />
         </div>
-        <span className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-muted)]">
-          portfolio.tsx
-        </span>
       </div>
 
-      <div className="mt-5 grid gap-4">
-        <div className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-4">
-          <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-accent)]">
-            Current focus
-          </p>
-          <p className="mt-3 text-2xl font-black">{personal.title}</p>
-          <p className="mt-3 text-sm leading-7 text-(--portfolio-muted)]">
-            Building scalable web products & browser extensions with practical architecture, clean UI, authentication, and dynamic DOM automation.
-          </p>
-        </div>
+      <div className="relative overflow-hidden w-full py-2">
+        {/* Gradient edge masks */}
+        <div className="absolute left-0 inset-y-0 w-24 bg-gradient-to-r from-[#05070c] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 inset-y-0 w-24 bg-gradient-to-l from-[#05070c] to-transparent z-10 pointer-events-none" />
 
-        <div className="grid grid-cols-2 gap-3">
-          {heroStats.map((stat) => (
+        <div className="marquee-track flex gap-3 px-4">
+          {marqueeList.map((item, idx) => (
             <div
-              key={stat.label}
-              className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-4"
+              key={`${item.name}-${idx}`}
+              className="flex items-center gap-2.5 rounded-full border border-white/10 bg-slate-900/60 px-5 py-2.5 text-xs font-mono font-bold text-slate-200 shadow-md backdrop-blur-md transition hover:border-cyan-400/50 hover:bg-slate-800/80 whitespace-nowrap"
             >
-              <p className="font-mono text-3xl font-black text-(--portfolio-text)]">
-                {stat.value}
-              </p>
-              <p className="mt-2 text-xs font-bold uppercase tracking-[0.14em] text-(--portfolio-muted)]">
-                {stat.label}
-              </p>
+              <span
+                className="size-2 rounded-full shadow-[0_0_8px_currentColor]"
+                style={{ backgroundColor: item.color, color: item.color }}
+              />
+              {item.name}
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+});
 
-        <div className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-4">
-          <div className="flex items-center justify-between">
-            <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-warm)]">
-              Stack map
-            </p>
-            <Sparkles
-              className="size-4 text-(--portfolio-warm)]"
-              aria-hidden="true"
+/* =========================================================================
+   PROJECT VISUAL COMPONENT (RICH BROWSER MOCKUP WITH REAL UI PREVIEWS)
+   ========================================================================= */
+
+function ProjectVisual({ project }: { project: Project }) {
+  const isYouTubeCleaner = project.slug === "youtube-cleaner";
+
+  return (
+    <div className="w-full relative aspect-[16/9] sm:aspect-[16/10] overflow-hidden bg-slate-950 group">
+      {/* Realistic Browser Chrome Header (Scaled down, full width edge-to-edge) */}
+      <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between border-b border-white/10 bg-slate-950/90 px-3 py-1.5 backdrop-blur-md w-full">
+        <div className="flex items-center gap-1.5">
+          <span className="size-2 rounded-full bg-[#ff5f57]" />
+          <span className="size-2 rounded-full bg-[#ffbd2e]" />
+          <span className="size-2 rounded-full bg-[#28c840]" />
+          <div className="hidden sm:flex items-center gap-1 ml-2 rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-slate-400">
+            <span className="text-emerald-400">https://</span>
+            <span className="text-slate-200 truncate max-w-[220px]">
+              {project.liveDemo
+                ? project.liveDemo.replace(/^https?:\/\//, "").replace(/\/$/, "")
+                : `${project.slug}.vercel.app`}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-mono font-bold ${isYouTubeCleaner
+                ? "bg-rose-500/10 border border-rose-500/25 text-rose-300"
+                : "bg-cyan-500/10 border border-cyan-500/20 text-cyan-300"
+              }`}
+          >
+            <span
+              className={`size-1 rounded-full animate-pulse ${isYouTubeCleaner ? "bg-rose-400" : "bg-cyan-400"
+                }`}
             />
-          </div>
-          <div className="mt-4 space-y-3">
-            {[
-              ["Client", "React / Next.js / Tailwind"],
-              ["Extension", "Plasmo / Manifest V3 / DOM"],
-              ["Server", "Node.js / Go / APIs / Auth"],
-              ["Data", "Prisma / PostgreSQL / MongoDB"],
-            ].map(([label, value]) => (
-              <div key={label} className="flex items-center gap-3">
-                <span className="w-16 font-mono text-xs font-black uppercase tracking-[0.14em] text-(--portfolio-muted)]">
-                  {label}
-                </span>
-                <span className="h-px flex-1 bg-(--portfolio-line)]" />
-                <span className="text-right text-sm font-bold">{value}</span>
+            {project.badge}
+          </span>
+        </div>
+      </div>
+
+      {/* Main Preview Canvas (Edge-to-edge 100% Full Width & Height) */}
+      <div className="w-full h-full pt-6 overflow-hidden relative">
+        {isYouTubeCleaner ? (
+          /* High-Fidelity Custom Centered Container for YouTube Cleaner (Full-bleed, edge-to-edge) */
+          <div className="w-full h-full flex flex-col items-center justify-center relative bg-gradient-to-b from-[#1a0306] via-[#0b0d14] to-[#04060a] px-4 py-6 select-none">
+            {/* Ambient Red Glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,0,0.18)_0%,transparent_70%)] pointer-events-none" />
+
+            {/* Blueprint Grid Lines */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+                                  linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)`,
+                backgroundSize: "36px 36px",
+              }}
+            />
+
+            {/* Official YouTube Brand Logo (Exact Vector Icons & Wordmark) */}
+            <div className="relative z-10 flex items-center justify-center gap-2 sm:gap-2.5 transition-transform duration-500 group-hover:scale-105">
+              {/* Official YouTube Red Play Icon */}
+              <svg
+                viewBox="0 0 29 20"
+                className="h-7 sm:h-8 w-auto shrink-0 drop-shadow-[0_0_12px_rgba(255,0,0,0.45)]"
+                fill="none"
+              >
+                <path
+                  d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 2.24288e-07 14.285 0 14.285 0C14.285 0 5.35042 2.24288e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C2.24288e-07 5.35042 0 10 0 10C0 10 2.24288e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z"
+                  fill="#FF0000"
+                />
+                <path
+                  d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z"
+                  fill="#FFFFFF"
+                />
+              </svg>
+
+              {/* Official YouTube Pure White Wordmark */}
+              <svg viewBox="0 0 52 20" className="h-6 sm:h-7 w-auto shrink-0" fill="#FFFFFF">
+                <path d="M4.6024 13.0036L1.3945 1.41846H4.1932L5.3174 6.6701C5.6043 7.96361 5.8136 9.06662 5.95 9.97913H6.0323C6.1264 9.32532 6.3381 8.22937 6.665 6.68892L7.8291 1.41846H10.6278L7.3799 13.0036V18.561H4.6001V13.0036H4.6024Z" />
+                <path d="M11.4697 18.1937C10.9053 17.8127 10.5031 17.22 10.2632 16.4157C10.0257 15.6114 9.9058 14.5437 9.9058 13.2078V11.3898C9.9058 10.0422 10.0422 8.95805 10.315 8.14196C10.5878 7.32588 11.0135 6.72851 11.592 6.35457C12.1706 5.98063 12.9302 5.79248 13.871 5.79248C14.7976 5.79248 15.5384 5.98298 16.0981 6.36398C16.6555 6.74497 17.0647 7.34234 17.3234 8.15137C17.5821 8.96275 17.7115 10.0422 17.7115 11.3898V13.2078C17.7115 14.5437 17.5845 15.6161 17.3329 16.4251C17.0812 17.2365 16.672 17.8292 16.1075 18.2031C15.5431 18.5771 14.7764 18.7652 13.8098 18.7652C12.8126 18.7675 12.0342 18.5747 11.4697 18.1937ZM14.6353 16.2323C14.7905 15.8231 14.8705 15.1575 14.8705 14.2309V10.3292C14.8705 9.43077 14.7929 8.77225 14.6353 8.35833C14.4777 7.94206 14.2026 7.7351 13.8074 7.7351C13.4265 7.7351 13.156 7.94206 13.0008 8.35833C12.8432 8.77461 12.7656 9.43077 12.7656 10.3292V14.2309C12.7656 15.1575 12.8408 15.8254 12.9914 16.2323C13.1419 16.6415 13.4123 16.8461 13.8074 16.8461C14.2026 16.8461 14.4777 16.6415 14.6353 16.2323Z" />
+                <path d="M26.8154 18.5634H24.6094L24.3648 17.03H24.3037C23.7039 18.1871 22.8055 18.7656 21.6061 18.7656C20.7759 18.7656 20.1621 18.4928 19.767 17.9496C19.3719 17.4039 19.1743 16.5526 19.1743 15.3955V6.03751H21.9942V15.2308C21.9942 15.7906 22.0553 16.188 22.1776 16.4256C22.2999 16.6631 22.5045 16.783 22.7914 16.783C23.036 16.783 23.2712 16.7078 23.497 16.5573C23.7228 16.4067 23.8874 16.2162 23.9979 15.9858V6.03516H26.8154V18.5634Z" />
+                <path d="M34.4755 3.68758H31.6768V18.5629H28.9181V3.68758H26.1194V1.42041H34.4755V3.68758Z" />
+                <path d="M41.2768 18.5634H39.0708L38.8262 17.03H38.7651C38.1654 18.1871 37.267 18.7656 36.0675 18.7656C35.2373 18.7656 34.6235 18.4928 34.2284 17.9496C33.8333 17.4039 33.6357 16.5526 33.6357 15.3955V6.03751H36.4556V15.2308C36.4556 15.7906 36.5167 16.188 36.639 16.4256C36.7613 16.6631 36.9659 16.783 37.2529 16.783C37.4974 16.783 37.7326 16.7078 37.9584 16.5573C38.1842 16.4067 38.3488 16.2162 38.4593 15.9858V6.03516H41.2768V18.5634Z" />
+                <path d="M50.609 8.0387C50.4373 7.24849 50.1621 6.67699 49.7812 6.32186C49.4002 5.96674 48.8757 5.79035 48.2078 5.79035C47.6904 5.79035 47.2059 5.93616 46.7567 6.23014C46.3075 6.52412 45.9594 6.90747 45.7148 7.38489H45.6937V0.785645H42.9773V18.5608H45.3056L45.5925 17.3755H45.6537C45.8724 17.7988 46.1993 18.1304 46.6344 18.3774C47.0695 18.622 47.554 18.7443 48.0855 18.7443C49.038 18.7443 49.7412 18.3045 50.1904 17.4272C50.6396 16.5476 50.8653 15.1765 50.8653 13.3092V11.3266C50.8653 9.92722 50.7783 8.82892 50.609 8.0387ZM48.0243 13.1492C48.0243 14.0617 47.9867 14.7767 47.9114 15.2941C47.8362 15.8115 47.7115 16.1808 47.5328 16.3971C47.3564 16.6158 47.1165 16.724 46.8178 16.724C46.585 16.724 46.371 16.6699 46.1734 16.5594C45.9759 16.4512 45.816 16.2866 45.6937 16.0702V8.96062C45.7877 8.6196 45.9524 8.34209 46.1852 8.12337C46.4157 7.90465 46.6697 7.79646 46.9401 7.79646C47.2271 7.79646 47.4481 7.90935 47.6034 8.13278C47.7609 8.35855 47.8691 8.73485 47.9303 9.26636C47.9914 9.79787 48.022 10.5528 48.022 11.5335V13.1492H48.0243Z" />
+              </svg>
+            </div>
+
+            {/* Official Extension Badge Pill */}
+            <div className="relative z-10 mt-2.5 sm:mt-3 flex items-center gap-2 rounded-full bg-slate-900/90 border border-rose-500/40 px-3 sm:px-3.5 py-1 sm:py-1.5 shadow-[0_0_20px_rgba(244,63,94,0.18)]">
+              {/* Chrome Extension Puzzle Icon */}
+              <svg viewBox="0 0 24 24" className="size-3.5 text-rose-400 shrink-0" fill="currentColor">
+                <path d="M19 13h-2V9c0-1.1-.9-2-2-2h-4c0-1.66-1.34-3-3-3S5 5.34 5 7H1c-1.1 0-2 .9-2 2v4c1.66 0 3 1.34 3 3s-1.34 3-3 3v4c0 1.1.9 2 2 2h4c0-1.66 1.34-3 3-3s3 1.34 3 3h4c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3z" />
+              </svg>
+              <span className="font-sans text-[10px] sm:text-[11px] font-bold tracking-wider text-slate-100 uppercase">
+                Cleaner Extension
+              </span>
+              <span className="h-2.5 w-px bg-white/20" />
+              <div className="flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-mono font-bold text-emerald-400">
+                <span className="size-1 rounded-full bg-emerald-400 animate-pulse" />
+                MV3
               </div>
-            ))}
+            </div>
           </div>
+        ) : (
+          /* Standard Image Preview (w-full h-full object-cover edge-to-edge) */
+          <img
+            src={project.image}
+            onError={(e) => {
+              if (project.fallbackImage && e.currentTarget.src !== project.fallbackImage) {
+                e.currentTarget.src = project.fallbackImage;
+              }
+            }}
+            alt={`${project.name} UI Mockup Preview`}
+            className="w-full h-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+            loading="lazy"
+          />
+        )}
+
+        {/* Ambient Dark Gradient Vignette for Depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent pointer-events-none" />
+
+        {/* Floating Quick Stat Chips (Scaled down, full width spread) */}
+        <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
+          <span className="rounded-md bg-slate-950/85 border border-white/10 px-2 py-0.5 text-[10px] font-mono font-medium text-slate-300 backdrop-blur-md">
+            {project.statBadge}
+          </span>
+          <span
+            className={`rounded-md px-2 py-0.5 text-[10px] font-mono font-semibold backdrop-blur-md flex items-center gap-1 ${isYouTubeCleaner
+                ? "bg-rose-500/15 border border-rose-500/25 text-rose-300"
+                : "bg-cyan-500/15 border border-cyan-500/25 text-cyan-300"
+              }`}
+          >
+            <Sparkles className="size-2.5" />
+            {isYouTubeCleaner ? "Official Badge" : "Live UI"}
+          </span>
         </div>
       </div>
     </div>
   );
-});
+}
 
-const StackRibbon = memo(function StackRibbon() {
-  const marqueeStack = useMemo(() => [...coreStack, ...coreStack], []);
+/* =========================================================================
+   PROJECTS SHOWCASE SECTION (AWWWARDS / VERCEL QUALITY)
+   - Real high-resolution UI mockup images
+   - Quick 1-click recruiter action buttons: [Live Preview ↗], [Source Code ↗]
+   - Architectural Case Study expandable tabs
+   ========================================================================= */
+
+const ProjectsSection = memo(function ProjectsSection() {
+  const [activeCaseStudy, setActiveCaseStudy] = useState<string | null>(null);
 
   return (
-    <section className="border-b border-(--portfolio-line)] bg-(--portfolio-bg)] px-4 py-9 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex items-center gap-4">
-          <p className="shrink-0 text-xs font-black uppercase tracking-[0.16em] text-(--portfolio-muted)]">
-            Core technologies
+    <section id="projects" className="relative z-10 px-4 py-16 sm:py-20 sm:px-6 md:px-10 lg:px-12">
+      <div className="mx-auto w-full max-w-[1240px]">
+        {/* Section Header (Scaled down, compact and focused) */}
+        <div className="max-w-2xl">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Production Works & Case Studies
           </p>
-          <span className="h-px flex-1 bg-(--portfolio-line)]" />
+          <h2 className="mt-1.5 text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+            Full–stack web applications with verified production architecture.
+          </h2>
+          <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Click directly into live demos and verified source repositories. Each project features clean component boundaries, robust server logic, and high-performance frontend workflows.
+          </p>
         </div>
-        <div className="portfolio-marquee-shell mt-6 py-3">
-          <div className="portfolio-marquee-track flex gap-4 pr-4">
-            {marqueeStack.map((item, index) => (
-              <div
-                key={`${item.name}-${index}`}
-                className="tech-pill flex min-h-16 min-w-[12rem] items-center justify-center rounded-lg border px-5 text-center text-sm font-black uppercase tracking-[0.04em] sm:min-w-[13.5rem]"
-                style={{ "--tech-color": item.color } as CSSProperties}
-              >
-                {item.name}
+
+        {/* Projects Grid (Compact & Refined Density) */}
+        <div className="mt-8 grid gap-5 sm:gap-6 md:grid-cols-2 w-full">
+          {projects.map((project) => (
+            <div
+              key={project.slug}
+              className="glass-panel-interactive rounded-2xl overflow-hidden flex flex-col justify-between group border border-white/10 shadow-lg w-full"
+            >
+              <div className="w-full">
+                {/* Visual Mockup Frame */}
+                <ProjectVisual project={project} />
+
+                <div className="p-4 sm:p-5">
+                  {/* Category & Status */}
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                      {project.category}
+                    </span>
+                    {project.role && (
+                      <span className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-slate-300">
+                        {project.role}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="mt-2 text-base sm:text-lg font-bold text-white tracking-tight group-hover:text-cyan-300 transition">
+                    {project.name}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {/* Highlights */}
+                  <div className="mt-3 space-y-1.5">
+                    {project.highlights.slice(0, 3).map((highlight) => (
+                      <div key={highlight} className="flex items-start gap-1.5 text-[11px] text-slate-300">
+                        <CheckCircle2 className="size-3 shrink-0 text-cyan-400 mt-0.5" />
+                        <span className="leading-snug">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tech Stack Pills */}
+                  <div className="mt-3.5 flex flex-wrap gap-1">
+                    {project.technologies.slice(0, 8).map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-mono text-slate-300"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 8 && (
+                      <span className="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[9px] font-mono text-slate-500">
+                        +{project.technologies.length - 8}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
+
+              {/* 1-Click Recruiter Action Hub */}
+              <div className="p-4 sm:p-5 pt-0 flex flex-wrap items-center justify-between gap-2.5 border-t border-white/5 mt-3">
+                <div className="flex items-center gap-1.5">
+                  {project.liveDemo ? (
+                    <a
+                      href={project.liveDemo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-400 to-teal-400 px-3 py-1.5 text-[11px] font-bold text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:shadow-[0_0_20px_rgba(34,211,238,0.5)] hover:brightness-110 transition active:scale-95"
+                    >
+                      <span>Live Preview</span>
+                      <ArrowUpRight className="size-3" />
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[10px] font-mono text-slate-400">
+                      Extension Repo
+                    </span>
+                  )}
+
+                  {project.repositoryLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-slate-300 hover:bg-white/10 hover:border-white/20 transition"
+                    >
+                      <GithubIcon className="size-3" />
+                      <span>Source Code</span>
+                      <ArrowUpRight className="size-2.5 text-slate-400" />
+                    </a>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveCaseStudy((curr) => (curr === project.slug ? null : project.slug))
+                  }
+                  className="font-mono text-[11px] text-cyan-400 hover:text-cyan-300 transition flex items-center gap-1 font-semibold"
+                >
+                  {activeCaseStudy === project.slug ? "Close" : "Case Study"}
+                  <ArrowRight className="size-3" />
+                </button>
+              </div>
+
+              {/* Expandable Case Study Section */}
+              <AnimatePresence>
+                {activeCaseStudy === project.slug && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden border-t border-white/10 bg-black/40 p-4 sm:p-5"
+                  >
+                    <p className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3">
+                      Architectural Case Study Breakdown
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {project.caseStudy.map((item) => (
+                        <div key={item.title} className="rounded-2xl border border-white/5 bg-white/[0.03] p-3.5">
+                          <p className="font-mono text-xs font-bold text-slate-200">{item.title}</p>
+                          <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">{item.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 });
+
+/* =========================================================================
+   ABOUT SECTION (BENTO GRID WITH FULL CONTENT PRESERVATION)
+   ========================================================================= */
 
 const AboutSection = memo(function AboutSection() {
   return (
-    <Section
-      id="about"
-      eyebrow="About"
-      title="Frontend, backend, and extension engineering with a polished product finish."
-      description="A portfolio built around real project work, honest skill levels, and complete application development from web interfaces to browser extensions and server layers."
-    >
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-start">
-        <div className="space-y-6 text-base leading-8 text-(--portfolio-muted)]">
-          <p>
-            I am a Full-Stack Software Engineer & Technical Team Lead with 3 years of hands-on experience delivering scalable full-stack web platforms and high-performance browser extensions. I take an active leadership role directing sprint planning, technical code reviews, and architecture at DigiVibe, while maintaining deep expertise in TypeScript across frontend and backend, micro-interactions, robust REST APIs, JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma & MongoDB).
+    <section id="about" className="relative z-10 px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        {/* Section Header */}
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            About & Engineering Scope
           </p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Frontend, backend, and extension engineering with a polished product finish.
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            A portfolio built around real project work, honest skill levels, and complete application development from web interfaces to browser extensions and server layers.
+          </p>
+        </div>
 
-          <div className="pt-2">
-            <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--portfolio-accent)]">
-              What I bring to a team
-            </p>
-            <div className="mt-4 space-y-3">
-              {[
-                {
-                  label: "Team Leadership & Architecture",
-                  text: "Active leadership role directing sprint planning, technical code reviews, and system architecture at DigiVibe while coordinating team milestones.",
-                },
-                {
-                  label: "Frontend Architecture & Micro-interactions",
-                  text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, micro-interactions, and Tailwind CSS with modern client state management.",
-                },
-                {
-                  label: "Browser Extensions & Specialized Tools",
-                  text: "Extensive experience building Chrome Manifest V3 extensions with Plasmo framework, SPA DOM lifecycle handling, MutationObserver, and dynamic CSS injection.",
-                },
-                {
-                  label: "Backend & Hybrid Database Design",
-                  text: "Hands-on expertise building robust REST APIs with Node.js and Express.js, implementing JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma ORM & MongoDB).",
-                },
-                {
-                  label: "AI-Assisted Engineering",
-                  text: "Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.",
-                },
-                {
-                  label: "Problem Solving & Adaptability",
-                  text: "Strong analytical mindset capable of quickly understanding complex domain logic, adopting new technologies, and shipping clean, maintainable code.",
-                },
-              ].map((item) => (
-                <div key={item.label} className="flex gap-3 text-sm leading-6">
-                  <CheckCircle2
-                    className="mt-0.5 size-4 shrink-0 text-(--portfolio-success)]"
-                    aria-hidden="true"
-                  />
-                  <div>
-                    <span className="font-bold text-(--portfolio-text)]">{item.label}: </span>
-                    <span className="text-(--portfolio-muted)]">{item.text}</span>
+        {/* Bento Grid */}
+        <div className="mt-12 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+          {/* Main Narrative Card */}
+          <div className="glass-panel rounded-3xl p-7 sm:p-8 flex flex-col justify-between">
+            <div>
+              <h3 className="text-xl font-bold text-white flex items-center gap-2.5">
+                <Sparkles className="size-5 text-cyan-400" />
+                Engineering Philosophy & Professional Trajectory
+              </h3>
+              <p className="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed">
+                I am a Full-Stack Web Developer with 3 years of hands-on experience delivering scalable full-stack web platforms and high-performance browser extensions. I maintain deep expertise in TypeScript across frontend and backend, micro-interactions, robust REST APIs, JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma & MongoDB).
+              </p>
+            </div>
+
+            {/* What I Bring to a Team */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <p className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-400 mb-4">
+                What I bring to a team
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {[
+                  {
+                    label: "Full-Stack Web Architecture & Delivery",
+                    text: "End-to-end full-stack web development directing sprint planning, technical code reviews, and system architecture while coordinating team milestones.",
+                  },
+                  {
+                    label: "Frontend Architecture & Micro-interactions",
+                    text: "Deep expertise in Next.js (App & Pages Router), React.js, TypeScript, micro-interactions, and Tailwind CSS with modern client state management.",
+                  },
+                  {
+                    label: "Browser Extensions & Specialized Tools",
+                    text: "Extensive experience building Chrome Manifest V3 extensions with Plasmo framework, SPA DOM lifecycle handling, MutationObserver, and dynamic CSS injection.",
+                  },
+                  {
+                    label: "Backend & Hybrid Database Design",
+                    text: "Hands-on expertise building robust REST APIs with Node.js and Express.js, implementing JWT/RBAC security, and hybrid database design (PostgreSQL via Prisma ORM & MongoDB).",
+                  },
+                  {
+                    label: "AI-Assisted Engineering",
+                    text: "Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.",
+                  },
+                  {
+                    label: "Problem Solving & Adaptability",
+                    text: "Strong analytical mindset capable of quickly understanding complex domain logic, adopting new technologies, and shipping clean, maintainable code.",
+                  },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                    <div className="flex items-start gap-2.5">
+                      <CheckCircle2 className="size-4 shrink-0 text-cyan-400 mt-0.5" />
+                      <div>
+                        <span className="font-bold text-white text-xs block">{item.label}</span>
+                        <span className="text-slate-400 text-xs mt-1 block leading-relaxed">{item.text}</span>
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Profile & Contact Card */}
+          <div className="flex flex-col gap-6">
+            <div className="glass-panel rounded-3xl p-7">
+              <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+                <div className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-cyan-400 to-indigo-600 font-mono text-xl font-black text-slate-950 shadow-lg">
+                  AR
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white">{personal.name}</h4>
+                  <p className="text-xs text-slate-400 mt-0.5">{personal.title}</p>
+                  <span className="inline-flex items-center gap-1.5 mt-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] font-mono text-emerald-400">
+                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Verified Credentials
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-4 text-xs font-mono">
+                <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+                  <span className="text-slate-400 flex items-center gap-2">
+                    <MapPin className="size-3.5 text-cyan-400" /> Location
+                  </span>
+                  <span className="text-slate-200 font-bold">{personal.location}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+                  <span className="text-slate-400 flex items-center gap-2">
+                    <Mail className="size-3.5 text-cyan-400" /> Email
+                  </span>
+                  <a href={`mailto:${personal.email}`} className="text-cyan-300 hover:underline truncate max-w-[180px]">
+                    {personal.email}
+                  </a>
+                </div>
+                <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+                  <span className="text-slate-400 flex items-center gap-2">
+                    <Phone className="size-3.5 text-cyan-400" /> Phone
+                  </span>
+                  <span className="text-slate-200 font-bold">{personal.phone}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400 flex items-center gap-2">
+                    <GithubIcon className="size-3.5 text-cyan-400" /> GitHub
+                  </span>
+                  <a
+                    href={personal.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-cyan-300 hover:underline flex items-center gap-1"
+                  >
+                    asifrayhanjoy <ArrowUpRight className="size-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Three Technical Highlights */}
+            <div className="space-y-3">
+              {capabilityHighlights.map((cap) => (
+                <div key={cap.title} className="glass-panel rounded-2xl p-4 border border-white/10 hover:border-cyan-500/30 transition">
+                  <p className="font-bold text-white text-xs">{cap.title}</p>
+                  <p className="mt-1 text-slate-400 text-xs leading-relaxed">{cap.body}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        <aside className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-(--portfolio-shadow)]">
-          <div className="flex items-center gap-4 border-b border-(--portfolio-line)] pb-5">
-            <div className="grid size-14 shrink-0 place-items-center rounded-lg bg-(--portfolio-accent)] font-mono text-lg font-black text-(--portfolio-accent-contrast)]">
-              AR
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-lg font-black">{personal.name}</p>
-              <p className="mt-1 text-sm font-semibold text-(--portfolio-muted)]">
-                {personal.title}
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 space-y-4 text-sm">
-            <InfoRow icon={MapPin} label="Location" value={personal.location} />
-            <InfoRow icon={Mail} label="Email" value={personal.email} />
-            <InfoRow icon={Phone} label="Phone" value={personal.phone} />
-            <InfoRow icon={Github} label="GitHub" value="asifrayhanjoy" />
-          </div>
-        </aside>
       </div>
-
-      <div className="mt-12 grid gap-4 md:grid-cols-3">
-        {capabilityHighlights.map((item) => (
-          <article
-            key={item.title}
-            className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-sm"
-          >
-            <h3 className="text-xl font-black">{item.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-(--portfolio-muted)]">
-              {item.body}
-            </p>
-          </article>
-        ))}
-      </div>
-    </Section>
+    </section>
   );
 });
 
-function ProjectsSection() {
-  return (
-    <Section
-      id="projects"
-      eyebrow="Selected Work"
-      title="Full-stack projects with clear architecture and review-ready detail."
-      description="Each case study is grounded in your actual repositories, stack, and project boundaries."
-    >
-      <div className="grid gap-6 lg:grid-cols-2">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
-        ))}
-      </div>
+/* =========================================================================
+   SKILLS & TAXONOMY SECTION
+   ========================================================================= */
 
-      <div className="mt-12 grid gap-5">
-        {projects.map((project) => (
-          <ProjectCaseStudy key={project.slug} project={project} />
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function ProjectCard({ project }: { project: Project }) {
-  const shouldReduceMotion = useReducedMotion();
+const SkillsSection = memo(function SkillsSection() {
+  const levelBadgeClass: Record<SkillLevel, string> = {
+    Core: "border-cyan-400/40 bg-cyan-500/10 text-cyan-300",
+    Working: "border-indigo-400/40 bg-indigo-500/10 text-indigo-300",
+    Learning: "border-amber-400/40 bg-amber-500/10 text-amber-300",
+    Basic: "border-rose-400/40 bg-rose-500/10 text-rose-300",
+  };
 
   return (
-    <motion.article
-      className="flex h-full flex-col overflow-hidden rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] shadow-(--portfolio-shadow)]"
-      style={{ "--project-accent": project.accent } as CSSProperties}
-      whileHover={shouldReduceMotion ? undefined : { y: -5 }}
-      transition={{ duration: 0.18 }}
-    >
-      <ProjectVisual project={project} />
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-(--project-accent)]">
-            {project.category}
+    <section id="skills" className="relative z-10 px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Technical Stack & Taxonomy
           </p>
-          {project.role ? (
-            <span className="text-xs font-semibold text-(--portfolio-muted)]">
-              {project.role}
-            </span>
-          ) : null}
-        </div>
-        <h3 className="mt-3 font-mono text-3xl font-black">{project.name}</h3>
-        <p className="mt-4 text-sm leading-7 text-(--portfolio-muted)]">
-          {project.description}
-        </p>
-
-        <div className="mt-6 space-y-3">
-          {project.highlights.map((highlight) => (
-            <div
-              key={highlight}
-              className="flex gap-3 text-sm font-semibold leading-6 text-(--portfolio-text)]"
-            >
-              <CheckCircle2
-                className="mt-0.5 size-4 shrink-0 text-(--project-accent)]"
-                aria-hidden="true"
-              />
-              <span>{highlight}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 flex flex-wrap gap-2">
-          {project.technologies.map((technology) => (
-            <span
-              key={technology}
-              className="rounded-md border border-(--portfolio-line)] bg-(--portfolio-surface-muted)] px-2.5 py-1.5 text-xs font-bold text-(--portfolio-muted)]"
-            >
-              {technology}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-7 flex flex-wrap gap-3">
-          {project.repositoryLinks.map((link) => (
-            <SecondaryLink
-              key={link.href}
-              href={link.href}
-              icon={Github}
-              external
-            >
-              {link.label}
-            </SecondaryLink>
-          ))}
-          {project.liveDemo ? (
-            <SecondaryLink href={project.liveDemo} icon={ExternalLink} external>
-              Live Demo
-            </SecondaryLink>
-          ) : (
-            <span className="inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-(--portfolio-line)] px-4 text-sm font-bold text-(--portfolio-subtle)] opacity-75">
-              <ExternalLink className="size-4" aria-hidden="true" />
-              Demo Pending
-            </span>
-          )}
-          <PrimaryLink href={`#project-${project.slug}`} icon={ArrowRight}>
-            Details
-          </PrimaryLink>
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-function ProjectVisual({ project }: { project: Project }) {
-  return (
-    <div
-      className="relative aspect-[16/10] overflow-hidden border-b border-(--portfolio-line)] bg-(--project-visual-bg)]"
-      role="img"
-      aria-label={`${project.name} interface concept`}
-    >
-      <div className="absolute inset-0 bg-(--project-visual-grid)]" />
-      <div className="relative z-10 flex h-full flex-col p-4">
-        <div className="flex items-center justify-between border-b border-(--project-visual-line)] pb-3">
-          <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-            <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
-            <span className="size-2.5 rounded-full bg-[#28c840]" />
-          </div>
-          <span className="font-mono text-[10px] font-black uppercase tracking-[0.16em] text-(--project-visual-muted)]">
-            {project.visual === "commerce"
-              ? "Commerce System"
-              : project.visual === "extension"
-                ? "Browser Extension"
-                : "Product App"}
-          </span>
-        </div>
-
-        {project.visual === "commerce" ? (
-          <CommerceMockup />
-        ) : project.visual === "extension" ? (
-          <ExtensionMockup />
-        ) : (
-          <AppMockup />
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ExtensionMockup() {
-  return (
-    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[1fr_0.9fr] gap-3">
-      <div className="flex flex-col justify-between rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-        <div>
-          <div className="flex items-center justify-between border-b border-(--project-visual-line)] pb-2">
-            <span className="font-mono text-[10px] font-black uppercase tracking-wider text-(--project-accent)]">
-              YouTube.com
-            </span>
-            <span className="inline-flex items-center gap-1 rounded bg-[#ff4b4b]/20 px-1.5 py-0.5 font-mono text-[9px] font-black text-[#ff4b4b]">
-              <span className="size-1.5 rounded-full bg-[#ff4b4b] animate-pulse" />
-              Ad Blocked
-            </span>
-          </div>
-          <div className="mt-3 space-y-2">
-            <div className="relative flex h-16 items-center justify-center overflow-hidden rounded-md bg-(--project-visual-accent-soft)]">
-              <span className="font-mono text-[10px] font-bold text-(--project-visual-muted)]">
-                Video Player (Ads Suppressed)
-              </span>
-            </div>
-            <div className="flex items-center justify-between font-mono text-[10px] text-(--project-visual-muted)]">
-              <span>yt-navigate-finish</span>
-              <span className="font-bold text-(--portfolio-success)]">Auto-Skipped</span>
-            </div>
-          </div>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {["MutationObserver", "Content Script"].map((badge) => (
-            <span
-              key={badge}
-              className="rounded border border-(--project-visual-line)] px-1.5 py-0.5 font-mono text-[9px] text-(--project-visual-muted)]"
-            >
-              {badge}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="space-y-3">
-        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-(--project-visual-muted)]">
-            Plasmo & Manifest V3
-          </p>
-          <div className="mt-2 space-y-1.5">
-            {["Background Worker", "Dynamic CSS Injection", "DOM Watcher"].map(
-              (item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-(--project-accent)]" />
-                  <span className="font-mono text-[10px] text-(--project-visual-muted)]">
-                    {item}
-                  </span>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-          <div className="h-2 w-3/4 rounded-full bg-(--project-visual-line)]" />
-          <div className="mt-2 h-2 w-1/2 rounded-full bg-(--project-visual-line)]" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CommerceMockup() {
-  return (
-    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[0.8fr_1.2fr_0.9fr] gap-3">
-      <div className="space-y-2 border-r border-(--project-visual-line)] pr-3">
-        {["Catalog", "Orders", "Users", "API"].map((item, index) => (
-          <div
-            key={item}
-            className={cn(
-              "h-7 rounded-md border border-(--project-visual-line)] px-2 py-1 font-mono text-[10px] font-black text-(--project-visual-muted)]",
-              index === 0 && "bg-(--project-visual-accent-soft)]",
-            )}
-          >
-            {item}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        {[0, 1, 2, 3].map((item) => (
-          <div
-            key={item}
-            className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3"
-          >
-            <div className="h-10 rounded-md bg-(--project-visual-accent-soft)]" />
-            <div className="mt-3 h-2 rounded-full bg-(--project-visual-line)]" />
-            <div className="mt-2 h-2 w-2/3 rounded-full bg-(--project-visual-line)]" />
-          </div>
-        ))}
-      </div>
-      <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-        <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-(--project-visual-muted)]">
-          API Flow
-        </p>
-        <div className="mt-4 space-y-3">
-          {["Client", "REST", "Prisma", "MongoDB"].map((item) => (
-            <div key={item} className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-(--project-accent)]" />
-              <span className="h-2 flex-1 rounded-full bg-(--project-visual-line)]" />
-              <span className="w-14 font-mono text-[10px] font-black text-(--project-visual-muted)]">
-                {item}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AppMockup() {
-  return (
-    <div className="mt-4 grid min-h-0 flex-1 grid-cols-[1fr_0.9fr] gap-3">
-      <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-        <div className="flex h-24 items-end gap-2">
-          {[44, 70, 52, 86, 64, 92].map((height, index) => (
-            <span
-              key={height + index}
-              className="w-full rounded-t bg-(--project-accent)] opacity-80"
-              style={{ height }}
-            />
-          ))}
-        </div>
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {["Auth", "Stripe", "API"].map((item) => (
-            <div
-              key={item}
-              className="rounded-md border border-(--project-visual-line)] bg-(--project-visual-accent-soft)] px-2 py-2 text-center font-mono text-[10px] font-black text-(--project-visual-muted)]"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="space-y-3">
-        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-(--project-visual-muted)]">
-            Data Layer
-          </p>
-          <div className="mt-4 h-20 rounded-md bg-(--project-visual-accent-soft)]" />
-        </div>
-        <div className="rounded-lg border border-(--project-visual-line)] bg-(--project-visual-panel)] p-3">
-          <div className="h-2 w-3/4 rounded-full bg-(--project-visual-line)]" />
-          <div className="mt-2 h-2 w-1/2 rounded-full bg-(--project-visual-line)]" />
-          <div className="mt-4 h-8 rounded-md bg-(--portfolio-warm)] opacity-85" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ProjectCaseStudy({ project }: { project: Project }) {
-  return (
-    <article
-      id={`project-${project.slug}`}
-      className="portfolio-section rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm"
-      style={{ "--project-accent": project.accent } as CSSProperties}
-    >
-      <div className="grid gap-6 lg:grid-cols-[0.72fr_1fr]">
-        <div>
-          <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-(--project-accent)]">
-            Case Study
-          </p>
-          <h3 className="mt-3 font-mono text-3xl font-black">
-            {project.name}
-          </h3>
-          <p className="mt-4 text-sm leading-7 text-(--portfolio-muted)]">
-            {project.description}
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            A focused toolkit with honest, production-tested skill levels.
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            Core strengths are separated from working, learning, and basic technologies so the portfolio reads clearly in technical review.
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {project.caseStudy.map((block) => (
-            <div
-              key={block.title}
-              className="border-t border-(--portfolio-line)] pt-4"
-            >
-              <h4 className="text-base font-black">{block.title}</h4>
-              <p className="mt-3 text-sm leading-7 text-(--portfolio-muted)]">
-                {block.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </article>
-  );
-}
 
-function SkillsSection() {
-  return (
-    <Section
-      id="skills"
-      eyebrow="Technical Stack"
-      title="A focused toolkit with honest skill levels."
-      description="Core strengths are separated from working, learning, and basic technologies so the portfolio reads clearly in technical review."
-    >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {skillGroups.map((group) => {
-          const Icon = group.icon;
-
-          return (
-            <article
-              key={group.title}
-              className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-sm"
-            >
-              <div className="flex items-start gap-3">
-                <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-(--portfolio-accent-soft)] text-(--portfolio-accent)]">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {skillGroups.map((group) => {
+            const Icon = group.icon;
+            return (
+              <div
+                key={group.title}
+                className="glass-panel-interactive rounded-3xl p-6 flex flex-col justify-between"
+              >
                 <div>
-                  <h3 className="font-mono text-lg font-black">
-                    {group.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-(--portfolio-muted)]">
-                    {group.description}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="grid size-11 place-items-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shadow-inner">
+                      <Icon className="size-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white text-base">{group.title}</h3>
+                      <p className="text-xs text-slate-400 mt-0.5">{group.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {group.skills.map((skill) => (
+                      <span
+                        key={skill.name}
+                        className={cn(
+                          "inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-mono font-medium backdrop-blur-md",
+                          levelBadgeClass[skill.level],
+                        )}
+                      >
+                        {skill.name}
+                        <span className="text-[9px] uppercase tracking-wider opacity-60">
+                          {skill.level}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-bold",
-                      levelStyles[skill.level],
-                    )}
-                  >
-                    {skill.name}
-                    <span className="font-mono text-[10px] uppercase tracking-wide opacity-75">
-                      {skill.level}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            </article>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </Section>
+    </section>
   );
-}
+});
 
-function ProcessSection() {
+/* =========================================================================
+   EXPERIENCE & EDUCATION (PRESERVES NORTHERN UNIVERSITY OF BUSINESS & TECHNOLOGY KHULNA)
+   ========================================================================= */
+
+const ExperienceSection = memo(function ExperienceSection() {
   return (
-    <section
-      id="process"
-      className="portfolio-section relative overflow-hidden border-y border-(--portfolio-line)] bg-(--portfolio-inverse)] px-4 py-16 text-(--portfolio-inverse-text)] sm:px-6 sm:py-20 lg:px-8"
-    >
-      <div className="absolute inset-0 bg-(--portfolio-grid)] opacity-30" />
-      <div className="relative mx-auto max-w-7xl">
-        <div className="mb-12 grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-end">
-          <div>
-            <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-(--portfolio-warm)]">
-              Development Process
-            </p>
-            <h2 className="mt-3 max-w-3xl font-mono text-3xl font-black leading-tight sm:text-4xl">
-              A disciplined workflow for turning requirements into reliable
-              products.
-            </h2>
-          </div>
-          <p className="max-w-3xl text-base leading-8 text-(--portfolio-inverse-muted)]">
-            Each project moves through the same sequence: clarify the problem,
-            shape the system, build the product, and refine the result until it
-            is easier to use and easier to explain.
+    <section id="experience" className="relative z-10 px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Professional Experience & Background
+          </p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Software Development & System Architecture
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            3 years of professional experience across full-stack software development, system architecture, and production delivery.
           </p>
         </div>
 
-        <div className="grid gap-px overflow-hidden rounded-lg border border-(--portfolio-inverse-line)] bg-(--portfolio-inverse-line)] md:grid-cols-2 xl:grid-cols-4">
-          {processSteps.map((item) => (
-            <article
-              key={item.step}
-              className="bg-(--portfolio-inverse)] p-6"
-            >
-              <p className="font-mono text-sm font-black text-(--portfolio-warm)]">
-                {item.step}
-              </p>
-              <h3 className="mt-5 font-mono text-2xl font-black">
-                {item.title}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-(--portfolio-inverse-muted)]">
-                {item.body}
-              </p>
-              <div className="mt-6 space-y-2 border-t border-(--portfolio-inverse-line)] pt-4">
-                {item.tags.map((tag) => (
-                  <div
-                    key={tag}
-                    className="flex items-center gap-2 text-sm font-bold"
-                  >
-                    <CheckCircle2
-                      className="size-4 shrink-0 text-(--portfolio-warm)]"
-                      aria-hidden="true"
-                    />
-                    {tag}
-                  </div>
-                ))}
+        {/* Timeline of Roles */}
+        <div className="mt-12 space-y-6">
+          {experiences.map((exp) => (
+            <div key={exp.role} className="glass-panel rounded-3xl p-7 sm:p-8">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-white/10 pb-5">
+                <div>
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-400">
+                    {exp.type}
+                  </span>
+                  <h3 className="mt-1 text-2xl font-bold text-white">{exp.role}</h3>
+                </div>
+                <div className="text-left sm:text-right font-mono text-xs">
+                  <p className="font-bold text-slate-200">{exp.duration}</p>
+                  <p className="text-slate-400 mt-0.5">{exp.location}</p>
+                </div>
               </div>
-            </article>
+
+              <ul className="mt-6 space-y-3">
+                {exp.bullets.map((bullet) => (
+                  <li key={bullet} className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
+                    <CheckCircle2 className="size-4 shrink-0 text-cyan-400 mt-1" />
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Education & AI Engineering Row */}
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          {/* Exact Preserved Educational Institution */}
+          <div className="glass-panel rounded-3xl p-7 border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3.5">
+                <div className="grid size-12 place-items-center rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+                  <GraduationCap className="size-6" />
+                </div>
+                <div>
+                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-400">
+                    Educational Institution
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold text-white">
+                    Northern University of Business & Technology Khulna
+                  </h3>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl bg-white/[0.03] border border-white/5 p-4">
+                <p className="text-base font-bold text-slate-200">
+                  Honours in English
+                </p>
+                <p className="mt-1 text-xs font-mono text-slate-400">
+                  Satkhira, Bangladesh (Currently studying)
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-4 text-xs text-slate-400">
+              Pursuing undergraduate degree in English alongside professional full-stack software development workflows.
+            </p>
+          </div>
+
+          {/* AI-Assisted Workflow */}
+          <div className="glass-panel rounded-3xl p-7 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3.5">
+                <div className="grid size-12 place-items-center rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                  <Sparkles className="size-6" />
+                </div>
+                <div>
+                  <p className="font-mono text-xs font-bold uppercase tracking-wider text-amber-400">
+                    Engineering & Workflow
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold text-white">
+                    AI-Assisted Development
+                  </h3>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl bg-white/[0.03] border border-white/5 p-4">
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-mono">
+              <span className="rounded-lg bg-white/5 px-2.5 py-1 text-slate-300">Cursor AI</span>
+              <span className="rounded-lg bg-white/5 px-2.5 py-1 text-slate-300">Claude Code</span>
+              <span className="rounded-lg bg-white/5 px-2.5 py-1 text-slate-300">RAG Integration</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Spoken Languages */}
+        <div className="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-4">
+          {languages.map((lang) => (
+            <div key={lang.name} className="glass-panel rounded-2xl p-4 text-center">
+              <Languages className="size-4 text-cyan-400 mx-auto mb-2" />
+              <p className="font-bold text-white text-sm">{lang.name}</p>
+              <p className="text-[11px] font-mono text-slate-400 mt-1">{lang.level}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-}
+});
 
-function ExperienceSection() {
+/* =========================================================================
+   AI CAPABILITIES & PROCESS SECTIONS
+   ========================================================================= */
+
+const AiCapabilitiesSection = memo(function AiCapabilitiesSection() {
   return (
-    <Section
-      id="experience"
-      eyebrow="Experience & Background"
-      title="Software Development & Team Leadership"
-      description="3 years of professional experience across full-stack software development, system architecture, and technical team leadership."
-    >
-      <div className="grid gap-6">
-        {experiences.map((exp) => (
-          <article
-            key={exp.role}
-            className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm"
-          >
-            <div className="flex flex-col gap-2 border-b border-(--portfolio-line)] pb-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="font-mono text-xs font-black uppercase tracking-[0.16em] text-(--portfolio-accent)]">
-                  {exp.type}
-                </p>
-                <h3 className="mt-1 text-2xl font-black">{exp.role}</h3>
-              </div>
-              <div className="text-sm font-semibold text-(--portfolio-muted)] sm:text-right">
-                <p className="font-mono text-(--portfolio-text)]">{exp.duration}</p>
-                <p className="text-xs text-(--portfolio-subtle)]">{exp.location}</p>
-              </div>
-            </div>
-
-            <ul className="mt-5 space-y-3">
-              {exp.bullets.map((bullet) => (
-                <li key={bullet} className="flex gap-3 text-sm leading-7 text-(--portfolio-muted)]">
-                  <CheckCircle2
-                    className="mt-1 size-4 shrink-0 text-(--portfolio-success)]"
-                    aria-hidden="true"
-                  />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <article className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-(--portfolio-accent-soft)] text-(--portfolio-accent)]">
-              <GraduationCap className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-accent)]">
-                Education
-              </p>
-              <h3 className="mt-1 text-xl font-black">
-                Satkhira Government College
-              </h3>
-            </div>
-          </div>
-          <p className="mt-6 text-base font-bold">
-            Honours in English
+    <section id="ai-capabilities" className="relative z-10 px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            AI & RAG Competencies
           </p>
-          <p className="mt-2 text-sm text-(--portfolio-muted)]">
-            Satkhira, Bangladesh (Currently studying)
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            AI-assisted software development with practical application focus.
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            I work with AI development workflows to accelerate code exploration, debugging, refactoring, prototyping, and feature delivery without replacing engineering judgment.
           </p>
-        </article>
-
-        <article className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg bg-(--portfolio-warm-soft)] text-(--portfolio-warm)]">
-              <Sparkles className="size-5" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-(--portfolio-warm)]">
-                Engineering & Workflow
-              </p>
-              <h3 className="mt-1 text-xl font-black">
-                AI-Assisted Development
-              </h3>
-            </div>
-          </div>
-          <p className="mt-6 text-sm leading-7 text-(--portfolio-muted)]">
-            Pragmatic use of modern developer tools (Cursor, Claude Code) to accelerate debugging, refactoring, and codebase exploration while maintaining full engineering judgment and code quality.
-          </p>
-        </article>
-      </div>
-
-      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {languages.map((language) => (
-          <article
-            key={language.name}
-            className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-sm"
-          >
-            <div className="flex items-center gap-3">
-              <Languages
-                className="size-5 text-(--portfolio-accent)]"
-                aria-hidden="true"
-              />
-              <h3 className="font-mono text-lg font-black">{language.name}</h3>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-(--portfolio-muted)]">
-              {language.level}
-            </p>
-          </article>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function AiCapabilitiesSection() {
-  return (
-    <Section
-      id="ai-capabilities"
-      eyebrow="AI & RAG"
-      title="AI-assisted software development with practical application focus."
-      description="I work with AI development workflows to accelerate code exploration, debugging, refactoring, prototyping, and feature delivery without replacing engineering judgment."
-    >
-      <div className="grid gap-5 md:grid-cols-3">
-        {[
-          {
-            title: "RAG & Knowledge Workflows",
-            body: "I can work with retrieval pipelines, document-based knowledge apps, and LLM-driven question-answering patterns.",
-          },
-          {
-            title: "LLM Integration",
-            body: "I can connect AI workflows into application logic, support integration boundaries, and work with embeddings and vector search concepts.",
-          },
-          {
-            title: "AI-Assisted Delivery",
-            body: "Tools such as Claude Code, OpenAI Codex, ChatGPT, and Cursor are used for code generation, refactoring, debugging, and understanding unfamiliar codebases.",
-          },
-        ].map((item) => (
-          <article
-            key={item.title}
-            className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-sm"
-          >
-            <h3 className="font-mono text-xl font-black">{item.title}</h3>
-            <p className="mt-4 text-sm leading-7 text-(--portfolio-muted)]">
-              {item.body}
-            </p>
-          </article>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function ContactSection() {
-  return (
-    <Section
-      id="contact"
-      eyebrow="Contact"
-      title="Open to roles, projects, and technical conversations."
-      description="Reach out for job opportunities, collaboration, interview follow-ups, or project discussions."
-    >
-      <div className="grid gap-8 lg:grid-cols-[0.72fr_1fr]">
-        <div className="space-y-4">
-          <ContactMethod
-            icon={Mail}
-            label="Email"
-            value={personal.email}
-            href={`mailto:${personal.email}`}
-          />
-          <ContactMethod
-            icon={Phone}
-            label="Phone"
-            value={personal.phone}
-            href={`tel:${personal.phone}`}
-          />
-          <ContactMethod
-            icon={Github}
-            label="GitHub"
-            value="github.com/asifrayhanjoy"
-            href={personal.github}
-            external
-          />
-          <ContactMethod
-            icon={Linkedin}
-            label="LinkedIn"
-            value="linkedin.com/in/md-asif-rayhan-joy-4177372a4"
-            href={personal.linkedin}
-            external
-          />
         </div>
-        <ContactForm />
+
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {[
+            {
+              title: "RAG & Knowledge Workflows",
+              body: "I can work with retrieval pipelines, document-based knowledge apps, and LLM-driven question-answering patterns.",
+            },
+            {
+              title: "LLM Integration",
+              body: "I can connect AI workflows into application logic, support integration boundaries, and work with embeddings and vector search concepts.",
+            },
+            {
+              title: "AI-Assisted Delivery",
+              body: "Tools such as Claude Code, OpenAI Codex, ChatGPT, and Cursor are used for code generation, refactoring, debugging, and understanding unfamiliar codebases.",
+            },
+          ].map((item) => (
+            <div key={item.title} className="glass-panel rounded-3xl p-6">
+              <h3 className="font-bold text-white text-lg">{item.title}</h3>
+              <p className="mt-3 text-sm text-slate-400 leading-relaxed">{item.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
-}
+});
+
+const ProcessSection = memo(function ProcessSection() {
+  return (
+    <section id="process" className="relative z-10 px-4 py-24 sm:px-6 lg:px-8 border-y border-white/10 bg-slate-950/70 backdrop-blur-2xl">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-amber-400">
+            Engineering Process
+          </p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            A disciplined workflow for turning requirements into reliable products.
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            Each project moves through the same sequence: clarify the problem, shape the system, build the product, and refine the result until it is easier to use and maintain.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {processSteps.map((step) => (
+            <div key={step.step} className="glass-panel rounded-3xl p-6 flex flex-col justify-between">
+              <div>
+                <span className="font-mono text-2xl font-black text-amber-400">{step.step}</span>
+                <h3 className="mt-3 text-xl font-bold text-white">{step.title}</h3>
+                <p className="mt-3 text-xs leading-relaxed text-slate-400">{step.body}</p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/10 space-y-1.5">
+                {step.tags.map((tag) => (
+                  <div key={tag} className="flex items-center gap-1.5 text-[11px] font-mono text-slate-300">
+                    <CheckCircle2 className="size-3 text-amber-400" />
+                    <span>{tag}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+});
+
+/* =========================================================================
+   CONTACT SECTION (LUXURY SPLIT LAYOUT + REACT HOOK FORM & ZOD)
+   ========================================================================= */
+
+const ContactSection = memo(function ContactSection() {
+  return (
+    <section id="contact" className="relative z-10 px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            Direct Contact & Inquiries
+          </p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Open to roles, web engineering, and collaborative projects.
+          </h2>
+          <p className="mt-4 text-base text-slate-400 leading-relaxed">
+            Reach out for full-stack web developer roles, contract opportunities, remote positions, or interview scheduling.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          {/* Left Cards */}
+          <div className="space-y-4">
+            {[
+              {
+                icon: Mail,
+                label: "Email",
+                value: personal.email,
+                href: `mailto:${personal.email}`,
+              },
+              {
+                icon: Phone,
+                label: "Phone / WhatsApp",
+                value: personal.phone,
+                href: `tel:${personal.phone}`,
+              },
+              {
+                icon: GithubIcon,
+                label: "GitHub Profile",
+                value: "github.com/asifrayhanjoy",
+                href: personal.github,
+                external: true,
+              },
+              {
+                icon: LinkedinIcon,
+                label: "LinkedIn Profile",
+                value: "linkedin.com/in/md-asif-rayhan-joy-4177372a4",
+                href: personal.linkedin,
+                external: true,
+              },
+            ].map((method) => {
+              const Icon = method.icon;
+              return (
+                <a
+                  key={method.label}
+                  href={method.href}
+                  target={method.external ? "_blank" : undefined}
+                  rel={method.external ? "noreferrer" : undefined}
+                  className="glass-panel-interactive rounded-2xl p-4 flex items-center gap-4 group"
+                >
+                  <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 group-hover:bg-cyan-500/20 transition">
+                    <Icon className="size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {method.label}
+                    </p>
+                    <p className="mt-0.5 text-sm font-bold text-white truncate group-hover:text-cyan-300 transition">
+                      {method.value}
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Right: Modern Form */}
+          <ContactForm />
+        </div>
+      </div>
+    </section>
+  );
+});
 
 function ContactForm() {
   const [statusMessage, setStatusMessage] = useState<{
@@ -2049,9 +2382,7 @@ function ContactForm() {
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
@@ -2084,338 +2415,235 @@ function ContactForm() {
     <form
       noValidate
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-5 shadow-(--portfolio-shadow)] sm:p-6"
+      className="glass-panel rounded-3xl p-6 sm:p-8"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-2 text-sm font-bold" htmlFor="name">
-          Name
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="block text-xs font-mono font-bold uppercase text-slate-300 mb-2">
+            Your Name
+          </label>
           <input
             id="name"
             type="text"
+            placeholder="John Doe"
             autoComplete="name"
-            aria-invalid={Boolean(errors.name)}
-            className="min-h-12 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-input)] px-4 text-sm font-semibold text-(--portfolio-text)] outline-none transition placeholder:text-(--portfolio-subtle)] focus:border-(--portfolio-accent)] focus:ring-4 focus:ring-(--portfolio-ring)]"
-            placeholder="Your name"
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-400 focus:bg-white/10 focus:ring-2 focus:ring-cyan-400/20"
             {...register("name")}
           />
-          {errors.name?.message ? (
-            <span className="text-xs font-semibold text-(--portfolio-danger)]">
-              {errors.name.message}
-            </span>
-          ) : null}
-        </label>
+          {errors.name && (
+            <p className="mt-1.5 text-xs text-rose-400 font-mono">{errors.name.message}</p>
+          )}
+        </div>
 
-        <label className="grid gap-2 text-sm font-bold" htmlFor="email">
-          Email
+        <div>
+          <label htmlFor="email" className="block text-xs font-mono font-bold uppercase text-slate-300 mb-2">
+            Your Email
+          </label>
           <input
             id="email"
             type="email"
+            placeholder="john@example.com"
             autoComplete="email"
-            aria-invalid={Boolean(errors.email)}
-            className="min-h-12 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-input)] px-4 text-sm font-semibold text-(--portfolio-text)] outline-none transition placeholder:text-(--portfolio-subtle)] focus:border-(--portfolio-accent)] focus:ring-4 focus:ring-(--portfolio-ring)]"
-            placeholder="you@example.com"
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-400 focus:bg-white/10 focus:ring-2 focus:ring-cyan-400/20"
             {...register("email")}
           />
-          {errors.email?.message ? (
-            <span className="text-xs font-semibold text-(--portfolio-danger)]">
-              {errors.email.message}
-            </span>
-          ) : null}
-        </label>
+          {errors.email && (
+            <p className="mt-1.5 text-xs text-rose-400 font-mono">{errors.email.message}</p>
+          )}
+        </div>
       </div>
 
-      <label className="mt-4 grid gap-2 text-sm font-bold" htmlFor="subject">
-        Subject
+      <div className="mt-5">
+        <label htmlFor="subject" className="block text-xs font-mono font-bold uppercase text-slate-300 mb-2">
+          Subject / Opportunity
+        </label>
         <input
           id="subject"
           type="text"
-          aria-invalid={Boolean(errors.subject)}
-          className="min-h-12 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-input)] px-4 text-sm font-semibold text-(--portfolio-text)] outline-none transition placeholder:text-(--portfolio-subtle)] focus:border-(--portfolio-accent)] focus:ring-4 focus:ring-(--portfolio-ring)]"
-          placeholder="Project, role, or opportunity"
+          placeholder="Full-Stack Web Developer Opportunity / Project Inquiry"
+          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-400 focus:bg-white/10 focus:ring-2 focus:ring-cyan-400/20"
           {...register("subject")}
         />
-        {errors.subject?.message ? (
-          <span className="text-xs font-semibold text-(--portfolio-danger)]">
-            {errors.subject.message}
-          </span>
-        ) : null}
-      </label>
+        {errors.subject && (
+          <p className="mt-1.5 text-xs text-rose-400 font-mono">{errors.subject.message}</p>
+        )}
+      </div>
 
-      <label className="mt-4 grid gap-2 text-sm font-bold" htmlFor="message">
-        Message
+      <div className="mt-5">
+        <label htmlFor="message" className="block text-xs font-mono font-bold uppercase text-slate-300 mb-2">
+          Message
+        </label>
         <textarea
           id="message"
-          rows={6}
-          aria-invalid={Boolean(errors.message)}
-          className="min-h-36 resize-y rounded-lg border border-(--portfolio-line)] bg-(--portfolio-input)] px-4 py-3 text-sm font-semibold text-(--portfolio-text)] outline-none transition placeholder:text-(--portfolio-subtle)] focus:border-(--portfolio-accent)] focus:ring-4 focus:ring-(--portfolio-ring)]"
-          placeholder="Tell me about the role, project, or interview context."
+          rows={5}
+          placeholder="Tell me about your team, role scope, or project specifications..."
+          className="w-full resize-y rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-400 focus:bg-white/10 focus:ring-2 focus:ring-cyan-400/20"
           {...register("message")}
         />
-        {errors.message?.message ? (
-          <span className="text-xs font-semibold text-(--portfolio-danger)]">
-            {errors.message.message}
-          </span>
-        ) : null}
-      </label>
+        {errors.message && (
+          <p className="mt-1.5 text-xs text-rose-400 font-mono">{errors.message.message}</p>
+        )}
+      </div>
 
       <button
         type="submit"
         disabled={isSending}
-        className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-(--portfolio-accent)] px-5 text-sm font-black text-(--portfolio-accent-contrast)] shadow-sm transition hover:bg-(--portfolio-text)] hover:text-(--portfolio-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="mt-6 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-500 px-7 py-3 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.4)] hover:brightness-110 transition active:scale-95 disabled:opacity-60"
       >
-        <Send className={cn("size-4", isSending && "animate-spin")} aria-hidden="true" />
-        {isSending ? "Sending..." : "Send Message"}
+        <Send className={cn("size-4", isSending && "animate-spin")} />
+        {isSending ? "Transmitting..." : "Send Message"}
       </button>
 
-      {statusMessage ? (
-        <p
+      {statusMessage && (
+        <div
           role="status"
           className={cn(
-            "mt-4 text-sm font-semibold",
+            "mt-4 rounded-2xl p-4 text-xs font-mono border",
             statusMessage.type === "success"
-              ? "text-(--portfolio-success)]"
-              : "text-(--portfolio-danger)]",
+              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+              : "bg-rose-500/10 border-rose-500/30 text-rose-300",
           )}
         >
           {statusMessage.text}
-        </p>
-      ) : null}
+        </div>
+      )}
     </form>
   );
 }
 
-function Footer() {
+/* =========================================================================
+   FOOTER (MINIMALIST LINEAR STYLE)
+   ========================================================================= */
+
+const Footer = memo(function Footer() {
   return (
-    <footer className="relative z-10 border-t border-(--portfolio-line)] bg-(--portfolio-surface)] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <footer className="relative z-10 border-t border-white/10 bg-slate-950/80 backdrop-blur-2xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <p className="font-mono text-base font-black">{personal.name}</p>
-          <p className="mt-1 text-sm font-semibold text-(--portfolio-muted)]">
-            {personal.title}
+          <div className="flex items-center gap-3">
+            <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 font-mono text-xs font-black text-slate-950 shadow-md">
+              AR
+            </span>
+            <span className="font-mono text-sm font-bold text-white tracking-tight">
+              {personal.name}
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mt-1">
+            {personal.title} · Dhaka, Bangladesh
           </p>
-          <p className="mt-2 text-xs text-(--portfolio-subtle)]">
-            Copyright © {copyrightYear} {personal.name}. All rights reserved.
+          <p className="text-[11px] font-mono text-slate-500 mt-2">
+            © {copyrightYear} {personal.name}. All rights reserved.
           </p>
         </div>
+
         <div className="flex flex-wrap items-center gap-3">
-          <FooterLink
+          <a
             href={personal.github}
-            icon={Github}
-            label="GitHub"
-            external
-          />
-          <FooterLink
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub Profile"
+            className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-cyan-400/40 hover:bg-white/10 transition"
+          >
+            <GithubIcon className="size-4" />
+          </a>
+          <a
             href={personal.linkedin}
-            icon={Linkedin}
-            label="LinkedIn"
-            external
-          />
-          <FooterLink
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn Profile"
+            className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-cyan-400/40 hover:bg-white/10 transition"
+          >
+            <LinkedinIcon className="size-4" />
+          </a>
+          <a
             href={`mailto:${personal.email}`}
-            icon={Mail}
-            label="Email"
-          />
+            aria-label="Email Me"
+            className="grid size-9 place-items-center rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-cyan-400/40 hover:bg-white/10 transition"
+          >
+            <Mail className="size-4" />
+          </a>
           <a
             href="#home"
-            className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-(--portfolio-text)] px-4 text-sm font-black text-(--portfolio-bg)] transition hover:bg-(--portfolio-accent)] hover:text-(--portfolio-accent-contrast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-mono font-bold text-slate-200 hover:bg-white/10 hover:border-white/20 transition"
           >
-            <ArrowUp className="size-4" aria-hidden="true" />
-            Back to Top
+            <ArrowUp className="size-3.5" />
+            Top
           </a>
         </div>
       </div>
     </footer>
   );
-}
-
-const Section = memo(function Section({
-  id,
-  eyebrow,
-  title,
-  description,
-  children,
-}: {
-  id: string;
-  eyebrow?: string;
-  title: string;
-  description?: string;
-  children: ReactNode;
-}) {
-  const shouldReduceMotion = useReducedMotion();
-
-  return (
-    <motion.section
-      id={id}
-      className="portfolio-section px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
-    >
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10 grid gap-5 lg:grid-cols-[0.72fr_1fr] lg:items-end">
-          <div>
-            {eyebrow ? (
-              <p className="font-mono text-sm font-black uppercase tracking-[0.18em] text-(--portfolio-accent)]">
-                {eyebrow}
-              </p>
-            ) : null}
-            <h2 className="mt-3 max-w-3xl font-mono text-3xl font-black leading-tight sm:text-4xl">
-              {title}
-            </h2>
-          </div>
-          {description ? (
-            <p className="max-w-3xl text-base leading-8 text-(--portfolio-muted)]">
-              {description}
-            </p>
-          ) : null}
-        </div>
-        {children}
-      </div>
-    </motion.section>
-  );
 });
 
-function PrimaryLink({
-  href,
-  icon: Icon,
-  children,
-}: {
-  href: string;
-  icon: IconComponent;
-  children: ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-(--portfolio-accent)] px-5 text-sm font-black text-(--portfolio-accent-contrast)] shadow-sm transition hover:bg-(--portfolio-text)] hover:text-(--portfolio-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
-    >
-      {children}
-      <Icon className="size-4" aria-hidden="true" />
-    </a>
-  );
-}
+/* =========================================================================
+   ROOT PAGE COMPONENT
+   ========================================================================= */
 
-function SecondaryLink({
-  href,
-  icon: Icon,
-  children,
-  external = false,
-}: {
-  href: string;
-  icon: IconComponent;
-  children: ReactNode;
-  external?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface-raised)] px-5 text-sm font-black text-(--portfolio-text)] shadow-sm transition hover:border-(--portfolio-line-strong)] hover:bg-(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
-    >
-      <Icon className="size-4" aria-hidden="true" />
-      {children}
-      {external ? <ArrowUpRight className="size-3.5" aria-hidden="true" /> : null}
-    </a>
-  );
-}
+export default function Home() {
+  const activeSection = useActiveSection();
 
-function InfoRow({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: IconComponent;
-  label: string;
-  value: string;
-}) {
+  const structuredData = useMemo(
+    () => ({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: personal.name,
+      jobTitle: personal.title,
+      email: `mailto:${personal.email}`,
+      telephone: personal.phone,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Dhaka",
+        addressRegion: "Dhaka",
+        addressCountry: "BD",
+      },
+      sameAs: [personal.github, personal.linkedin].filter(Boolean),
+      knowsAbout: [
+        "React",
+        "Next.js",
+        "Node.js",
+        "TypeScript",
+        "Go (Golang)",
+        "MongoDB",
+        "PostgreSQL",
+        "Prisma",
+        "Plasmo",
+        "Chrome WebExtensions",
+      ],
+    }),
+    [],
+  );
+
   return (
-    <div className="flex min-w-0 items-start gap-3">
-      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-(--portfolio-surface-muted)] text-(--portfolio-accent)]">
-        <Icon className="size-4" aria-hidden="true" />
-      </span>
-      <div className="min-w-0">
-        <p className="font-mono text-xs font-black uppercase tracking-wide text-(--portfolio-subtle)]">
-          {label}
-        </p>
-        <p className="mt-1 break-words font-bold text-(--portfolio-text)]">
-          {value}
-        </p>
-      </div>
+    <div className="relative min-h-screen text-slate-100 selection:bg-cyan-500/30 selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* Dynamic Background Slideshow with Tuned Opacity & Ken Burns Effect */}
+      <BackgroundSlideshow />
+
+      {/* Micro-spark trail on fine pointer */}
+      <CursorTrailLayer />
+
+      {/* Modern Floating Glassmorphism Navigation */}
+      <FloatingNavbar activeSection={activeSection} />
+
+      {/* Main Portfolio Sections */}
+      <main className="relative z-10">
+        <HeroSection />
+        <StackRibbon />
+        <ProjectsSection />
+        <SkillsSection />
+        <ExperienceSection />
+        <AboutSection />
+        <AiCapabilitiesSection />
+        <ProcessSection />
+        <ContactSection />
+      </main>
+
+      {/* Minimalist Linear Footer */}
+      <Footer />
     </div>
-  );
-}
-
-function ContactMethod({
-  icon: Icon,
-  label,
-  value,
-  href,
-  external = false,
-}: {
-  icon: IconComponent;
-  label: string;
-  value: string;
-  href?: string;
-  external?: boolean;
-}) {
-  const content = (
-    <>
-      <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-(--portfolio-accent-soft)] text-(--portfolio-accent)]">
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <span className="min-w-0">
-        <span className="block font-mono text-xs font-black uppercase tracking-wide text-(--portfolio-subtle)]">
-          {label}
-        </span>
-        <span className="mt-1 block break-words text-sm font-bold text-(--portfolio-text)]">
-          {value}
-        </span>
-      </span>
-    </>
-  );
-
-  if (!href) {
-    return (
-      <div className="flex items-center gap-4 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-4 shadow-sm">
-        {content}
-      </div>
-    );
-  }
-
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="flex items-center gap-4 rounded-lg border border-(--portfolio-line)] bg-(--portfolio-surface)] p-4 shadow-sm transition hover:border-(--portfolio-line-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
-    >
-      {content}
-    </a>
-  );
-}
-
-function FooterLink({
-  href,
-  icon: Icon,
-  label,
-  external = false,
-}: {
-  href: string;
-  icon: IconComponent;
-  label: string;
-  external?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
-      className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-(--portfolio-line)] px-4 text-sm font-bold text-(--portfolio-text)] transition hover:border-(--portfolio-line-strong)] hover:bg-(--portfolio-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--portfolio-ring)]"
-    >
-      <Icon className="size-4" aria-hidden="true" />
-      {label}
-    </a>
   );
 }

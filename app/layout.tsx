@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio-neon-omega-77.vercel.app"),
   title:
-    "MD ASIF RAYHAN JOY | Full-Stack Software Engineer & Technical Team Lead",
+    "MD. Asif Rayhan Joy | Full-Stack Web Developer",
   description:
-    "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB. 3 years of professional experience.",
+    "Full-Stack Web Developer specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB. 3 years of professional experience.",
   keywords: [
+    "Full-Stack Web Developer",
     "Full-Stack Developer",
-    "Full-Stack Software Engineer",
-    "Technical Team Lead",
+    "Web Developer",
+    "Frontend Developer",
     "Extension Engineer",
     "Browser Extension Developer",
     "Plasmo Developer",
-    "Team Lead",
     "Next.js Developer",
     "React.js Developer",
     "TypeScript Developer",
@@ -27,26 +28,34 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title:
-      "Md. Asif Rayhan Joy | Full-Stack Software Engineer & Technical Team Lead",
+      "MD. Asif Rayhan Joy | Full-Stack Web Developer",
     description:
-      "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
+      "Full-Stack Web Developer specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
     url: "https://portfolio-neon-omega-77.vercel.app/",
-    siteName: "Md. Asif Rayhan Joy Portfolio",
+    siteName: "MD. Asif Rayhan Joy Portfolio",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "Md. Asif Rayhan Joy | Full-Stack Software Engineer & Technical Team Lead",
+      "Md. Asif Rayhan Joy | Full-Stack Web Developer",
     description:
-      "Full-Stack Engineer & Team Lead specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
+      "Full-Stack Web Developer specializing in Next.js, React, TypeScript, Node.js, and Chrome WebExtensions (Plasmo) with PostgreSQL and MongoDB.",
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+    <html lang="en" className="h-full dark scroll-smooth antialiased" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#05070c] text-slate-100 antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>
